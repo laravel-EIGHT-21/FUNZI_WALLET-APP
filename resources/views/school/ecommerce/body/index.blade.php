@@ -114,8 +114,9 @@ $products = App\Models\products::latest()->limit(6)->get();
                                   <div class="col-sm-6 col-lg-4">
                                     <div class="card p-2 h-100 shadow-none border">
                                       <div class="rounded-2 text-center mb-3">
-                                       
-                                       <img src="{{asset($product->product_thambnail)}}" class="img-fluid" alt="Product Image" >
+
+                                       <img src="{{ (!empty($product->product_thambnail))? url('upload/product_images/'.$product->product_thambnail):url('upload/no_image.jpg') }}" class="img-fluid" alt="Product Image" >
+
                 
                                       </div>
                                       <div class="card-body p-3 pt-2">

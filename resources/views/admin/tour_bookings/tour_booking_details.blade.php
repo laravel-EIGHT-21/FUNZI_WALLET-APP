@@ -27,7 +27,7 @@ Tour Bookings Details | funziwallet
 
 @elseif($booking->status == 'Bookings Confirmed')
 
-<a href="{{ route('confirmed.tour.bookings')}}" class="btn rounded-pill btn-primary" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
+<a href="{{ route('confirmed-tour-bookings')}}" class="btn rounded-pill btn-primary" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
 
 
 

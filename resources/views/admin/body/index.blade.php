@@ -148,29 +148,6 @@ $year_rental_amount = DB::table('car_bookings')->where('year',$years)->where('st
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex align-items-center flex-wrap gap-2">
-                  <div class="avatar me-3">
-                    <div class="avatar-initial bg-label-warning rounded">
-                      <i class="mdi mdi-account-outline mdi-24px">
-                      </i>
-                    </div>
-                  </div>
-                  <a href="{{ route('view.tours.operators') }}">
-                  <div class="card-warning">
-                    <div class="d-flex align-items-center">
-                      <h4 class="mb-0"><h4 class="mb-0">{{ count($tour_operators) }}</h4></h4>
-
-                    </div>
-                    <small>Tour Operators</small>
-                  </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
 
 
           <div class="col-lg-3 col-sm-6">

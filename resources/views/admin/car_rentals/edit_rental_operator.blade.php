@@ -46,10 +46,6 @@ Edit Rental Operator | funziwallet
         <button type="button" class="nav-link py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-vehicles" aria-controls="navs-pills-justified-vehicles" aria-selected="false"><i class="tf-icons ti ti-bus me-1"></i> Rental Vehicles</button>
         </li>
     
-    <li class="nav-item">
-    <button type="button" class="nav-link py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-routes" aria-controls="navs-pills-justified-routes" aria-selected="false"><i class="tf-icons ti ti-bus me-1"></i> Transport Routes</button>
-    </li>
-    
     
     </ul>
     
@@ -69,13 +65,7 @@ Edit Rental Operator | funziwallet
 
             <hr>
 
-            <div class="card-body">
-                <div class="d-flex align-items-start align-items-sm-center gap-4">
-                  <img src="{{ (!empty($editData->rental_photo))? url('upload/rental_photos/'.$editData->rental_photo):url('upload/no_image.jpg') }}" alt="user-avatar" class="d-block w-px-200 h-px-170 rounded"  />
-        
-                </div>
-              </div>
-
+           
 
             <div class="card-body pt-2 mt-1">
             <form action="{{ route('update.rental.operator',$editData->id) }}" enctype="multipart/form-data" method="POST" >
@@ -140,14 +130,6 @@ Edit Rental Operator | funziwallet
             </div>
             
             
-            
-            <div class="col-4">
-            
-                <div class="form-floating form-floating-outline mb-4">
-                <input class="form-control" type="file" name="rental_photo" id="html5-text-input" value="{{$editData->rental_photo}}" />
-                <label for="html5-text-input">Photo</label>
-                </div>
-                </div>
             
             </div>
 
@@ -253,18 +235,29 @@ Edit Rental Operator | funziwallet
                         <div class="col-md-2">
                         
                         <div class="form-floating form-floating-outline mb-4">
-                        <input class="form-control" type="text" name="hire_price[]" required  id="html5-text-input" />
-                        <label for="html5-text-input">Hire Price Amount</label>
+                        <input class="form-control" type="text" name="hire_price_fuel[]" required  id="html5-text-input" />
+                        <label for="html5-text-input">Hire Price (With Fuel)</label>
                         </div>
                         
                         </div>
 
 
+                                                
+                        <div class="col-md-2">
+                        
+                          <div class="form-floating form-floating-outline mb-4">
+                          <input class="form-control" type="text" name="hire_price_no_fuel[]" required  id="html5-text-input" />
+                          <label for="html5-text-input">Hire Price (No Fuel)</label>
+                          </div>
+                          
+                          </div>
+  
+  
                         
 
                         <div class="col-md-2" style="padding-top: 10px;">
                             <span class="btn btn-sm btn-success addeventmore"><i class="tf-icons mdi mdi-plus mdi-20px"></i> </span> 
-                            <span class="btn btn-sm btn-danger removeeventmore"><i class="tf-icons mdi mdi-minus-circle mdi-20px"></i> </span>    		
+                           
                             </div><!-- End col-md-2 -->
                             
                         </div>
@@ -318,7 +311,8 @@ Edit Rental Operator | funziwallet
             <th scope="col">Vehicle</th>
             <th scope="col">Model</th>
             <th scope="col">No. of Seats</th>
-            <th scope="col">Hire Px.</th>
+            <th scope="col">Hire Px. (Fuel)</th>
+            <th scope="col">Hire Px. (No Fuel)</th>
             <th scope="col">Action</th> 
         </tr>
     </thead>
@@ -346,7 +340,8 @@ Edit Rental Operator | funziwallet
 
             <td>{{ $item->model }}</td>
             <td>{{ $item->no_of_seats }}</td>
-            <td>{{ $item->hire_price }}</td>
+            <td>{{ $item->hire_price_fuel }}</td>
+            <td>{{ $item->hire_price_no_fuel }}</td>
 
             <td>
 <a href="javascript:void(0);" class="btn btn-sm btn-info px-3 radius-30" title="Edit" data-bs-toggle="modal" data-bs-target="#editVehicle" id="{{ $item->id }}" onclick="vehicleView(this.id)">
@@ -414,8 +409,16 @@ Edit Rental Operator | funziwallet
 
                 <div class="col mb-4 mt-2">
                   <div class="form-floating form-floating-outline">
-                    <input type="text" id="hireprice" class="form-control" name="hire_price" required>
-                    <label for="name">Hire Price</label>
+                    <input type="text" id="hirepricefuel" class="form-control" name="hire_price_fuel" required>
+                    <label for="name">Hire Price(With Fuel)</label>
+                  </div>
+                </div>
+
+
+                <div class="col mb-4 mt-2">
+                  <div class="form-floating form-floating-outline">
+                    <input type="text" id="hirepricenofuel" class="form-control" name="hire_price_no_fuel" required>
+                    <label for="name">Hire Price (No Fuel)</label>
                   </div>
                 </div>
 
@@ -455,174 +458,6 @@ Edit Rental Operator | funziwallet
 </div>
 
 
-
-
-<div class="tab-pane fade" id="navs-pills-justified-routes" role="tabpanel">
-
-    
-    <div class="row">
-
-        <h4 class="text"><b>Add Transport Routes</b></h4>
-        <div class="nav-align-top mb-4">
-    
-            <div class="col-xl-12">
-    
-            
-              <div class="row">
-      <div class="col-xl">
-        <div class="card mb-4">
-
-          <div class="card-body">
-            
-
-    
-              <button type="button" onclick="addRoute()" id="addRoute" class="btn btn-primary">Add New Routes</button>
-
-              <button type="button" onclick="viewRoute()" id="viewRoute" class="btn btn-sm btn-warning">View Routes</button>
-    
-<br/><br/>
-
-
-<div class="routesHide" id="routesHide">
-    <form action="{{ route('store.route',$editData->id) }}" method="post">
-        @csrf
-
-        
-        <input type="hidden" name="rental_operator_id" value="{{$editData->id}}" >
-
-
-        <div class="add_route_remove" id="add_route_remove">
-        <div class="add_item2">
-
-
-        <div class="row">
-
-            <div class="col-md-3">
-
-                <div class="form-floating form-floating-outline mb-4">
-                <input class="form-control" type="text" name="route_name[]" required  id="html5-text-input" />
-                <label for="html5-text-input">Route Name</label>
-                </div>
-                
-                </div>
-
-
-                <div class="col-md-3">
-
-                    <div class="form-floating form-floating-outline mb-4">
-                    <input class="form-control" type="text" name="route_price[]" required  id="html5-text-input" />
-                    <label for="html5-text-input">Route Price</label>
-                    </div>
-                    
-                    </div>
-                
-
-                    <div class="col-md-3">
-
-
-                        <div class="form-floating form-floating-outline mb-4">
-                        <select id="region_id" name="region_id[]" required class="select2 form-select form-select-lg" data-allow-clear="true"">
-                        <option value="">Select Region</option>
-                        @foreach ($regions as $region)
-                        <option value="{{ $region->id }}">{{ $region->destination_name }}</option>
-                        @endforeach
-            
-                        </select>
-                        <label for="region_id">Regions</label>
-                        </div>
-            
-                        </div> 
-
-
-                        <div class="col-md-2" style="padding-top: 10px;">
-                            <span class="btn btn-sm btn-success addeventmore1"><i class="tf-icons mdi mdi-plus mdi-20px"></i> </span> 
-                            <span class="btn btn-sm btn-danger removeeventmore1"><i class="tf-icons mdi mdi-minus-circle mdi-20px"></i> </span>    		
-                            </div><!-- End col-md-2 -->
-           
-                       </div>
-                    </div>    
-                
-                </div>
-
-
-                       <div class="row">
-        <div class="col-md-4">
-            
-            <button type="submit" class="btn btn-success" style="margin-top: 28px;">Save</button>
-            
-        </div> 
-    </div> 
-    </form> 
-</div>
-
-
-
-
-          </div>
-
-        </div>
-
-
-
-        <div class="card mb-4">
-
-            <div class="card-body" id="routesview">
-          <div class="row">
-
-            
- <table id="zero_config" class="table border table-striped table-bordered text-nowrap">
-    <thead>
-        <tr>
-            <th scope="col">Route</th>
-            <th scope="col">Price</th>
-            <th scope="col">Region</th>
-            <th scope="col">Action</th> 
-        </tr>
-    </thead>
-    <tbody>
-  
-        @foreach ($routesData as $item) 
-       
-        <tr> 
-            <td>{{ $item->route_name }}</td>
-            <td>{{ $item->route_price }}</td>
-            <td>{{ $item['region']['destination_name'] }}</td>
-            <td>
-<a href="javascript:void(0);" class="btn btn-sm btn-info px-3 radius-30" title="Edit" data-bs-toggle="modal" data-bs-target="#editRoute" id="{{ $item->id }}" onclick="routeView(this.id)">
-    <i class="mdi mdi-square-edit-outline me-2"></i></a>
-
-
-
-
-<a href="{{ route('delete.route',$item->id) }}" class="btn tbn-sm btn-danger px-3 radius-30" id="delete" title="Delete"> <i class="mdi mdi-delete-empty me-1"></i></a>  
-
-            </td>
-        </tr>
-        @endforeach
-        
-    </tbody>
-</table>
-
-          </div>
-        
-      </div>
-    </div>
-    
-
-
-
-
-      </div>
-              </div>
-
-            </div>
-
-        </div>
-
-
-    </div>
-   
-</div>
 
 
 
@@ -679,10 +514,20 @@ Edit Rental Operator | funziwallet
     <div class="col-md-2">
     
         <div class="form-floating form-floating-outline mb-4">
-            <input class="form-control" type="text" name="hire_price[]" required  id="html5-text-input" />
-            <label for="html5-text-input">Hire Price Amount</label>
+            <input class="form-control" type="text" name="hire_price_fuel[]" required  id="html5-text-input" />
+            <label for="html5-text-input">Hire Price (With Fuel)</label>
             </div>
     </div>
+
+
+        
+    <div class="col-md-2">
+    
+      <div class="form-floating form-floating-outline mb-4">
+          <input class="form-control" type="text" name="hire_price_no_fuel[]" required  id="html5-text-input" />
+          <label for="html5-text-input">Hire Price (No Fuel)</label>
+          </div>
+  </div>
     
     
     <div class="col-md-2" style="padding-top: 10px;">
@@ -695,6 +540,8 @@ Edit Rental Operator | funziwallet
     </div>  	
     </div>
     
+
+
     
     <script type="text/javascript">
     $(document).ready(function(){
@@ -705,165 +552,18 @@ Edit Rental Operator | funziwallet
     counter++;
     });
     $(document).on("click",'.removeeventmore',function(event){
-        $(this).closest("#add_car_remove").remove();
+        $(this).closest(".delete_whole_extra_item_add").remove();
         counter -= 1
     });
     
     });
+
     </script>
     
 
-
-
-  <!--========== Start Transport Route Add ==============-->
-  <div style="visibility: hidden">
-    <div class="whole_extra_item_add2" id="whole_extra_item_add2">
-       <div class="add_route_remove" id="add_route_remove">
-          <div class="container mt-2">
-
-
-
-            <div class="row">
-                <div class="col-md-3">
-
-                    <div class="form-floating form-floating-outline mb-4">
-                    <input class="form-control" type="text" name="route_name[]" required  id="html5-text-input" />
-                    <label for="html5-text-input">Route Name</label>
-                    </div>
-                    
-                    </div>
-
-
-                    <div class="col-md-3">
-
-                        <div class="form-floating form-floating-outline mb-4">
-                        <input class="form-control" type="text" name="route_price[]" required  id="html5-text-input" />
-                        <label for="html5-text-input">Route Price</label>
-                        </div>
-                        
-                        </div>
-                    
-    
-                        <div class="col-md-3">
-
-
-                            <div class="form-floating form-floating-outline mb-4">
-                            <select id="region_id" name="region_id[]" required class="form-select" data-allow-clear="true">
-                            <option value="">Select Region</option>
-                            @foreach ($regions as $region)
-                            <option value="{{ $region->id }}">{{ $region->destination_name }}</option>
-                            @endforeach
-                
-                            </select>
-                            <label for="region_id">Regions</label>
-                            </div>
-                
-                            </div> 
-
-
-                <div class="col-md-2" style="padding-top: 10px;">
-                    <span class="btn btn-sm btn-success addeventmore1"><i class="tf-icons mdi mdi-plus mdi-20px"></i> </span> 
-                    <span class="btn btn-sm btn-danger removeeventmore1"><i class="tf-icons mdi mdi-minus-circle mdi-20px"></i> </span>    		
-                    </div><!-- End col-md-2 -->
-                   
-                               </div>
-
-
-
-          </div>
-       </div>
-    </div>
- </div>
-
-
-
- 
-    <script type="text/javascript">
-        $(document).ready(function(){
-           var counter = 0;
-           $(document).on("click",".addeventmore1",function(){
-                 var whole_extra_item_add2 = $("#whole_extra_item_add2").html();
-                 $(this).closest(".add_item2").append(whole_extra_item_add2);
-                 counter++;
-           });
-           $(document).on("click",".removeeventmore1",function(event){
-                 $(this).closest("#add_route_remove").remove();
-                 counter -= 1
-           });
-        });
-     </script>
-    
     
 
 
-
-
-
-<script>
-    $('#routesHide').hide();
-    $('#routesview').show();
-
-    function addRoute(){
-        $('#routesHide').show();
-        $('#routesview').hide();
-        $('#addRoute').hide();
-    }
-
-    function viewRoute(){
-        $('#routesHide').hide();
-        $('#routesview').show();
-        $('#addRoute').hide();
-    }
-
-</script>
-
-
-
-
-
-<script type="text/javascript">
-
-
-$.ajaxSetup({
-headers:{
-'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-}
-})
-
-
-function routeView(id){
-
-$.ajax({
-type: 'GET',
-url: '/admin/edit/route/'+id,
-dataType: 'json',
-success:function(data){
-
-$('#name').val(data.route.route_name);
-$('#price').val(data.route.route_price);
-$('#route_id').val(id);
-var route = data.route;
-var region = data.regions;
-var htmlRegion = "<option value=''>Select Region</option>";
-
-
-for(let i = 0;i < region.length;i++){
-if(route['region_id'] == region[i]['id']){
-htmlRegion += `<option value="`+region[i]['id']+`" selected>`+region[i]['destination_name']+`</option>`;
-}
-else{
-htmlRegion += `<option value="`+region[i]['id']+`">`+region[i]['destination_name']+`</option>`;
-}
-}
-
-$("#edit_region").html(htmlRegion);
-
-}
-})
-
-}
-
-</script>
 
 
 
@@ -896,7 +596,8 @@ success:function(data){
 $('#carname').val(data.car.car_name);
 $('#model').val(data.car.model);
 $('#seats').val(data.car.no_of_seats);
-$('#hireprice').val(data.car.hire_price);
+$('#hirepricefuel').val(data.car.hire_price_fuel);
+$('#hirepricenofuel').val(data.car.hire_price_no_fuel);
 $('#carphoto').val(data.car.car_photo);
 $('#car_id').val(id);
 

@@ -167,7 +167,7 @@ public function update(Request $request, $id)
 
   
 public function inactiveSchools($id)
-{ 
+{  
 
 User::findOrFail($id)->update(['status' => 0]);
 
@@ -181,8 +181,6 @@ return back()->with('error',' School Has Been Deactivated...');
 public function activeSchools($id)
 {
   
-
-
 User::findOrFail($id)->update(['status' => 1]);
 
 return back()->with('info',' School Has Been Activated...');

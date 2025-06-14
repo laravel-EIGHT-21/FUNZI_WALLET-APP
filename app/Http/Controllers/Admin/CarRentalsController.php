@@ -93,16 +93,6 @@ class CarRentalsController extends Controller
                 $rental_operator->address = $request->address;
                 $rental_operator->created_at = Carbon::now(); 
 
-
-                $manager = new ImageManager(new Driver());
-                $image = $request->file('rental_photo');
-                $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-                $new_img = $manager->read($request->file('rental_photo'));
-                $new_img = $new_img->resize(720,720);
-                $new_img->toJpeg(80)->save(base_path('public/upload/rental_photos/'.$name_gen));
-                $save_url = $name_gen;
-                $rental_operator['rental_photo'] = $save_url;
-
                 $rental_operator->save();    
             
                
@@ -132,9 +122,8 @@ class CarRentalsController extends Controller
     public function EditRentalOperator($id){
     
         $data['editData'] = rental_operators::findOrFail($id);
-        $data['regions'] = tours_destinations::all();
 		$data['carData'] = car::where('rental_operator_id',$id)->orderBy('id','asc')->get();
-		$data['routesData'] = transport_routes::where('rental_operator_id',$id)->orderBy('id','asc')->get();
+		////$data['routesData'] = transport_routes::where('rental_operator_id',$id)->orderBy('id','asc')->get();
 
     	return view('admin.car_rentals.edit_rental_operator',$data);
 
@@ -154,20 +143,6 @@ class CarRentalsController extends Controller
             $rental_operator->telephone = $request->telephone;
             $rental_operator->telephone2 = $request->telephone2;
             $rental_operator->address = $request->address;
-
-            if ($request->file('rental_photo')) {
-
-                $manager = new ImageManager(new Driver());
-                @unlink(public_path('upload/rental_photos/'.$rental_operator->rental_photo));
-                $image = $request->file('rental_photo');
-                $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-                $new_img = $manager->read($request->file('rental_photo'));
-                $new_img = $new_img->resize(720,720);
-                $new_img->toJpeg(80)->save(base_path('public/upload/rental_photos/'.$name_gen));
-                $save_url = $name_gen;
-                $rental_operator['rental_photo'] = $save_url;
-            
-              }    
 
             $rental_operator->save();
     
@@ -232,7 +207,9 @@ public function StoreVehicle(Request $request,$id){
             $assign_car->car_name = $request->car_name[$i];
             $assign_car->model = $request->model[$i];
             $assign_car->no_of_seats = $request->no_of_seats[$i];
-            $assign_car->hire_price = $request->hire_price[$i];
+            $assign_car->hire_price_fuel = $request->hire_price_fuel[$i];
+            $assign_car->hire_price_no_fuel = $request->hire_price_no_fuel[$i];
+        
             $assign_car->save();
 
 
@@ -266,7 +243,8 @@ public function UpdateVehicle(Request $request){
     $data->car_name = $request->car_name;
     $data->model = $request->model;
     $data->no_of_seats = $request->no_of_seats;
-    $data->hire_price = $request->hire_price;
+    $data->hire_price_fuel = $request->hire_price_fuel;
+    $data->hire_price_no_fuel = $request->hire_price_no_fuel;
 
 
     if ($request->file('car_photo')) {
@@ -325,6 +303,7 @@ public function DeleteVehicle($id){
 ///Rental Transportation Routes
 
 
+/*
 
 public function StoreRoute(Request $request,$id){
 
@@ -393,7 +372,7 @@ public function DeleteRoute($id){
 
 
 
-
+*/
 
 
 

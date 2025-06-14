@@ -11,10 +11,6 @@ class tour_packages extends Model
 
     protected $guarded = [];
 
-        
-    public function operator(){
-    	return $this->belongsTo(TourOperator::class,'tour_operator_id','id');
-    }
 
 
             

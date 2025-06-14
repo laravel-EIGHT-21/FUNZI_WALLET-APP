@@ -33,7 +33,25 @@ $year_orders = DB::table('order_items')->where('year',$years)->where('school_id'
 $tours = App\Models\school_bookings::where('school_id',$id)->where('booking_year',$years)->latest()->limit(4)->get();
 
 
+$month_stud_totals = DB::table('tours_packs')->where('month',$months)->where('school_id',$id)->where('status','Bookings Confirmed')->sum('stud_pricetotal');
+
+$month_adult_totals = DB::table('tours_packs')->where('month',$months)->where('school_id',$id)->where('status','Bookings Confirmed')->sum('adult_pricetotal');
+$monthly_tours_total = (float)$month_stud_totals + (float)$month_adult_totals;
+
+
+$year_stud_tours = DB::table('tours_packs')->where('year',$years)->where('school_id',$id)->where('status','Bookings Confirmed')->sum('stud_pricetotal');
+
+$year_adult_tours = DB::table('tours_packs')->where('year',$years)->where('school_id',$id)->where('status','Bookings Confirmed')->sum('adult_pricetotal');
+$yearly_tours_total = (float)$year_stud_tours + (float)$year_adult_tours;
+
+
+
 $rentals = App\Models\car_bookings::where('school_id',$id)->where('year',$years)->latest()->limit(4)->get();
+
+$monthly_rentals = DB::table('car_rental_bookings')->where('month',$months)->where('school_id',$id)->where('status','Bookings Confirmed')->sum('pricetotal');
+
+$yearly_rentals = DB::table('car_rental_bookings')->where('year',$years)->where('school_id',$id)->where('status','Bookings Confirmed')->sum('pricetotal');
+
 
 @endphp
 
@@ -42,9 +60,8 @@ $rentals = App\Models\car_bookings::where('school_id',$id)->where('year',$years)
         
        <div class="container-xxl flex-grow-1 container-p-y">
           
+<br/>
 
-                   
-<h5 class="py-3 mb-4"> Students</h5>
 <div class="row gy-4">
 
   <!-- Students Overview-->
@@ -80,8 +97,9 @@ $rentals = App\Models\car_bookings::where('school_id',$id)->where('year',$years)
   </div>
   <!--/ Students & Agents Overview-->
 
-
+  
   <div class="col-lg-6">
+  
     <div class="swiper-container swiper-container-horizontal swiper swiper-sales">
       <div class="swiper-wrapper">
 
@@ -90,7 +108,7 @@ $rentals = App\Models\car_bookings::where('school_id',$id)->where('year',$years)
 
 
         <div class="d-flex justify-content-between">
-          <h4 class="mb-2">Total Orders Amounts Overview</h4>
+          <h4 class="mb-2">Total Amounts For Orders Overview</h4>
 
         </div>
 
@@ -139,7 +157,129 @@ $rentals = App\Models\car_bookings::where('school_id',$id)->where('year',$years)
 
 
 
-<br/>
+
+<br/><br/>
+
+
+
+<div class="row gy-4">
+
+  <!-- Tours Overview-->
+ 
+  <div class="col-lg-6">
+  
+    <div class="swiper-container swiper-container-horizontal swiper swiper-sales">
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide">
+        <div class="col-lg-6">
+
+
+        <div class="d-flex justify-content-between">
+          <h4 class="mb-2">Total Amounts For Tours Booked Overview</h4>
+
+        </div>
+
+      </div>
+      <br/>
+      <div class="card-body d-flex justify-content-between flex-wrap gap-3">
+
+        <div class="d-flex gap-3">
+          <div class="avatar">
+            <div class="avatar-initial bg-label-warning rounded">
+              <i class="mdi mdi-currency-usd mdi-px"></i>
+            </div>
+          </div>
+          <div class="card-info">
+            <h4 class="mb-0">{{ ($monthly_tours_total) }}</h4>
+            <small>Monthly Total</small>
+          </div>
+        </div>
+        <div class="d-flex gap-3">
+          <div class="avatar">
+            <div class="avatar-initial bg-label-success rounded">
+              <i class="mdi mdi-currency-usd mdi-px"></i>
+            </div>
+          </div>
+          <div class="card-info">
+            <h4 class="mb-0">{{ ($yearly_tours_total) }}</h4>
+            <small>Yearly Total</small>
+          </div>
+        </div>
+      </div>
+
+
+
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+  <!--/ Tours Overview-->
+
+  
+  <div class="col-lg-6">
+  
+    <div class="swiper-container swiper-container-horizontal swiper swiper-sales">
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide">
+        <div class="col-lg-6">
+
+
+        <div class="d-flex justify-content-between">
+          <h4 class="mb-2">Total Amounts For Vehicle Rentals Overview</h4>
+
+        </div>
+
+      </div>
+      <br/>
+      <div class="card-body d-flex justify-content-between flex-wrap gap-3">
+
+        <div class="d-flex gap-3">
+          <div class="avatar">
+            <div class="avatar-initial bg-label-warning rounded">
+              <i class="mdi mdi-currency-usd mdi-px"></i>
+            </div>
+          </div>
+          <div class="card-info">
+            <h4 class="mb-0">{{ ($monthly_rentals) }}</h4>
+            <small>Monthly Total</small>
+          </div>
+        </div>
+        <div class="d-flex gap-3">
+          <div class="avatar">
+            <div class="avatar-initial bg-label-success rounded">
+              <i class="mdi mdi-currency-usd mdi-px"></i>
+            </div>
+          </div>
+          <div class="card-info">
+            <h4 class="mb-0">{{ ($yearly_rentals) }}</h4>
+            <small>Yearly Total</small>
+          </div>
+        </div>
+      </div>
+
+
+
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
+
+<br/><br/>
 
 <h5 class="py-3 mb-2"> School Orders </h5>
 <div class="row gy-4">
@@ -367,7 +507,7 @@ $rentals = App\Models\car_bookings::where('school_id',$id)->where('year',$years)
 
        </div>
 
-
+<br/>
 
 
        <script src="{{asset('Admin/assets/vendor/libs/chart.js/Chart.js')}}"></script>

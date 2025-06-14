@@ -21,7 +21,7 @@ View Rental Operators | funziwallet
                   <span class="text-muted fw-light"><a href="{{route('admin.dashboard')}}">Home</a>/View /</span> Rental Operators 
                 </h4>
     
-                @can('create-school')
+                @can('taxi-bus-create')
             <div class="row">
     
             <div class="mb-2">
@@ -66,11 +66,9 @@ View Rental Operators | funziwallet
         
 <td>
     <div class="d-flex align-items-center">
-    <img src="{{ (!empty($value->rental_photo))? url('upload/rental_photos/'.$value->rental_photo):url('upload/no_image.jpg') }}" class="rounded-circle" alt="..." width="56" height="56">
-    
     
     <div class="ms-3">
-    <h6 class="fw-semibold mb-0 fs-6">{{ $value->name}}</h6>
+    <h5 class="fw-semibold mb-0 fs-6">{{ $value->name}}</h5>
 
     </div>
     </div>

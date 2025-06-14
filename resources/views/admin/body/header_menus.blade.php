@@ -89,11 +89,7 @@ $route = Route::current()->getName();
             <div data-i18n="Students">Student</div>
           </a>
         </li>
-        <li class="menu-item {{($route == 'view.tours.operators')? 'active':''}}">
-          <a href="{{ route('view.tours.operators') }}" class="menu-link">
-            <div data-i18n="Tour Operators">Tour Operators</div>
-          </a>
-        </li>
+
 
       </ul>
     </li>

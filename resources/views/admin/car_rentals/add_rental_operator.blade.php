@@ -6,7 +6,7 @@
 @section('title')
 
 Add New Rental Operator | funziwallet
-
+ 
 @endsection
 
 
@@ -103,16 +103,6 @@ Add New Rental Operator | funziwallet
 </div>
 
 
-
-<div class="col-4">
-
-    <div class="form-floating form-floating-outline mb-4">
-    <input class="form-control" type="file" name="rental_photo" required  id="html5-text-input" />
-    <label for="html5-text-input">Photo</label>
-    </div>
-    </div>
-
-</div>
 
 
 <div class="row">

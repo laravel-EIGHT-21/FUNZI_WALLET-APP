@@ -87,34 +87,52 @@ $route = Route::current()->getName();
 
 
 
+        <!-- Front Pages -->
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <i class='menu-icon tf-icons mdi mdi-cart-outline mdi-24px fs-4'></i>
+            <div data-i18n="Ecommerce">Ecommerce</div>
+          </a>
+          <ul class="menu-sub">
+    
+    
+                      <li class="menu-item {{($route == 'view.students')? 'active':''}}">
+                        <a href="{{ route('view.students') }}" class="menu-link">
+                          <div data-i18n="All Orders">All Orders</div>
+                        </a>
+                      </li>
+    
+   
+          </ul>
+        </li>
 
-<li class="menu-item ">
+
+            <!-- Front Pages -->
+    <li class="menu-item">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
-        <i class='menu-icon tf-icons mdi mdi-file-document-outline'></i>
-        <div data-i18n="Orders Reports">Orders Reports</div>
+        <i class='menu-icon tf-icons mdi mdi-bus-school mdi-24px fs-4'></i>
+        <div data-i18n="Tours & Travel">Tours & Travel</div>
       </a>
-
       <ul class="menu-sub">
 
 
-<li class="menu-item {{($route == 'school.monthly.orders.reports')? 'active':''}}">
-      <a href="{{ route('school.monthly.orders.reports') }}" class="menu-link">
-        <div data-i18n="Monthly Reports">Monthly Reports</div>
-      </a>
-</li>
+                  <li class="menu-item {{($route == 'view.students')? 'active':''}}">
+                    <a href="{{ route('view.students') }}" class="menu-link">
+                      <div data-i18n="All Tours">All Tours</div>
+                    </a>
+                  </li>
 
+                  <li class="menu-item {{($route == 'view.old.students')? 'active':''}}">
+                    <a href="{{ route('view.old.students') }}" class="menu-link">
+                      <div data-i18n="Vehicle Rentals">Vehicle Rentals</div>
+                    </a>
+                  </li>
 
+      </ul>
+    </li>
 
-<li class="menu-item {{($route == 'school.yearly.orders.reports')? 'active':''}}">
-      <a href="{{ route('school.yearly.orders.reports') }}" class="menu-link">
-        <div data-i18n="Yearly Reports">Yearly Reports</div>
-      </a>
-</li>
+    
 
-
-</ul>
-
-</li>
 
         
 

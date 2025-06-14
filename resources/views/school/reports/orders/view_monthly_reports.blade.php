@@ -1,5 +1,5 @@
 
-@extends('school.body.admin_master')
+@extends('school.ecommerce.body.admin_master')
 @section('content')
         
 

@@ -86,7 +86,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/', function () {
-return view('auth.login');
+return view('auth.landing');
 });   
 
 
@@ -175,7 +175,7 @@ Route::post('/reset-password', function (Request $request) {
 
 
 
-
+/*
 
 ///Tour Operators Password Reset Section////
 
@@ -227,6 +227,12 @@ Route::post('/touroperator/reset-password', function (Request $request) {
                 ? redirect('touroperator/login')->with('status', __($tour_status))
                 : back()->withErrors(['email' => [__($tour_status)]]);
 })->middleware('guest')->name('tour.operator.reset.password.update');
+
+
+
+*/
+
+
 
 
 
@@ -408,21 +414,6 @@ Route::get('/school/active/{id}',[SchoolsController::class,'activeSchools'])->mi
 Route::get('/view/students', [SchoolsController::class, 'ViewSchoolStudents'])->name('view.all.students');
 
 
-// All Tour Operators Informations
-
-Route::get('/view/tours/operators', [TourOperatorController::class, 'ViewTourOperator'])->name('view.tours.operators');
-
-Route::post('/store/tours/operator', [TourOperatorController::class, 'storeTourOperator'])->middleware(['auth','verified'])->name('tours.operator.store');
-
-Route::get('/tours/operator/edit/{id}', [TourOperatorController::class, 'EditTourOperator']);
-
-Route::post('/tours-operator-update', [TourOperatorController::class, 'update'])->middleware(['auth','verified']);
-
-Route::get('/tours/operator/inactive/{id}',[TourOperatorController::class,'inactiveTourOperator'])->middleware(['auth','verified'])->name('tours.operator.inactive');
-
-Route::get('/tours/operator/active/{id}',[TourOperatorController::class,'activeTourOperator'])->middleware(['auth','verified'])->name('tours.operator.active');
-
-
 
 //Roles
 Route::get('/roles/view',[RoleController::class,'index'])->middleware(['auth','verified'])->name('role.index');
@@ -562,6 +553,20 @@ Route::get('/shipped/to/delivered/{order_id}', [OrdersController::class, 'Shippe
 
 Route::get('/view/all/tour/packages', [SchoolTourBookingsController::class, 'SchoolTourPackages'])->name('all.school.tour.packages');
 
+Route::get('/add/new/tour/package',[ToursTravelsController::class,'addTourPackages'])->name('add.tour.package');
+Route::post('/store/tour/package',[ToursTravelsController::class,'storeTourPackage'])->name('tour.package.store');
+Route::get('/edit/tour/package/{id}',[ToursTravelsController::class,'editTourPackage'])->name('tour.package.edit');
+Route::post('/update/tour/package',[ToursTravelsController::class,'updateTourPackage'])->name('tour.package.update');
+Route::post('/update/tour/multi/images',[ToursTravelsController::class,'updateTourMultiImage'])->name('tour.multi.image.update');
+Route::get('/delete/tour/package/{id}',[ToursTravelsController::class,'deleteTourPackage'])->name('tour.package.delete');
+Route::get('/delete/tour/multi/images/{id}',[ToursTravelsController::class,'deleteTourMultiImage'])->name('tour.multi.image.delete');
+
+
+Route::get('/tour/deactivate/{id}',[ToursTravelsController::class,'deactivateTourPackage'])->middleware(['auth','verified'])->name('tour.deactivate');
+
+Route::get('/tour/activate/{id}',[ToursTravelsController::class,'activateTourPackage'])->middleware(['auth','verified'])->name('tour.activate');
+
+
 Route::get('/tour/details/{id}',[SchoolTourBookingsController::class,'tourPackageDetails'])->name('tour.details');
 
 
@@ -657,7 +662,7 @@ Route::get('/delete/vehicle/{id}', 'DeleteVehicle')->name('delete.vehicle');
 
 
 ///Transportation Routes
-
+/*
 Route::controller(CarRentalsController::class)->group(function(){
 
 Route::get('/edit/route/{id}', 'EditRoute');
@@ -668,7 +673,7 @@ Route::post('/store/route/{id}', 'StoreRoute')->name('store.route');
 Route::get('/delete/route/{id}', 'DeleteRoute')->name('delete.route');
 
 });
-
+*/
 
 
 
@@ -690,8 +695,6 @@ Route::post('orders/report/search/by/month',[OrderReportsController::class,'Orde
 
 Route::post('orders/report/search/by/year', [OrderReportsController::class,'OrdersReportsByYear'])->name('search-orders-by-year');
 
-
-//Report for PocketMoney  Transfers Submitted
 Route::get('/order/details/report/{order_id}', [OrderReportsController::class, 'ViewOrderReportDetails'])->name('order.details.invoice.report');
 
 
@@ -896,7 +899,7 @@ Route::post('/search/school/orders/report/by/year', [SchoolOrdersReportControlle
 
 
 
-
+/*
 
 // Fee Category Amount Routes 
 
@@ -1160,6 +1163,18 @@ Route::post('/income/statement/report/search/by/term','IncomeStatementReportByTe
 Route::post('/income/statement/report/search/by/year', 'IncomeStatementReportByYears')->name('search-income-statement-report-by-year');
 
 });// Income statement Reports
+
+
+
+*/
+
+
+
+
+
+
+
+
 
 
 
@@ -1500,75 +1515,6 @@ Route::post('/update-medical-folder',[FolderController::class,'updateMedicalFold
 
 
 });//End of Students Middleware
-
-
-
-
-
-
-
-// Tour operators auth middleware
-
-Route::middleware(['auth:sanctum,touroperator', config('jetstream.auth_session'), 'verified'])->group(function () {
-
-Route::get('/touroperator/dashboard', function () {
-return view('tours_travels.body.index');})->name('tour.operator.dashboard');
-});
-
-
-
-// Tour operators auth middleware
-Route::group(['prefix' => 'touroperator','middleware' =>['auth:touroperator']],function(){
-
-
-Route::get('/logout',[TourOperatorUserController::class,'destroy'])->name('operator.logout');
-Route::get('/user/profile',[TourAdminController::class,'Userprofile'])->name('operator.user.profile.view');
-Route::post('/profile/update',[TourAdminController::class,'profileUpdate'])->name('operator.profile.update');
-Route::post('/update/password',[TourAdminController::class,'passwordUpdate'])->name('operator.password.update');
-
-
-///Tour Packages Section 
-
-Route::get('/view/tour/package',[ToursTravelsController::class,'viewTourPackages'])->name('view.tour.package');
-Route::get('/add/new/tour/package',[ToursTravelsController::class,'addTourPackages'])->name('add.tour.package');
-Route::post('/store/tour/package',[ToursTravelsController::class,'storeTourPackage'])->name('tour.package.store');
-Route::get('/edit/tour/package/{id}',[ToursTravelsController::class,'editTourPackage'])->name('tour.package.edit');
-Route::post('/update/tour/package',[ToursTravelsController::class,'updateTourPackage'])->name('tour.package.update');
-Route::post('/update/tour/multi/images',[ToursTravelsController::class,'updateTourMultiImage'])->name('tour.multi.image.update');
-Route::get('/delete/tour/package/{id}',[ToursTravelsController::class,'deleteTourPackage'])->name('tour.package.delete');
-Route::get('/delete/tour/multi/images/{id}',[ToursTravelsController::class,'deleteTourMultiImage'])->name('tour.multi.image.delete');
-
-Route::get('/deactivate/tour/package/{id}',[ToursTravelsController::class,'deactivateTourPackage'])->name('tour.package.deactivate');
-
-Route::get('/activate/tour/package/{id}',[ToursTravelsController::class,'activateTourPackage'])->name('tour.package.activate');
-
-
-//School Tour Bookings Routes
-
-
-
-Route::get('/school/tours/bookings', [SchoolTourBookingController::class, 'SchoolToursBookings'])->name('school-tours-bookings');
-
-Route::get('/tours/bookings/information/{booking_id}', [SchoolTourBookingController::class, 'TourBookingDetails'])->name('tour.bookings.information');
-
-Route::get('/tours/bookings/invoice/{booking_id}', [SchoolTourBookingController::class, 'TourBookingInvoice'])->name('tour.bookings.invoice');
-
-
-Route::get('/yearly/tour/bookings/reports', [SchoolTourBookingController::class, 'ViewYearlyTourBookingsReports'])->name('tour.bookings.reports');
-
-Route::post('tour/bookings/report/by/year',[SchoolTourBookingController::class,'TourBookingsReportsByYear'])->name('search-tour-booking-by-year');
-
-
-
-// Instructor Review All Route 
-Route::controller(ReviewController::class)->group(function(){
-Route::get('/all/tour/reviews','AllTourReviews')->name('tour.all.review');  
-
-});
-
-
-});
-//End of Tour operators Middleware
 
 
 

@@ -19,27 +19,12 @@ class ToursTravelsController extends Controller
 
 
     
-    public function viewTourPackages()
-    {
-        $id = Auth::user()->id;
-        $tours = tour_packages::where('tour_operator_id',$id)->latest()->paginate(9);
-        $destinations = tours_destinations::all();
-       
-        return view('tours_travels.tours.view_tour_packages',compact('tours','destinations'));
- 
-    }
-
-
-
-
-
-    
     public function addTourPackages()
     {
 
         $destinations = tours_destinations::all();
        
-        return view('tours_travels.tours.add_tour_package',compact('destinations'));
+        return view('admin.tour_packages.add_tour_package',compact('destinations'));
  
     }
 
@@ -50,8 +35,7 @@ class ToursTravelsController extends Controller
     public function storeTourPackage(Request $request)
     {
        
-            $id = Auth::user()->id;
-
+           
             $manager = new ImageManager(new Driver());
             $image = $request->file('image_thambnail');
             $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
@@ -61,7 +45,6 @@ class ToursTravelsController extends Controller
             $save_url = $name_gen;
 
             $tour_id = tour_packages::insertGetId([
-                'tour_operator_id' => $id,
                 'name' =>  $request->name,
                 'destination_id' => $request->destination_id,
                 'description' =>  $request->description,
@@ -113,10 +96,8 @@ class ToursTravelsController extends Controller
 
     public function editTourPackage($id)
     {
-
-        $operator_id = Auth::user()->id;
  
-     $tour_check = tour_packages::with(['operator'])->where('tour_operator_id',$operator_id)->where('id',$id)->first();
+     $tour_check = tour_packages::where('id',$id)->first();
  
      if($tour_check == true){
  
@@ -124,7 +105,7 @@ class ToursTravelsController extends Controller
         $tour = tour_packages::findOrFail($id);
         $destinations = tours_destinations::all();
         $multiImgs = tour_package_images::where('tour_package_id',$id)->get();
-        return view('tours_travels.tours.edit_tour_package',compact('tour','destinations','multiImgs'));
+        return view('admin.tour_packages.edit_tour_package',compact('tour','destinations','multiImgs'));
 
      }
 

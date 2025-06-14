@@ -101,7 +101,7 @@ public function SchoolTourBookingInvoice($booking_id){
 public function SchoolTourPackages()
 {
 
-    $tours = tour_packages::where('status',1)->latest()->paginate(12);
+    $tours = tour_packages::latest()->paginate(12);
         $destinations = tours_destinations::all();
 
         return view('admin.tour_packages.view_tour_packages',compact('tours','destinations'));

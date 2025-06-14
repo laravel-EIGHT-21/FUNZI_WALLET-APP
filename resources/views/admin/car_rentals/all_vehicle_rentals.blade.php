@@ -42,8 +42,8 @@ View All Rentals | funziwallet
 
                                                 <th>Rental Operator</th>
                                                 <th>No. of Seats</th>
-                                                <th>Hire Price/Day(UGX)</th>
-
+                                                <th>Hire Price/Day (Fuel)</th>
+                                                <th>Hire Price/Day (No Fuel)</th>
                                                     </tr>
                                                     <!-- end row -->
                                                 </thead>
@@ -70,8 +70,8 @@ View All Rentals | funziwallet
 
     <td>{{ $value['operator']['name']}}</td>
     <td>{{ $value->no_of_seats}}</td>
-    <td>{{ $value->hire_price}}</td>
-
+    <td>{{ $value->hire_price_fuel}}</td>
+    <td>{{ $value->hire_price_no_fuel}}</td>
     
     
     

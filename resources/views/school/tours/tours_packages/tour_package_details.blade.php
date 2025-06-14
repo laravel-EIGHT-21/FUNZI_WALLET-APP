@@ -77,18 +77,6 @@ Tour Package Details | funzitours
 
             <div class="card-body pt-3">
 
-              <h5>Tour Agent</h5>
-              <div class="d-flex justify-content-start align-items-center user-name">
-                <div class="avatar-wrapper">
-                  <div class="avatar me-4"><img src="{{ (!empty($tour['operator']['profile_photo_path']))? url('upload/tour_operators/'.$tour['operator']['profile_photo_path']):url('upload/no_image.jpg') }}" class="rounded-circle"></div>
-                </div>
-                <div class="d-flex flex-column">
-                  <h6 class="mb-1">{{$tour['operator']['name']}}</h6>
-                </div>
-              </div>
-
-              <hr class="my-6">
-
               <h5>About this Tour Package</h5>
 
               <h6>Region</h6>
@@ -203,7 +191,6 @@ Tour Package Details | funzitours
                   @csrf
 
                   <input type="hidden" name="tour_id" value="{{ $tour->id }}">
-                  <input type="hidden" name="tour_operator_id" value="{{ $tour->tour_operator_id }}">
 
                 <div class="col-md-12">
 

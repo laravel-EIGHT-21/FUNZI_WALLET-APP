@@ -19,23 +19,21 @@ class ReviewController extends Controller
     public function StoreReview(Request $request){
  
         $tour =  $request->input('tour_id');
-        $operator =  $request->input('tour_operator_id');
 
         $request->validate([
             'comment' => 'required',
-        ]);
+        ]); 
 
         tour_reviews::insert([
             'tour_id' => $tour,
             'school_id' => Auth::id(),
             'comment' => $request->comment,
             'rating' => $request->rate,
-            'tour_operator_id' => $operator,
             'created_at' => Carbon::now(),
         ]);
 
 
-        return redirect()->back()->with('info','Your Review will Be Approved By Admin Soon');  
+        return back()->with('info','Your Review will Be Approved By Admin Soon');  
 
     }// End Method 
 
@@ -70,15 +68,6 @@ class ReviewController extends Controller
 
 
     
-
-    public function AllTourReviews(){
-        $id = Auth::user()->id;
-        $review = tour_reviews::where('tour_operator_id',$id)->where('status',1)->orderBy('id','DESC')->get();
-        return view('tours_travels.tours.tour_reviews',compact('review'));
-
-
-    }// End Method 
-
 
 
 

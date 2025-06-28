@@ -15,18 +15,11 @@ Admin - Dashboard | funziwallet
 
 $students= App\Models\Students::where('status',1)->get();
 
-
 $totalstudents= App\Models\Students::all();
-
 
 $schools= App\Models\User::where('status',1)->get();
 
-
 $admin= App\Models\Admin::where('status',1)->get();
-
-
-$tour_operators= App\Models\TourOperator::where('status',1)->get();
-
 
 $rental_operators= App\Models\rental_operators::where('status',1)->get();
 
@@ -102,7 +95,7 @@ $year_rental_amount = DB::table('car_bookings')->where('year',$years)->where('st
         </h4>
         <div class="row gy-4">
           <!-- Cards with few info -->
-          <div class="col-lg-3 col-sm-6">
+          <div class="col-lg-4 col-sm-6">
             <div class="card">
               <div class="card-body">
                 <div class="d-flex align-items-center flex-wrap gap-2">
@@ -125,7 +118,7 @@ $year_rental_amount = DB::table('car_bookings')->where('year',$years)->where('st
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-sm-6">
+          <div class="col-lg-4 col-sm-6">
             <div class="card">
               <div class="card-body">
                 <div class="d-flex align-items-center flex-wrap gap-2">
@@ -150,7 +143,7 @@ $year_rental_amount = DB::table('car_bookings')->where('year',$years)->where('st
           </div>
 
 
-          <div class="col-lg-3 col-sm-6">
+          <div class="col-lg-4 col-sm-6">
             <div class="card">
               <div class="card-body">
                 <div class="d-flex align-items-center flex-wrap gap-2">
@@ -212,7 +205,7 @@ $year_rental_amount = DB::table('car_bookings')->where('year',$years)->where('st
                     <td class="pe-0"><span class="badge rounded-pill bg-label-primary">{{ $value->name}}</span></td>
                     <td class="pe-0 text-success">{{ $value->order_number}}</td>
                     <td class="pe-0 text-warning">{{ $value->order_date}}</td>
-                    <td class="pe-0 h6">{{ $value->amount}}</td>
+                    <td class="pe-0 h6">{{ $value->amount}}</td> 
                   </tr>
             
                 </tbody>

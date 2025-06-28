@@ -52,7 +52,7 @@ public function ViewWeeklyOrdersReports(){
   public function OrdersReportsByMonth(Request $request){
   
       $month = Carbon::parse($request->month)->format('F Y');	 
-      $orders = order_items::select('month')->groupBy('month')->where('month',$month)->get();
+      $orders = order_items::select('month')->groupBy('month')->where('month',$month)->where('status','Order Delivered')->get();
         
       return view('admin.reports.orders.view_monthly_reports',compact('orders'));
   
@@ -73,7 +73,7 @@ public function ViewWeeklyOrdersReports(){
   
   
       $year= $request->year;
-      $orders = order_items::select('month')->groupBy('month')->where('year',$year)->orderBy('created_at', 'asc')->groupBy('month')->get();
+      $orders = order_items::select('month')->groupBy('month')->where('year',$year)->where('status','Order Delivered')->orderBy('created_at', 'asc')->groupBy('month')->get();
   
   
       return view('admin.reports.orders.view_yearly_reports',compact('orders'));

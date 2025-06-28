@@ -4,7 +4,7 @@ namespace App\Http\Controllers\School;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\tours_cart;
+use App\Models\tours_cart; 
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\tours_packs;
@@ -12,6 +12,7 @@ use App\Models\school_bookings;
 use App\Models\tour_payments;
 use App\MtnMomo\MtnConfig;
 use App\MtnMomo\MtnCollection;
+use App\Models\car_rental_bookings;
 
 class TourBookingsController extends Controller
 {
@@ -30,7 +31,7 @@ class TourBookingsController extends Controller
         $subtotal =(float)$tourCartSubtotal_Stud + (float)$tourCartSubtotal_Adult;
 
 		$externalId = rand(100,10000000);
-		$partyId = $request->mobile_number;
+		$partyId = $request->school_tel1;
 
 		$config = new MtnConfig([ 
 			// mandatory credentials
@@ -87,7 +88,7 @@ class TourBookingsController extends Controller
      	'email' => $request->email,
      	'school_tel1' => $request->school_tel1,
      	'school_tel2' => $request->school_tel2, 
-		'school_address' => $request->school_address,     	 
+		'school_address' => $request->address,     	 
      	'total_amount' => $subtotal,
 		'total_tours' => $tourCartCout,
 		'booking_number' => mt_rand(10000000,99999999),
@@ -125,12 +126,12 @@ $tour_payment->save();
 
 
 	 $carts = tours_cart::where('school_id',$school_id)->orderBy('id','ASC')->get();
+
      foreach ($carts as $cartitem) {
         tours_packs::insert([
      		'booking_id' => $booking_id, 
 			'school_id' => Auth::id(), 
             'tour_package_id' => $cartitem->tour_package_id,
-			'tour_operator_id' => $cartitem->tour->operator->id,
      		'stud_qty' => $cartitem->stud_qty,
      		'stud_price' => $cartitem->stud_price,
 			'stud_pricetotal' => $cartitem->stud_pricetotal,
@@ -162,7 +163,7 @@ $tour_payment->save();
 
 
 
-    public function ViewTourBookings(){
+    public function ViewTourBookings(){ 
 
     	$bookings = school_bookings::where('school_id',Auth::id())->latest()->get();
     	return view('school.tours.bookings.view_tour_bookings',compact('bookings'));
@@ -176,8 +177,9 @@ $tour_payment->save();
         $school_id = Auth::user()->id;
 		$booking = school_bookings::with('school')->where('id',$booking_id)->where('school_id',$school_id)->first();
     	$tour_booking = tours_packs::with('tour')->where('booking_id',$booking_id)->orderBy('id','ASC')->get();
+		$payments = tour_payments::with('booking')->where('booking_id',$booking_id)->where('school_id',$school_id)->get();
 
-    	return view('school.tours.bookings.tour_booking_details',compact('booking','tour_booking'));
+    	return view('school.tours.bookings.tour_booking_details',compact('booking','tour_booking','payments'));
 
     } 
 
@@ -220,19 +222,89 @@ public function TourBookingReportInvoice($booking_id){
 
 
 
-
-
-
-
-public function SchoolTourBookingsPayments(){
-
     
-    $payments = tour_payments::with(['school','booking'])->where('school_id',Auth::id())->latest()->get();
+    public function TourBookingsGeneralInfo(){
 
-    return view('school.tours.bookings.tour_booking_payments', compact('payments'));
-    
-}
+    	$payments = tour_payments::with(['school','booking'])->where('school_id',Auth::id())->latest()->get();
 
+    	return view('school.tours.bookings.tour_booking_payments', compact('payments'));
+
+    } 
+
+
+
+
+
+	
+
+
+          //Yearly Orders Reports
+          public function AnnualTourReports(){
+
+            $school_id = Auth::user()->id;
+            $bookings = tours_packs::select('month')->groupBy('month')->where('school_id',$school_id)->where('status','Bookings Confirmed')->orderBy('created_at')->get();
+            return view('school.reports.tours.tour_bookings_report_view',compact('bookings'));
+
+
+          }
+      
+      
+      
+      public function ToursAnnualReport(Request $request){
+      
+        $school_id = Auth::user()->id;
+          $year= $request->year;
+          $bookings = tours_packs::select('month')->groupBy('month')->where('school_id',$school_id)->where('year',$year)->where('status','Bookings Confirmed')->orderBy('created_at', 'asc')->groupBy('month')->get();
+      
+      
+          return view('school.reports.tours.tour_bookings_report_view',compact('bookings'));
+      
+      
+      } // end mehtod 
+      
+
+
+
+
+
+
+
+	
+///Rental Bookings Report ///
+
+
+
+public function AnnualBusRentalsReports(){
+
+	 $school_id = Auth::user()->id;
+    $bookings = car_rental_bookings::select('month')->groupBy('month')->where('school_id',$school_id)->where('status','Bookings Confirmed')->orderBy('created_at')->get();
+
+    return view('school.reports.bus_rentals.rental_bookings_report_view',compact('bookings'));
+
+
+  }
+
+
+
+public function BusRentalsAnnualReports(Request $request){
+
+	 $school_id = Auth::user()->id;
+  $year= $request->year;
+  $bookings = car_rental_bookings::select('month')->groupBy('month')->where('school_id',$school_id)->where('year',$year)->where('status','Bookings Confirmed')->orderBy('created_at', 'asc')->groupBy('month')->get();
+
+  return view('school.reports.bus_rentals.rental_bookings_report_view',compact('bookings'));
+
+
+} // end mehtod 
+
+
+
+
+
+
+
+
+	
 
 
 

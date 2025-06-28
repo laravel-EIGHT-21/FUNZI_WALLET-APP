@@ -12,20 +12,19 @@ use App\Models\car_rental_bookings;
 use App\Models\car_rental_cart;
 use App\Models\rental_bookings_payments;
 use App\Models\rental_operators;
-use App\Models\tours_destinations;
-use App\Models\transport_routes;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
 use App\MtnMomo\MtnConfig;
 use App\MtnMomo\MtnCollection;
+use App\Models\tour_packages;
 
 class CarRentalsController extends Controller
 {
     
 
 
-
+ 
     ///Rental Operator Section///
     
     public function ViewRentalOperator(){
@@ -472,12 +471,16 @@ public function SchoolTourBookingInvoice($booking_id){
 
 
 ///Schools Section For Bus Rentals///
-
+ 
 
 
 public function ViewBusRentalsDash(){
 
-    return view('school.bus_rentals.body.index');
+    
+    $rentals = car::latest()->paginate(12);
+    $tours = tour_packages::latest()->limit(6)->orderBy('id','DESC')->get();
+
+    return view('school.bus_rentals.body.index',compact('rentals','tours'));
 }
 
 
@@ -592,7 +595,7 @@ public function SubmitBusRentalsBookings(Request $request){
     $subtotal = car_rental_cart::where('school_id',$school_id)->sum('pricetotal');
 
     $externalId = rand(100,10000000);
-    $partyId = $request->mobile_number;
+    $partyId = $request->school_tel1;
 
     $config = new MtnConfig([ 
         // mandatory credentials
@@ -628,7 +631,7 @@ public function SubmitBusRentalsBookings(Request $request){
      'email' => $request->email,
      'school_tel1' => $request->school_tel1,
      'school_tel2' => $request->school_tel2, 
-    'school_address' => $request->school_address,     	 
+    'school_address' => $request->address,     	 
      'total_price' => $subtotal,
     'total_rentals' => $rentalCartCout,
     'booking_no' => mt_rand(10000000,99999999),
@@ -674,6 +677,7 @@ $rental_payment->save();
     'total_days' => $cartitem->total_days,
     'start_day' => $cartitem->start_day,
     'end_day' => $cartitem->end_day,
+    'fuel_status' => $cartitem->fuel_status,
     'price_per_day' => $cartitem->price_per_day,
     'pricetotal' => $cartitem->pricetotal,
     'date' => Carbon::today()->format('Y-m-d'),
@@ -690,8 +694,9 @@ $rental_payment->save();
 
  car_rental_cart::where('school_id',$school_id)->delete();
 
-    return redirect()->route('view.bus.rental.bookings')->with('success','Bus Rental Bookings Submitted Successfully');
+    //return redirect()->route('view.bus.rental.bookings')->with('success','Bus Rental Bookings Submitted Successfully');
 
+    return redirect()->route('school.car.rentals.dashboard')->with('success','Bus Rental Bookings Submitted Successfully');
 
 
 
@@ -721,8 +726,10 @@ public function BusRentalBookingDetails($booking_id){
     $school_id = Auth::user()->id;
     $booking = car_bookings::with('school')->where('id',$booking_id)->where('school_id',$school_id)->first();
     $rental_booking = car_rental_bookings::with('rental')->where('booking_id',$booking_id)->orderBy('id','ASC')->get();
+    $payments = rental_bookings_payments::with('booking')->where('booking_id',$booking_id)->where('school_id',$school_id)->get();
 
-    return view('school.bus_rentals.bookings.rental_booking_details',compact('booking','rental_booking'));
+
+    return view('school.bus_rentals.bookings.rental_booking_details',compact('booking','rental_booking','payments'));
 
 } 
 
@@ -806,6 +813,46 @@ public function AllRentalBookingsReportsByYear(Request $request){
 
 
 
+
+
+
+
+
+
+    // Bus Rental Seach 
+	public function BusRentalSearch(Request $request){
+
+        $request->validate(["search" => "required"]);
+
+		$item = $request->search; 
+       
+		$rentals= car::where('car_name','LIKE',"%$item%")->get();
+        $tours = tour_packages::latest()->limit(6)->orderBy('id','DESC')->get();
+        
+        
+
+		return view('school.bus_rentals.bus_rentals.search',compact('tours','rentals'));
+
+	}
+
+
+///// Advance Search Options 
+
+public function SearchBusRental(Request $request){
+
+    $request->validate(["search" => "required"]);
+
+    $item = $request->search;		  
+    
+    $rentals = car::where('car_name','LIKE',"%$item%")->select('car_name','car_photo','hire_price_fuel','id')->limit(6)->get();
+
+
+    
+    return view('school.bus_rentals.bus_rentals.search_bus_rental',compact('rentals'));
+
+
+
+} // end method 
 
 
 

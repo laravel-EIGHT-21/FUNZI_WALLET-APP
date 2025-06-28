@@ -17,6 +17,7 @@ use App\Models\order_carts;
 use App\Models\schoolorders_payments_records;
 use App\Models\order_payments_tracking;
 
+ 
 class OrderController extends Controller
 {
     
@@ -30,7 +31,7 @@ class OrderController extends Controller
         $CartCout = order_carts::where('school_id',$school_id)->count(); 
         $subtotal = order_carts::where('school_id',$school_id)->sum('pricetotal');
 
-
+/*
 		$externalId = rand(100,10000000);
 		$partyId = $request->phone_number;
 	
@@ -64,7 +65,7 @@ class OrderController extends Controller
  
  ////dd($order_transaction);
 
-		
+		*/
  		
      $order_id = orders::insertGetId([ 
      	'school_id' => Auth::id(), 
@@ -72,7 +73,7 @@ class OrderController extends Controller
      	'email' => $request->email,
      	'school_tel1' => $request->school_tel1, 
      	'school_tel2' => $request->school_tel2, 
-		'school_address' => $request->school_address,     	 
+		'school_address' => $request->address,     	 
      	'amount' => $subtotal,
 		'total_order_items' => $CartCout,
      	'order_number' => mt_rand(10000000,99999999),
@@ -80,14 +81,16 @@ class OrderController extends Controller
      	'order_date' => Carbon::today()->format('Y-m-d'),
      	'order_month' => Carbon::today()->format('F Y'),
      	'order_year' => Carbon::today()->format('Y'),
-     	'status' => 'Order Pending',
-		'payment_status' => 'Non Credit',
+     	'status' => 'Order Pending',		
+		'payment_status' => 'No Payment',
 		'created_at' => Carbon::now(),
 
-     ]);
+		]);
+
+			
 
 
-	 
+/*	 
 $token_status = $order_transaction->status;
 $amount = $order_transaction->amount;
 $currency = $order_transaction->currency;
@@ -108,18 +111,22 @@ $order_payment->payment_date = Carbon::today()->format('Y-m-d');;
 $order_payment->month = Carbon::now()->format('F Y');
 $order_payment->year = Carbon::now()->format('Y');
 $order_payment->save();
+*/
 
 
 
-$schoolorders_pay_records = new schoolorders_payments_records();
-$schoolorders_pay_records->order_id = $order_payment->order_id;
-$schoolorders_pay_records->school_id = $order_payment->school_id;
-$schoolorders_pay_records->amount = $order_payment->amount;
-$schoolorders_pay_records->total_amount = $subtotal;
-$schoolorders_pay_records->month =Carbon::now()->format('F Y');
-$schoolorders_pay_records->year =Carbon::now()->format('Y');
-$schoolorders_pay_records->save();
 
+schoolorders_payments_records::insert([
+
+'order_id' => $order_id, 
+'school_id' => Auth::id(), 
+'amount' => 0,
+'total_amount' => $subtotal,
+'month' => Carbon::today()->format('F Y'),
+'year' => Carbon::today()->format('Y'),
+'created_at' => Carbon::now(),
+
+]);
 
 $carts = order_carts::where('school_id',$school_id)->orderBy('id','ASC')->get();
      foreach ($carts as $cartitem) {
@@ -156,7 +163,7 @@ $carts = order_carts::where('school_id',$school_id)->orderBy('id','ASC')->get();
 
 
 
-	
+/*	
     public function SubmitCreditOrders(Request $request){
 
 		
@@ -181,11 +188,24 @@ $carts = order_carts::where('school_id',$school_id)->orderBy('id','ASC')->get();
      	'order_month' => Carbon::today()->format('F Y'),
      	'order_year' => Carbon::today()->format('Y'),
      	'status' => 'Order Pending',
-		 'payment_status' => 'On Credit',
+		 'payment_status' => 'No Payment',
 		'created_at' => Carbon::now(),
 
      ]);
 
+
+	 schoolorders_payments_records::insert([
+
+		'order_id' => $order_id, 
+	   'school_id' => Auth::id(), 
+		'amount' => 0,
+		'total_amount' => $subtotal,
+	   'month' => Carbon::today()->format('F Y'),
+	   'year' => Carbon::today()->format('Y'),
+		'created_at' => Carbon::now(),
+
+	 ]);
+	 
 	 
 $schoolorders_pay_records = new schoolorders_payments_records();
 $schoolorders_pay_records->order_id = $order_id;
@@ -195,6 +215,7 @@ $schoolorders_pay_records->total_amount = $subtotal;
 $schoolorders_pay_records->month =Carbon::now()->format('F Y');
 $schoolorders_pay_records->year =Carbon::now()->format('Y');
 $schoolorders_pay_records->save();
+
 
 $carts = order_carts::where('school_id',$school_id)->orderBy('id','ASC')->get();
      foreach ($carts as $cartitem) {
@@ -224,7 +245,7 @@ $carts = order_carts::where('school_id',$school_id)->orderBy('id','ASC')->get();
 
     } // end method 
 
-
+*/
 
 
 
@@ -250,16 +271,13 @@ if($auth_check == true){
 		$order = orders::with('school')->where('id',$order_id)->where('school_id',Auth::id())->first();
 		
     	$orderItems = order_items::with(['product'])->where('order_id',$order_id)->orderBy('id','DESC')->get();
-
 		
         $order_payments = schoolorders_payments_records::with(['order'])->where('order_id',$order_id)->where('school_id',Auth::id())->get();
 
-        $order_payment_total = schoolorders_payments_records::with(['order'])->where('order_id',$order_id)->where('school_id',Auth::id())->sum('amount');
-
-        
         $offline_payments_track = order_payments_tracking::with(['order'])->where('order_id',$order_id)->where('school_id',Auth::id())->get();
 
-    	return view('school.ecommerce.orders.order_details',compact('order','orderItems','order_payments','order_payment_total','offline_payments_track'));
+
+    	return view('school.ecommerce.orders.order_details',compact('order','orderItems','order_payments','offline_payments_track'));
 
 
 }
@@ -287,7 +305,7 @@ else{
             'status' => 'Order Cancelled',
         ]);
 
-		return redirect()->back()->with('error',' Order Has Been Cancelled Successfully..');
+		return back()->with('error',' Order Has Been Cancelled Successfully..');
        
     } // end method 
 
@@ -315,16 +333,24 @@ public function ViewOrderReportInvoice($order_id){
 
 //Schools` Orders
 
-public function OrdersPayments(){
+public function OrderPaymentsRecords(){
 
     
-    $payments = school_orders_payments::with(['school','order'])->where('school_id',Auth::id())->latest()->get();
+    $payment_records = schoolorders_payments_records::with(['school','order'])->where('school_id',Auth::id())->latest()->get();
 
-    return view('school.ecommerce.orders.order_payments', compact('payments'));
+    return view('school.ecommerce.orders.order_payments', compact('payment_records'));
     
 }
 
 
+
+    
+    public function OrderGeneralInfo(){
+
+    	$orders = orders::where('school_id',Auth::id())->latest()->get();
+    	return view('school.ecommerce.orders.orders_general_info',compact('orders'));
+
+    } 
 
 
 

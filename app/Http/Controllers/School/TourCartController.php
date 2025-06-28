@@ -43,7 +43,7 @@ class TourCartController extends Controller
                     
         ]);
     
-        return redirect()->route('school.tour.packages')->with('success','Tour Package Successfully Added To Your Tour Cart...');
+        return back()->with('success','Tour Package Successfully Added To Your Tour Cart...');
     
     
     
@@ -137,10 +137,22 @@ class TourCartController extends Controller
     
             $rowId = $request->id;
             tours_cart::destroy($rowId);
-            return back();
+            return back()->with('error','Tour Deleted From Your Cart!');
     
         }
     
+
+            
+    public function deleteTourFromCart(Request $request){
+
+        $row_id = $request->id;
+        tours_cart::destroy($row_id);
+
+        return back()->with('error','Tour Deleted From Your Cart!');
+
+
+
+    } 
     
         public function clearTourCart(){
     

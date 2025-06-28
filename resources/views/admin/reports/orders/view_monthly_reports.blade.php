@@ -31,10 +31,10 @@ $year_orders = DB::table('order_items')->where('year',$years)->where('status','O
 $today_orders_count = App\Models\orders::whereDate('created_at',Carbon\Carbon::today())->get();
 
 
-$month_orders_count = DB::table('orders')->where('order_month',$months)->get();
+$month_orders_count = DB::table('orders')->where('order_month',$months)->where('status','Order Delivered')->get();
 
 
-$year_orders_count = DB::table('orders')->where('order_year',$years)->get();
+$year_orders_count = DB::table('orders')->where('order_year',$years)->where('status','Order Delivered')->get();
 
 
 
@@ -302,7 +302,7 @@ $year_orders_count = DB::table('orders')->where('order_year',$years)->get();
             @php 
             
                   
-            $total = App\Models\order_items::where('month',$value->month)->sum('pricetotal');
+            $total = App\Models\order_items::where('month',$value->month)->where('status','Order Delivered')->sum('pricetotal');
             
             @endphp
             
@@ -313,7 +313,7 @@ $year_orders_count = DB::table('orders')->where('order_year',$years)->get();
             </tr>
             @endforeach
 
-                          </tbody>
+                          </tbody> 
   
                           </table>
                           </div>

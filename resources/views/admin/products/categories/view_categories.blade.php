@@ -46,6 +46,14 @@ All Categories | funziwallet
                       </div>
                     </div>
 
+
+                    <div class="col mb-4 mt-2">
+                      <div class="form-floating form-floating-outline">
+                        <input type="text" id="nameWithTitle" class="form-control" name="category_icon" required placeholder="Enter Category Icon">
+                        <label for="nameWithTitle">Icon</label>
+                      </div>
+                    </div>
+
                   </div>
 
 
@@ -79,7 +87,7 @@ All Categories | funziwallet
                                                 <!-- start row -->
                                                 <tr>
                                             <th scope="col">Category Name</th>
-
+                                            <th scope="col">Icon</th>
                                             <th scope="col">Actions</th>
 
 
@@ -104,6 +112,17 @@ All Categories | funziwallet
 
 
 
+<td>
+
+  <div class="d-flex align-items-center">
+  <div class="ms-3">
+  <h6 class="fw-semibold mb-0">{{ $value->category_icon}}</h6>
+  
+  </div>
+  </div>
+  
+  </td>
+  
 
 
 <td>
@@ -166,6 +185,13 @@ All Categories | funziwallet
                       </div>
                     </div>
 
+                    <div class="col mb-4 mt-2">
+                      <div class="form-floating form-floating-outline">
+                        <input type="text" id="icon" class="form-control" name="category_icon" required>
+                        <label for="nameWithTitle">Icon</label>
+                      </div>
+                    </div>
+
                   </div>
 
 
@@ -209,6 +235,7 @@ dataType: 'json',
 success:function(data){
 
 $('#name').val(data.category.category_name);
+$('#icon').val(data.category.category_icon);
 $('#id').val(id);
 
 }

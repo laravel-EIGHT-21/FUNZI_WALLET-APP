@@ -1,231 +1,240 @@
-@extends('school.ecommerce.body.admin_master')
+@extends('school.ecommerce.body.main_master')
 @section('content')
         
 
 @section('title')
 
-MyCart List | funziwallet
+Shopping Cart List 
 
 @endsection
 
-         
 
-        <!-- Content -->
-        
-        <div class="container-xxl flex-grow-1 container-p-y">
-            
-            
-        <h4 class="py-3 mb-4">
-              <span class="text-muted fw-light">Ecommerce /</span> My Shopping Cart
-            </h4>
-            
-            <!-- Checkout Wizard -->
-            <div id="wizard-checkout" class="bs-stepper wizard-icons wizard-icons-example mt-2">
-              <div class="bs-stepper-header m-auto border-0">
-                <div class="step" data-target="#checkout-cart">
-                  <button type="button" class="step-trigger">
-                    <span class="bs-stepper-label">Shopping Cart</span>
-                  </button>
-                </div>
+<div class="container">
 
 
-
-
-              </div>
-              <div class="bs-stepper-content border-top rounded-0">
-                <form id="wizard-checkout-form">
-            
-                  <!-- Cart -->
-                  <div id="checkout-cart" class="content">
-                    <div class="row">
-                      <!-- Cart left -->
-                      <div class="col-xl-8 mb-3 mb-xl-0">
-            
-                        @php 
-
-                        $school_id = Auth::user()->id;
-                        $CartCount = App\Models\order_carts::where('school_id',$school_id)->count();
-                        $Subtotal = App\Models\order_carts::where('school_id',$school_id)->sum('pricetotal');
-
-                        
-                              @endphp
-            
-                        <!-- Shopping bag -->
-                        <h5>My Shopping Bag ({{$CartCount}} Items)</h5>
-                        <ul class="list-group mb-3">
-                        @if($CartCount > 0)
-
-                        @foreach($carts as $cart)
-                          <li class="list-group-item p-4">
-                            <div class="d-flex gap-3">
-                              <div class="flex-shrink-0">
-                                <img src="{{ (!empty($cart['product']['product_thambnail']))? url('upload/product_images/'.$cart['product']['product_thambnail']):url('upload/no_image.jpg') }}" alt="image Thambnail" class="w-px-100">
-
-                              </div>
-                              <div class="flex-grow-1">
-                                <div class="row">
-                                  <div class="col-md-8">
-                                    <h6 class="me-3"><a href="javascript:void(0)" class="text-heading">{{$cart['product']['product_name']}}</a></h6>
-                                    <div class="mb-1 d-flex flex-wrap">{{$cart['product']['description']}}</div>
-
-                                    
-                                    <label>Quantity</label>
-                                    <div class="d-flex d-md-block align-items-center mb-2 gap-4 justify-content-center justify-content-sm-start">
-
-                                      <a href="{{route('cart.qty.decrement',$cart->id)}}" class="btn btn-sm btn-danger">
-                                        <span class="ri-indeterminate-circle-fill"></span>
-                                        </a>
-                                    
-                                      <input name="stud_qty" value="{{$cart->qty}}" min="1" style="width:70px;">
-                                        
-                                      <a href="{{route('cart.qty.increment',$cart->id)}}"  class="btn btn-sm btn-success">
-                                        <span class="ri-add-circle-fill"></span>
-                                        </a>
-                                        
-                                    </div>
-
-
-                                  <div class="col-md-4">
-                                    <div class="text-md-end">
-                                    <button type="button" onclick="removeItemFromCart('{{$cart->id}}')" class="btn-close btn-pinned" aria-label="Close"></button>
-
-                                    @php 
-
-                                    $product_price = (float)$cart->price * (float)$cart->qty;
-
-                                    @endphp
-                                      <div class="my-2 mt-md-4 mb-md-5"><span class="text-primary">ugx {{$product_price}}</span></div>
-                                     
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                          @endforeach
- 
-                        </ul>
-
-                        
-                        @else
-
-                        <h5>Your Shopping Cart Is EMPTY</h5>
-                        <ul class="list-group mb-3">
-                    
-                          <li class="list-group-item p-4">
-                            <div class="d-flex gap-3">
-
-                              <div class="flex-grow-1">
-                                <div class="row">
-                                  <div class="col-md-6">
-                                  <a href="{{route('school.products')}}" class="btn round-pill btn-warning"><i class='tf-icons mdi mdi-cart-arrow-right mdi-20px'></i>Shop Now!</a>
-
-
-                                  </div>
-
-
+	<div class="row">
   
-                                  
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                          
-
-                        </ul>
+		<h4>Shopping Cart List</h4>
+	  
+	  </div>
+	  
+	  <br/>
+	  
 
 
+	<div class="row ">
+		<div class="shopping-cart">
+			<div class="shopping-cart-table ">
+<div class="table-responsive">
+	<table class="table">
+		<thead>
+			<tr>
+				<th class="cart-romove item">Remove</th>
+				<th class="cart-description item">Image</th>
+				<th class="cart-product-name item">Product Name</th>
+				<th class="cart-qty item">Quantity</th>
+				<th class="cart-sub-total item">Subtotal</th>
+			
+			</tr>
+		</thead><!-- /thead -->
+		<tfoot>
+			<tr>
+				<td colspan="7">
+					<div class="shopping-cart-btn">
+						<span class="">
+							<a href="{{ route('school.ecommerce.dashboard')}}" class="btn btn-upper btn-primary outer-left-xs">Continue Shopping</a>
+							
+						</span>
+					</div><!-- /.shopping-cart-btn -->
+				</td>
+			</tr>
+		</tfoot>
 
-                        @endif
-            
+    @php 
 
-                      </div>
-            
-                      <!-- Cart right -->
-                      <div class="col-xl-4">
-                        <div class="border rounded p-3 mb-3">
-            
-            
-                          <!-- Price Details -->
-                          <h6 class="mb-4">Price Details</h6>
-                          <dl class="row mb-0">
-                            <dt class="col-6 fw-normal text-heading">Bag Total</dt>
-                            <dd class="col-6 text-end">ugx {{$Subtotal}}</dd>
-            
-            
-                            <dt class="col-6 fw-normal text-heading">Order Total</dt>
-                            <dd class="col-6 text-end">{{$CartCount}}</dd>
-            
-            
-                          </dl>
+    $school_id = Auth::user()->id;
+    $CartCount = App\Models\order_carts::where('school_id',$school_id)->count();
+    $Subtotal = App\Models\order_carts::where('school_id',$school_id)->sum('pricetotal');
 
-                        </div>
-
-                        <hr class="mx-n3 my-3">
- 
-
-                        <div class="d-grid">
-                          <a href="{{ route('checkout')}}" class="btn btn-warning btn-next">CheckOut (ugx {{$Subtotal}})</a>
-                          </div>
+    
+          @endphp
 
 
-                      </div>
-                    </div>
-                  </div>
+@if($CartCount > 0)
 
-        
-                </form>
+@foreach($carts as $cart)
+
+		<tbody>
+			<tr>
+				<td class="romove-item">
+          <button type="button" onclick="deleteFromCart('{{$cart->id}}')"><i class="fa fa-trash"></i></button> 
+
+        </td>
+
+
+				<td class="cart-image">
+					<a class="entry-thumbnail" href="">
+						<img src="{{ (!empty($cart['product']['product_thambnail']))? url('upload/product_images/'.$cart['product']['product_thambnail']):url('upload/no_image.jpg') }}" alt="">
+					</a>
+				</td>
+				<td class="cart-product-name-info">
+					<h4 class='cart-product-description'><a href="">{{$cart['product']['product_name']}}</a></h4>
+
+
+				</td>
+
+				<td class="cart-product-quantity">
+					<div class="quant-input">
+
+            <div class="arrows">
+
+              <div class="arrow plus gradient">
+                <a href="{{route('cart.qty.increment',$cart->id)}}" >
+                <span class="ir"><i class="icon fa fa-sort-asc"></i></span>
+                </a>
               </div>
+
+
+              <div class="arrow minus gradient">
+                <a href="{{route('cart.qty.decrement',$cart->id)}}" >
+                <span class="ir"><i class="icon fa fa-sort-desc"></i></span>
+                </a>
+              
+              </div>
+
+
             </div>
-            <!--/ Checkout Wizard -->
-            
-            
-
-            
-                      </div>
-                      <!-- / Content -->
-            
-
-
-          
-          <form id="deleteFromCart" action="{{route('cart.remove')}}" method="post">
-          @csrf 
-          @method('delete')
-          <input type="hidden" id="rowId_D" name="id" />
-          </form>
+            <input name="qty" value="{{$cart->qty}}" min="1">
+							
+					  </div>
+				</td>
+				<td class="cart-product-sub-total"><span class="cart-sub-total-price">{{$cart->pricetotal}}</span></td>
+				
+			</tr>
 
 
-          
-          <form id="clearCart" action="{{route('cart.clear')}}" method="POST">
-          @csrf 
-          @method('delete')
-
-          </form>
 
 
-                               
-                      
+			
+
+
+		</tbody><!-- /tbody -->
+
+    @endforeach
+    @else
+
+    <h4>Your Shopping Cart Is EMPTY</h4>
+
+    @endif
+	</table><!-- /table -->
+</div>
+</div><!-- /.shopping-cart-table -->				<div class="col-md-4 col-sm-12 estimate-ship-tax">
+<table class="table">
+	
+	
+</table>
+</div><!-- /.estimate-ship-tax -->
+
+<div class="col-md-4 col-sm-12 estimate-ship-tax">
+<table class="table">
+	
+	<tbody>
+			<tr>
+				<td>
+
+				</td>
+			</tr>
+	</tbody><!-- /tbody -->
+</table><!-- /table -->
+</div><!-- /.estimate-ship-tax -->
+
+<div class="col-md-4 col-sm-12 cart-shopping-total">
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+
+				<div class="cart-grand-total">
+					Grand Total<span class="inner-left-md">UGX {{$Subtotal}}</span>
+				</div>
+			</th>
+		</tr>
+	</thead><!-- /thead -->
+	<tbody>
+			<tr>
+				<td>
+					<div class="cart-checkout-btn pull-right">
+
+						<div class="d-grid">
+
+							<form id="CheckOutOrder" method="post" action="{{ route('checkout.store') }}">
+							  @csrf
+							
+							<div class="row">
+							<div class="form-floating">
+							<input type="hidden" name="shipping_name" value="{{ Auth::user()->name }}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
+							<input type="hidden" name="shipping_email" value="{{Auth::user()->email}}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
+							<input type="hidden" name="shipping_tel1" value="{{Auth::user()->school_tel1}}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
+							<input type="hidden" name="shipping_tel2" value="{{Auth::user()->school_tel2}}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
+							<input type="hidden" name="shipping_address" value="{{Auth::user()->address}}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" /> 
+							
+							
+							
+							</div>
+							</div>
+							
+							</form>
+							
+							
+							
+							
+							<a href="javascript:void(0)" onclick="event.preventDefault();document.getElementById('CheckOutOrder').submit();" class="btn btn-primary checkout-btn">
+							<span>PROCEED TO CHECKOUT</span>
+							</a>   
+						  
+						
+					</div>
+				</td>
+			</tr>
+	</tbody><!-- /tbody -->
+</table><!-- /table -->
+</div><!-- /.cart-shopping-total -->			 
+
+
+
+<br/><br/><br/><br/>
+
+
+</div><!-- /.shopping-cart -->
+	</div> <!-- /.row -->
+
+<br/><br/>
+
+<form id="removeFromCart" action="{{route('delete.from.cart')}}" method="post">
+  @csrf 
+  @method('delete')
+  <input type="hidden" id="row_id" name="id" />
+
+  </form>
+
+
+</div><!-- /.container -->
+
+
+
 <script type="text/javascript">
 
 
+  function deleteFromCart(id)
+  {
+  
+  $('#row_id').val(id);
+  $('#removeFromCart').submit();
+  
+  }
+  
+  
+  </script>
+  
 
-function removeItemFromCart(id)
-{
-
-$('#rowId_D').val(id);
-$('#deleteFromCart').submit();
-
-}
-
-
-
-function clearCart()
-{
-
-$('#clearCart').submit();
-}
-
-</script>
-
-
-@endsection 
+@endsection

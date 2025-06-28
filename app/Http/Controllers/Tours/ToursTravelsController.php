@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\tour_package_images; 
 use App\Models\tour_packages; 
 use App\Models\tours_destinations;
+use App\Models\tour_activities;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Illuminate\Support\Facades\DB;
@@ -105,7 +106,8 @@ class ToursTravelsController extends Controller
         $tour = tour_packages::findOrFail($id);
         $destinations = tours_destinations::all();
         $multiImgs = tour_package_images::where('tour_package_id',$id)->get();
-        return view('admin.tour_packages.edit_tour_package',compact('tour','destinations','multiImgs'));
+        $edit_activities = tour_activities::where('tour_id',$id)->orderBy('id','asc')->get();
+        return view('admin.tour_packages.edit_tour_package',compact('tour','destinations','multiImgs','edit_activities'));
 
      }
 
@@ -147,11 +149,14 @@ class ToursTravelsController extends Controller
         $updateTour->save();
 
 
+
         return back()->with('success','Tour Package Information Update Successfully!');
 
 
 
     }
+
+
 
 
 
@@ -255,6 +260,79 @@ return back()->with('info',' Tour Package Has Been Activated...');
 
 
 
+
+
+
+
+
+
+
+
+
+
+    ///Tour Activities
+    
+public function StoreTourActivity(Request $request,$id){
+
+            
+    	$tour_act = count($request->tour_activity);
+    	if ($tour_act !=NULL) {
+    		for ($i=0; $i <$tour_act ; $i++) { 
+
+    			$activities = new tour_activities();
+    			$activities->tour_id =  $id;
+    			$activities->tour_activity = $request->tour_activity[$i];
+    		
+    			$activities->save();
+
+    		} // End For Loop
+    	}// End If Condition
+
+
+
+    return back()->with('success','Tour Activity Added Successfully'); 
+
+}//End Method 
+
+
+
+public function EditTourActivity($id){
+
+    $act = tour_activities::findOrFail($id);
+ 
+    return response()->json(array(
+        'tour_acts' => $act,
+    ));
+
+
+}//End Method 
+
+
+public function UpdateTourActivity(Request $request){
+
+    $id = $request->input('id');
+    $data = tour_activities::find($id);
+    $data->tour_activity = $request->tour_activity;
+
+    $data->save();
+
+    return back()->with('info','Tour Activity Successfully Updated...');
+
+
+}//End Method 
+
+
+
+
+
+public function DeleteTourActivity($id){
+
+    tour_activities::find($id)->delete();
+
+
+    return back()->with('error','Tour Activity Deleted Successfully'); 
+
+}//End Method
 
 
 

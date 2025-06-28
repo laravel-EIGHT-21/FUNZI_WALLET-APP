@@ -46,11 +46,6 @@ return [
             'provider' => 'admins',
         ],
 
-        'touroperator' => [
-            'driver' => 'session',
-            'provider' => 'touroperators',
-        ],
-
         'student' => [
             'driver' => 'session',
             'provider' => 'students',
@@ -87,11 +82,6 @@ return [
             'model' => env('AUTH_MODEL', App\Models\Admin::class),
         ],
 
-
-        'touroperators' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\TourOperator::class),
-        ],
 
         'students' => [
             'driver' => 'eloquent',
@@ -134,14 +124,6 @@ return [
 
         'admins' => [
             'provider' => 'admins',
-            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-
-
-        'touroperators' => [
-            'provider' => 'touroperators',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

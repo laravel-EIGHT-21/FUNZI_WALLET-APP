@@ -46,7 +46,7 @@ Filter Tour Packages | funzitours
             </div> 
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-2"> 
           <div class="form-floating form-floating-outline mb-4">
               <input class="form-control" type="text" name="min_price" id="html5-month-input" required />
               <label for="html5-month-input">Min Student Price</label>

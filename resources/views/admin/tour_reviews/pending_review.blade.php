@@ -45,7 +45,6 @@ View All Pending Reviews | funziwallet
                                                 <tr>
                                                     <th>Tour </th>
                                                     <th>School </th> 
-                                                    <th>Tour Agency </th> 
                                                     <th>Comment </th> 
                                                     <th>Ratings </th>
 
@@ -61,7 +60,6 @@ View All Pending Reviews | funziwallet
 
         <td>{{ $item['tour']['name'] }}</td> 
         <td>{{ $item['school']['name'] }}</td> 
-        <td>{{ $item['tour']['operator']['name'] }}</td> 
         <td>{{ $item->comment }}</td> 
         <td> 
        @if($item->rating == NULL)

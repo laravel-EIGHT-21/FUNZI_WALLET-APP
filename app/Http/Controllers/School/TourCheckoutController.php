@@ -11,7 +11,7 @@ class TourCheckoutController extends Controller
 {
 
 
-
+ 
 
     public function TourCheckoutCreate(){
 
@@ -44,18 +44,33 @@ class TourCheckoutController extends Controller
 
 public function TourCheckoutStore(Request $request){
 
+
+    $schoolid = Auth::user()->id;
+    $CartCout = tours_cart::where('school_id',$schoolid)->count();
+    if ($CartCout > 0) {
+
     $data = array();
-    $data['shipping_name'] = $request->shipping_name;
+    $data['shipping_name'] = $request->shipping_name; 
     $data['shipping_email'] = $request->shipping_email;
     $data['shipping_tel1'] = $request->shipping_tel1; 
     $data['shipping_tel2'] = $request->shipping_tel2; 
     $data['shipping_address'] = $request->shipping_address;
 
     $school_id = Auth::user()->id;
-    $tourCart = tours_cart::where('school_id',$school_id)->get();
-
+    $carts = tours_cart::where('school_id',$school_id)->get();
     
-    return view('school.tours.cart.checkout_submit',compact('data','tourCart'));
+    
+    return view('school.tours.cart.checkout_view',compact('data','carts'));
+
+}
+        
+else{
+
+
+return back()->with('warning','Book Atleast One Tour Package...');
+
+}
+
     
     
      

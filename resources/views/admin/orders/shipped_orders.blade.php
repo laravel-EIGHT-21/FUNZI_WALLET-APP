@@ -33,7 +33,7 @@ Shipped Orders| funziwallet
                                              <th scope="col">School</th>       
                                             <th scope="col">Order No.</th>
                                             <th scope="col">Total Px</th>
-                                            <th scope="col">Pay status</th>
+                                            <th scope="col"> Pay Status</th>
                                             <th scope="col">Shipped Date</th>
 
                                             <th scope="col">Actions</th>
@@ -88,22 +88,24 @@ Shipped Orders| funziwallet
     
     
     </td>
-    
-    
-    
-    <td>
-        
-      <div class="d-flex align-items-center">
-      
-      <div class="ms-3">
-      <h6 class="fw-semibold mb-0">{{ $value->payment_status}}</h6>
-      
-      </div>
-      </div>
-      
-      
-      </td>
 
+
+
+        
+<td>
+    
+    <div class="d-flex align-items-center">
+    
+    <div class="ms-3">
+    <h6 class="fw-semibold mb-0">{{ $value->payment_status}}</h6>
+    
+    </div>
+    </div>
+    
+    
+    </td>
+
+    
 
 <td>
 

@@ -1,5 +1,4 @@
-
-@extends('school.tours.body.admin_master')
+@extends('school.tours.body.main_master')
 @section('content')
         
 

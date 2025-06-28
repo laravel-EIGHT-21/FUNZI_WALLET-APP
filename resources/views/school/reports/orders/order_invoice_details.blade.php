@@ -168,8 +168,12 @@
 
         <tr>
           <td class="pe-3">Total Price:</td>
-          <td class="fw-medium">ugx {{$order->amount}}</td>
+          <td class="fw-medium">UGX {{$order->amount}}</td>
         </tr>
+
+        <td class="pe-3">Payment Status:</td>
+        <td class="fw-medium">{{$order->payment_status}}</td>
+      </tr>
 
 
       </tbody>

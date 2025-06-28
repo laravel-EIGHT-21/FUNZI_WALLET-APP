@@ -61,7 +61,7 @@ Edit Rental Operator | funziwallet
     <div class="col-xl-12 col-lg-7 col-md-7 order-0 order-md-1">
     
         <div class="card mb-4">
-            <h5 class="card-header">Add Rental Operator Information Below</h5>
+            <h5 class="card-header">Update Rental Operator Information Below</h5>
 
             <hr>
 

@@ -1,5 +1,4 @@
-
-@extends('school.ecommerce.body.admin_master')
+@extends('school.ecommerce.body.main_master')
 @section('content')
         
 
@@ -10,361 +9,155 @@ Orders List | funziwallet
 
 @endsection
 
-@php
 
 
 
 
-$id = Auth::user()->id;
 
 
-$months = date('F Y');
+<div class="body-content">
+	<div class="container">
 
-$years = date('Y');
+<div class="row">
+  
+  <h4>All School Orders</h4>
 
-$month_orders = DB::table('orders')->where('school_id',$id)->where('order_month',$months)->where('status','Order Delivered')->get();
+</div>
 
-$year_orders = DB::table('orders')->where('school_id',$id)->where('order_year',$years)->where('status','Order Delivered')->get();
+<br/>
+		<div class="row">
+		
+       
+       <div class="col-md-1">
+
+       </div>
+
+       <div class="col-md-12"> 
+
+        <div class="shopping-cart">
+			<div class="shopping-cart-table">
+        <div class="table-responsive"> 
+          <table class="table">
+            <tbody>
+  
+              <tr style="background: #e2e2e2;">
+              
+
+                <td class="col-md-1">
+                  <label for="">Order No.</label>
+                </td>
+
+                <td class="col-md-3">
+                  <label for=""> Date</label>
+                </td>
+
+                <td class="col-md-3">
+                  <label for="">Order Time</label>
+                </td>
 
 
-$month_orders_amounts = DB::table('order_items')->where('month',$months)->where('school_id',$id)->where('status','Order Delivered')->sum('pricetotal');
+                <td class="col-md-2">
+                  <label for=""> Total Px</label>
+                </td>
 
-$year_orders_amounts = DB::table('order_items')->where('year',$years)->where('school_id',$id)->where('status','Order Delivered')->sum('pricetotal');
+                 <td class="col-md-2">
+                  <label for=""> Status</label>
+                </td>
 
-
-
-@endphp 
-        
-
-
-        <!-- Content -->
-        
-        <div class="container-xxl flex-grow-1 container-p-y">
-
-
-        <h4 class="py-3 mb-4">
-              <span class="text-muted fw-light"><a href="{{route('school.ecommerce.dashboard')}}">Home</a> /View /</span> My Orders List
-            </h4>
-
-            <br/>
+                 <td class="col-md-1">
+                  <label for=""> Action </label>
+                </td>
+                
+              </tr>
 
 
+              @foreach($orders as $order)
+       <tr>
+                <td class="col-md-1">
+                  <label for=""> {{ $order->order_number }}</label>
+                </td>
+
+                <td class="col-md-3">
+                  <label for=""> {{ $order->order_date }}</label>
+                </td>
 
 
-             
-            <h5 class="py-3 mb-2">Total Order Amounts  </h5>
-<div class="row gy-4">
+                 <td class="col-md-3">
+                  <label for=""> {{ $order->order_time }}</label>
+                </td>
 
-  <!-- Cards with users info -->
+                <td class="col-md-2">
+                  <label for="">UGX {{ $order->amount }}</label>
+                </td>
 
-  <div class="col-lg-6 col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <div class="avatar me-3">
-            <div class="avatar-initial bg-label-success rounded">
-              <i class="mdi mdi-cart-plus mdi-24px">
-              </i>
-            </div>
-          </div>
-    
-          <div class="card-info">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">{{ ($month_orders_amounts) }}</h4>
 
-            </div>
-            <small>Monthly Total</small>
-          </div>
+
+                 <td class="col-md-2">
+                  <label for=""> 
+                  @if($order->status == 'Order Pending')        
+                    <span class="badge badge-pill badge-warning" style="background: #800080;">Order Pending </span>
+
+                    @elseif($order->status == 'Order Confirmed')
+                    <span class="badge badge-pill badge-warning" style="background: #0000FF;">Order Confirmed </span>
+
+
+                    @elseif($order->status == 'Out for Delivery')
+                    <span class="badge badge-pill badge-warning" style="background: orange;">Out for Delivery </span>
+
+
+                    @elseif($order->status == 'Order Delivered')
+                    <span class="badge badge-pill badge-warning" style="background: #008000;">Order  Delivered </span>
+
+                  
+                    @elseif($order->status == 'Order Cancelled')
+                    <span class="badge badge-pill badge-" style="background: red;">Order Cancelled </span>
+
+                   
+
+                  @endif
+ 
+                    </label>
+                </td>
+
+         <td class="col-md-1">
+         <a href="{{route('school.order.details',$order->id)}}"   title="Order Details" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i> View</a>
+         
+         <a href="{{route('order.invoice.report.details',$order->id)}}"  target="_blank" title="Order Invoice Report" class="btn btn-sm btn-warning" style="margin-top: 5px;"><i class="fa fa-download" style="color: white;"></i> Invoice </a>
+          
+        </td>
+                
+              </tr>
+              @endforeach
+
+
+
+
+
+            </tbody>
+            
+          </table>
           
         </div>
       </div>
-    </div>
-  </div>
-  <div class="col-lg-6 col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <div class="avatar me-3">
-            <div class="avatar-initial bg-label-info rounded">
-              <i class="mdi mdi-cart-plus mdi-24px">
-              </i>
-            </div>
-          </div>
-
-          <div class="card-info">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">{{ ($year_orders_amounts) }}</h4>
-
-            </div>
-            <small>Yearly Total</small>
-          </div>
-        
-        </div>
-      </div>
-    </div>
-  </div>
+       </div>
 
 
 
+
+         
+       </div> <!-- / end col md 8 -->
+
+		 
+
+		 
+			
+		</div> <!-- // end row -->
+
+    <br/><br/><br/>
+		
+	</div>
+	
 </div>
-
-
-
-<br />
-
-                    
-<h5 class="py-3 mb-2">Total School Orders Delivered  </h5>
-<div class="row gy-4">
-
-  <div class="col-lg-6 col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <div class="avatar me-3">
-            <div class="avatar-initial bg-label-success rounded">
-              <i class="mdi mdi-cart-plus mdi-24px">
-              </i>
-            </div>
-          </div>
-    
-          <div class="card-info">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">{{ count($month_orders) }}</h4>
-
-            </div>
-            <small>Monthly Orders</small>
-          </div>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-6 col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <div class="avatar me-3">
-            <div class="avatar-initial bg-label-info rounded">
-              <i class="mdi mdi-cart-plus mdi-24px">
-              </i>
-            </div>
-          </div>
-
-          <div class="card-info">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">{{ count($year_orders) }}</h4>
-
-            </div>
-            <small>Yearly Orders</small>
-          </div>
-        
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-</div>
-
-
-<br /><br />
-
-
-            <div class="row">
-                        <div class="col-12">
-                            <!-- ---------------------
-                                    start Zero Configuration
-                          
-                                ---------------- -->
-                            <div class="card">
-                                <div class="card-body">
-     
-                                    <div class="table-responsive">
-                                        <table id="zero_config"
-                                            class="table border table-striped table-bordered text-nowrap">
-                                            <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                            <th scope="col">Order No.</th>
-                                            <th scope="col">Date</th>
-                                            <th scope="col">Time</th>
-                                            <th scope="col">Total Px</th>
-                                            <th scope="col">Pay status</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Actions</th>
-
-
-                                                </tr>
-                                                <!-- end row --> 
-                                            </thead>
-
-<tbody>
-@foreach($orders as $value )
-<tr>
-
-<td>
-
-<div class="d-flex align-items-center">
-<div class="ms-3">
-<h6 class="fw-semibold mb-0">{{ $value->order_number}}</h6>
-
-</div>
-</div>
-
-</td>
-
-
-<td>
-
-<div class="d-flex align-items-center">
-<div class="ms-3">
-<h6 class="fw-semibold mb-0">{{ $value->order_date}}</h6>
-
-</div>
-</div>
-
-</td>
-
-
-
-<td>
-
-<div class="d-flex align-items-center">
-<div class="ms-3">
-<h6 class="fw-semibold mb-0">{{ $value->order_time}}</h6>
-
-</div>
-</div>
-
-</td>
-
-
-
-<td>
-    
-<div class="d-flex align-items-center">
-
-<div class="ms-3">
-<h6 class="fw-semibold mb-0">{{ $value->amount}}</h6>
-
-</div>
-</div>
-
-
-</td>
-
-
-
-<td>
-    
-  <div class="d-flex align-items-center">
-  
-  <div class="ms-3">
-  <h6 class="fw-semibold mb-0">{{ $value->payment_status}}</h6>
-  
-  </div>
-  </div>
-  
-  
-  </td>
-
-
-
-<td class="pe-0">
-@if($value->status == 'Order Pending')        
-<span class="badge badge-pill badge-warning" style="background: #800080;">Order Pending </span>
-
-@elseif($value->status == 'Order Confirmed')
-<span class="badge badge-pill badge-warning" style="background: #0000FF;">Order  Confirmed </span>
-
-
-@elseif($value->status == 'Out for Delivery')
-<span class="badge badge-pill badge-warning" style="background: #FFA500;">Out For Delivery </span>
-
-
-@elseif($value->status == 'Order Delivered')
-<span class="badge badge-pill badge-warning" style="background: green;">Order Delivered </span>
-
-
-@elseif($value->status == 'Order Cancelled')
-<span class="badge badge-pill badge-warning" style="background: red;">Order Cancelled </span>
-
-
-@endif
-
-</td>
-
-
-
-
-<td>
-
-<div class="action-btn d-flex align-items-center">
-<a href="{{route('school.order.details',$value->id)}}"   title="Order Details" class="btn btn-sm btn-primary">
-<i class="mdi mdi-notebook-outline me-1"></i>
-</a>
-
-&nbsp;&nbsp;&nbsp;
-
-<a href="{{route('order.invoice.report.details',$value->id)}}"  target="_blank" title="Order Invoice Report" class="btn btn-sm btn-warning">
-<i class="mdi mdi-printer-outline me-1"></i>
-</a>
-
-
-
-
-
-&nbsp;&nbsp;&nbsp;
-
-@if($value->status == 'Order Pending')       
-
-<a href="{{route('cancel.order',$value->id)}}" title="Cancel Order" class="btn btn-sm bg-danger" id="cancelled">
-<span class="mdi mdi-delete-empty bg-label-danger"></span>
-</a>
-
-@else
-
-
-@endif
-
-
-
-
-</div>
-
-
-
-
-
-
-
-</td>
-
-</tr>
-@endforeach
-</tbody>
-
-                                        </table>
-                                    </div>
-
-
-
-
-                                </div>
-                            </div>
-                            <!-- ---------------------
-                                    end Zero Configuration
-                                ---------------- -->
-                        </div>
-                    </div>
-
-
-            
-            
-                      </div>
-                      <!--/ Content -->
-
 
 
 

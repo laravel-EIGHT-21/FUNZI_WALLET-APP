@@ -1,12 +1,12 @@
-
-@extends('school.bus_rentals.body.admin_master')
+@extends('school.body.admin_master')
 @section('content')
+        
 
 
 
 @section('title')
 
-Bus Rental Bookings Mobile Payments Transactions
+Bus Rental Bookings Payments 
 
 @endsection
 
@@ -38,7 +38,7 @@ $year_payments = DB::table('rental_bookings_payments')->where('school_id',$schoo
             
 
             <h4 class="py-3 mb-4">
-              <span class="text-muted fw-light"><a href="{{route('school.car.rentals.dashboard')}}">Home</a> /View /</span>Bus Rental Bookings Mobile Payments
+              <span class="text-muted fw-light"><a href="{{route('dashboard')}}">Home</a> /View /</span>Bus Rental Bookings Payments
             </h4>
             
 
@@ -138,23 +138,48 @@ $year_payments = DB::table('rental_bookings_payments')->where('school_id',$schoo
                         <thead>
                         <!-- start row -->
                         <tr>
-                        <th>Booking No. </th>
-                        <th>School </th>
-                        <th> Date</th>
-                        <th> Time</th>
-                        <th>Payments (UGX)</th>
+                       <th> Booking No. </th>
+    <th>Total Rentals
+    <th> Date</th>
+    <th> Booking Status</th>
+    <th>Payments (UGX)</th>
 
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($payments as $key => $value )
-                        <tr>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach($payments as $key => $value )
+    <tr>
 
-                        <td> {{ $value['booking']['booking_no']}}</td>
-                        <td> {{ $value['school']['name']}}</td>
-                        <td> {{ $value->payment_date}}</td>
-                        <td> {{ $value['booking']['time']}}</td>
-                        <td> {{ $value->amount}}</td>
+    <td> {{ $value['booking']['booking_no']}}</td>
+    <td> {{ $value['booking']['total_rentals']}}</td>
+    <td> {{ $value->payment_date}} </td>
+
+
+    @php
+      $status = $value->booking->status;
+    @endphp
+    <td>
+        @if($status == 'Bookings Pending')        
+        <span class="badge badge-pill badge-warning" style="background: maroon;">Bookings Pending </span>
+
+        @elseif($status == 'Bookings Confirmed')
+        <span class="badge badge-pill badge-warning" style="background: #21f32f;">Bookings Confirmed </span>
+
+
+        @elseif($status == 'Bookings Cancelled')
+        <span class="badge badge-pill badge-" style="background: red;">Bookings Cancelled </span>
+
+
+
+        @endif   
+
+    </td>
+
+    <td>
+
+    <span class="badge rounded-pill text-primary bg-dark-primary p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $value->amount }}</b></span>
+
+    </td>
 
 
                         </tr>

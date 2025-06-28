@@ -68,7 +68,6 @@ use Laravel\Socialite\Facades\Socialite;
 
 use App\Models\Students;
 use App\Models\User;
-use App\Models\TourOperator;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
 
@@ -103,15 +102,6 @@ Route::get('student/login', [StudentUserController::class, 'loginForm']);
 Route::post('student/login', [StudentUserController::class, 'store'])->name('student.login');
 });
 
-
-
-
-
-
-Route::middleware('tour-operator')->group(function () {
-Route::get('touroperator/login', [TourOperatorUserController::class, 'loginForm']);
-Route::post('touroperator/login', [TourOperatorUserController::class, 'store'])->name('touroperator.login');
-});
 
 
 
@@ -167,70 +157,6 @@ Route::post('/reset-password', function (Request $request) {
 })->middleware('guest')->name('password.update');
 
 
-
-
-
-
-
-
-
-
-/*
-
-///Tour Operators Password Reset Section////
-
-
-Route::get('/touroperator/forgot-password', function () {
-    return view('auth.tour-operator-forgot-password');
-})->middleware('guest')->name('tour.operator.password.request');
-
-
-Route::post('/touroperator/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
- 
-    $tour_status = Password::broker('touroperators')->sendResetLink(
-        $request->only('email')
-    );
- 
-    return $tour_status === Password::RESET_LINK_SENT
-                ? back()->with(['status' => __($tour_status)])
-                : back()->withErrors(['email' => __($tour_status)]);
-})->middleware('guest')->name('tour.operator.password.email');
-
-
-Route::get('/touroperator/reset-password/{token}', function (string $token) {
-    return view('auth.tour-operator-reset-password', ['token' => $token]);
-})->middleware('guest')->name('tour.operator.password.reset');
-
-
-Route::post('/touroperator/reset-password', function (Request $request) {
-    $request->validate([
-        'token' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|min:8|confirmed',
-    ]);
- 
-    $tour_status = Password::broker('touroperators')->reset(
-        $request->only('email', 'password', 'password_confirmation', 'token'),
-        function (TourOperator $tour, string $tour_password) {
-            $tour->forceFill([
-                'password' => Hash::make($tour_password)
-            ])->setRememberToken(Str::random(60));
- 
-            $tour->save();
- 
-            event(new PasswordReset($tour));
-        }
-    );
- 
-    return $tour_status === Password::PASSWORD_RESET
-                ? redirect('touroperator/login')->with('status', __($tour_status))
-                : back()->withErrors(['email' => [__($tour_status)]]);
-})->middleware('guest')->name('tour.operator.reset.password.update');
-
-
-
-*/
 
 
 
@@ -511,24 +437,11 @@ Route::get('/all/orders/payments/records', [OrdersController::class, 'AllOrdersP
 
 ///Offline Order Payments///
 
-
-Route::get('/make/order/offline/payment/{order_id}', [OrdersController::class, 'MakeOrderPayment'])->name('make.order.offline.payment'); 
-
-Route::post('/submit/order/payment/{order_id}', [OrdersController::class, 'SubmitSchoolOrderPayment'])->name('submit.order.payment');
-
 Route::post('/school/orders/payment/{order_id}', [OrdersController::class, 'SchoolOrdersPayment'])->name('order.balance.topup.payment');
 
 Route::get('/offline/orders/track/invoice/{order_id}', [OrdersController::class, 'OfflineOrdersTrackInvoice'])->name('offline.orders.track.invoice'); 
 
-
-
 Route::get('/make/order/offline/payment/{order_id}', [OrdersController::class, 'MakeOrderPayment'])->name('make.order.offline.payment'); 
-
-
-Route::get('/edit/offline/order/payment/{order_id}', [OrdersController::class, 'EditSchoolOrderOfflinePayment'])->name('offline.order.payment.edit'); 
-
-Route::post('/update/offline/order/payment/{order_id}', [OrdersController::class, 'UpdateSchoolOrderOfflinePayment'])->name('offline.order.payment.update');
-
 
 Route::get('/offline/order/payment/invoice/{id}', [OrdersController::class, 'OfflineOrderPaymentInvoice'])->name('offline.order.payment.invoice'); 
 
@@ -565,6 +478,25 @@ Route::get('/delete/tour/multi/images/{id}',[ToursTravelsController::class,'dele
 Route::get('/tour/deactivate/{id}',[ToursTravelsController::class,'deactivateTourPackage'])->middleware(['auth','verified'])->name('tour.deactivate');
 
 Route::get('/tour/activate/{id}',[ToursTravelsController::class,'activateTourPackage'])->middleware(['auth','verified'])->name('tour.activate');
+
+
+
+//Tour Activities
+Route::controller(ToursTravelsController::class)->group(function(){
+
+Route::get('/edit/tour/activity/{id}', 'EditTourActivity');
+Route::post('/update/tour/activity', 'UpdateTourActivity');
+
+Route::post('/store/tour/activies/{id}', 'StoreTourActivity')->name('store.tour.activities');
+
+Route::get('/delete/tour/activity/{id}', 'DeleteTourActivity')->name('delete.tour.activity');
+
+});
+
+
+
+
+
 
 
 Route::get('/tour/details/{id}',[SchoolTourBookingsController::class,'tourPackageDetails'])->name('tour.details');
@@ -701,9 +633,9 @@ Route::get('/order/details/report/{order_id}', [OrderReportsController::class, '
 
 
 //All School Tour Bookings Reports
-Route::get('/all/yearly/tour/bookings/reports', [SchoolTourBookingController::class, 'ViewAllYearlyTourBookingsReports'])->name('all.tour.bookings.reports');
+Route::get('/all/yearly/tour/bookings/reports', [SchoolTourBookingsController::class, 'ViewAllYearlyTourBookingsReports'])->name('all.tour.bookings.reports');
 
-Route::post('/all/tour/bookings/report/by/year',[SchoolTourBookingController::class,'AllTourBookingsReportsByYear'])->name('search-school-tour-booking-by-year');
+Route::post('/all/tour/bookings/report/by/year',[SchoolTourBookingsController::class,'AllTourBookingsReportsByYear'])->name('search-school-tour-booking-by-year');
 
 
 
@@ -825,9 +757,7 @@ Route::post('/offline/schoolfees/transfers/report/search/by/year', [TransferRepo
 
 
 ///School Tours $ Travels Routes///
-Route::get('/ecommerce/dashboard',[ShopController::class,'ViewEcommerceDash'])->name('school.ecommerce.dashboard');
-
-Route::get('/eCommerce/shopping',[ShopController::class,'viewProductList'])->name('school.products');
+Route::get('/ecommerce',[ShopController::class,'ViewEcommerceDash'])->name('school.ecommerce.dashboard');
 
 Route::get('/product/details/{id}/{product_name}',[ShopController::class,'productDetails'])->name('product.details');
 
@@ -839,10 +769,29 @@ Route::get('/cart/quantity/increment/{id}',[CartController::class,'updateCartQty
 
 Route::get('/cart/quantity/decrement/{id}',[CartController::class,'decreCartQty'])->name('cart.qty.decrement');
 
-
 Route::delete('/cart/remove',[CartController::class,'removeCart'])->name('cart.remove');
 
+Route::delete('/delete/from/cart',[CartController::class,'deleteFromCart'])->name('delete.from.cart');
+
 Route::delete('/cart/clear',[CartController::class,'clearCart'])->name('cart.clear');
+
+
+
+// Product Search Route 
+Route::post('/search', [ShopController::class, 'ProductSearch'])->name('product.search');
+
+
+// Advance Search Routes 
+Route::post('search-product', [ShopController::class, 'SearchProduct']);
+
+
+// Shop Page Route 
+Route::get('/shop/by/category/prices', [ShopController::class, 'ShopPage'])->name('shopping.filter.page');
+
+Route::post('/shop/filter', [ShopController::class, 'ShopFilter'])->name('shopping.filtered');
+
+
+
 
 
 
@@ -851,7 +800,7 @@ Route::delete('/cart/clear',[CartController::class,'clearCart'])->name('cart.cle
 Route::post('/submit/orders', [OrderController::class, 'SubmitOrders'])->name('submit.orders');
 
 
-Route::post('/submit/credits/orders', [OrderController::class, 'SubmitCreditOrders'])->name('submit.credit.orders');
+//Route::post('/submit/credits/orders', [OrderController::class, 'SubmitCreditOrders'])->name('submit.credit.orders');
 
 
 Route::get('/view/my/orders', [OrderController::class, 'MyOrders'])->name('view.school.orders');
@@ -872,23 +821,20 @@ Route::get('/checkout', [CheckoutController::class, 'CheckoutCreate'])->name('ch
 Route::post('/checkout/store', [CheckoutController::class, 'CheckoutStore'])->name('checkout.store');
 
 
-Route::post('/checkout/credit/order/store', [CheckoutController::class, 'CheckoutCreditStore'])->name('checkoutcredit.store');
+//Route::post('/checkout/credit/order/store', [CheckoutController::class, 'CheckoutCreditStore'])->name('checkoutcredit.store');
+
 
 
 //Report Orders 
 Route::get('/order/report/details/{order_id}', [OrderController::class, 'ViewOrderReportInvoice'])->name('order.invoice.report.details');
 
 
-
 //Orders Reports    
-Route::get('/weekly/school/orders/reports', [SchoolOrdersReportController::class, 'ViewWeeklyOrdersReports'])->name('school.weekly.orders.reports');
 
 Route::get('/monthly/school/orders/reports', [SchoolOrdersReportController::class, 'ViewMonthlyOrdersReports'])->name('school.monthly.orders.reports');
 
 Route::get('/yearly/school/orders/reports', [SchoolOrdersReportController::class, 'ViewYearlyOrdersReports'])->name('school.yearly.orders.reports');
 
-
-Route::post('/search/school/orders/report/by/week',[SchoolOrdersReportController::class,'OrdersReportsByWeek'])->name('search-school-orders-by-week');
 
 Route::post('/search/school/orders/report/by/month',[SchoolOrdersReportController::class,'OrdersReportsByMonth'])->name('search-school-orders-by-month');
 
@@ -897,276 +843,13 @@ Route::post('/search/school/orders/report/by/year', [SchoolOrdersReportControlle
 
 
 
+//School Orders Information
+Route::get('/orders/general/information', [OrderController::class, 'OrderGeneralInfo'])->name('school.orders.general.info');
 
 
-/*
+//School Orders Payment Records  
+Route::get('/orders/payemnt/records', [OrderController::class, 'OrderPaymentsRecords'])->name('order.payment.records');
 
-// Fee Category Amount Routes 
-
-Route::get('fee/amount/view', [SchoolFeesAmountsController::class, 'ViewFeeAmount'])->name('fee.amount.view');
-
-Route::get('fee/amount/add', [SchoolFeesAmountsController::class, 'AddFeeAmount'])->name('fee.amount.add');
-
-Route::post('fee/amount/store', [SchoolFeesAmountsController::class, 'StoreFeeAmount'])->name('store.fee.amount');
-
-Route::get('fee/amount/edit/{rand_no}', [SchoolFeesAmountsController::class, 'EditFeeAmount'])->name('fee.amount.edit');
-
-Route::post('fee/amount/update/{rand_no}', [SchoolFeesAmountsController::class, 'UpdateFeeAmount'])->name('update.fee.amount');
-
-
-
-
-// All Students SchoolFees Collections Informations
-
-Route::get('/view/student/schoolfees/collections', [SchoolFeesCollectionController::class, 'ViewFeesCollections'])->name('view.fees.collections');
-
-
-Route::get('/student/fees/edit/{id}', [SchoolFeesCollectionController::class, 'StudentFeesEdit'])->middleware(['auth','verified'])->name('student.fees.update');
-
-
-Route::post('student/fees/update/store/{id}', [SchoolFeesCollectionController::class, 'StudentFeesUpdateStore'])->name('student.fees.update.store');
-
-
-Route::get('/student/fees/collections/details/{invoice_no}', [SchoolFeesCollectionController::class, 'ViewStudentFeesCollectionDetails'])->middleware(['auth','verified'])->name('student.fees.collections.details');
-
-
-Route::get('/get/fees/balance/amount',[SchoolFeesCollectionController::class, 'GetBalanceAmount'])->name('get-fees-balance-amount'); 
-
-
-Route::post('/student/mobile/balance/payment/{invoice_no}', [SchoolFeesCollectionController::class, 'MobileFeesBalancePayment'])->name('student.mobile.balance.payment');
-
-Route::get('/view/schoolfees/collections', [SchoolFeesCollectionController::class, 'ViewSchoolFeesCollections'])->name('view.schoolfees.collections.filter');
-
-Route::get('/student/fees/collections/report/print/{id}', [SchoolFeesCollectionController::class, 'ViewStudentFeesCollectionReportPrint'])->name('student.fees.collections.report.print');
-
-
-//Offline Students SchoolFees Payments
-
-Route::get('/make/offline/payments', [SchoolFeesCollectionController::class, 'MakeOfflineSchoolFeesPayments'])->name('make.offline.payments');
-
-
-Route::get('/make/offline/schoolfees/payment/{id}', [SchoolFeesCollectionController::class, 'MakeStudentOfflinePayment'])->name('student.make.offline.schoolfees.payment');
-
-
-Route::post('/student/submit/offline/payment/{student_code}', [SchoolFeesCollectionController::class, 'SubmitStudentOfflineSchoolfeesPayment'])->name('student.submit.offline.schoolfees.payment');
-
-
-
-Route::get('/student/offline/track/invoice/{invoice_no}', [SchoolFeesCollectionController::class, 'StudentOfflineTrackInvoice'])->name('student.offline.track.invoice'); 
-
-
-Route::get('/student/mobile/track/invoice/{student_acct_no}', [SchoolFeesCollectionController::class, 'StudentMobileTrackInvoice'])->name('student.mobile.track.invoice'); 
-
-
-Route::post('/student/offline/payment/{invoice_no}', [SchoolFeesCollectionController::class, 'SubmitStudentOfflinePayments'])->name('student.cash.payment');
-
-
-Route::get('/student/offline/payment/invoice/{id}', [SchoolFeesCollectionController::class, 'StudentOfflinePaymentInvoice'])->name('offline.payment.invoice'); 
-
-Route::get('/student/offline/payment/delete/{id}', [SchoolFeesCollectionController::class, 'StudentOfflinePaymentDelete'])->name('delete.offline.payment'); 
-
-
-
-
-//Students Financial Statements for SchoolFees Collection
-
-Route::get('/view/fees/financial/statements', [SchoolFeesReportController::class, 'StudentFeesFinancialStatement'])->name('get.financial.statements');
-
-Route::get('/generate/student/financial/statement/{id}', [SchoolFeesReportController::class, 'GenerateFinancialStatement'])->middleware(['auth','verified'])->name('generate.student.financial.statement');
-
-Route::post('/get/student/termly/financial/statements/{invoice_no}', [SchoolFeesReportController::class, 'GetStudentTermlyFinancialStatement'])->middleware(['auth','verified'])->name('get.student.termly.schoolfees.financial.statement');
-
-Route::post('/get/student/yearly/financial/statements/{student_code}', [SchoolFeesReportController::class, 'GetStudentYearlyFinancialStatement'])->middleware(['auth','verified'])->name('get.student.yearly.schoolfees.financial.statement');
-
-
-
-// All Students Admissions Fees Collections & Reports
-
-Route::get('/view/admission/fees/collections', [SchoolFeesCollectionController::class, 'ViewAdmissionFeesCollections'])->name('view.admission.fees');
-
-Route::get('/admission/fee/edit/{id}', [SchoolFeesCollectionController::class, 'AdmissionFeeEdit'])->name('edit.admission.fee');
-
-Route::post('/admission/fee/update/{id}', [SchoolFeesCollectionController::class, 'AdmissionFeeUpdate'])->name('update.admission.fee');
-
-
-Route::get('/view/admission/fees/collections/report', [SchoolFeesReportController::class, 'ViewAdmissionFeesReport'])->name('view.admission.fees.report');
-
-Route::post('/search/admission/fees/termly/report',[SchoolFeesReportController::class,'AdmissionFeesTermlyReport'])->name('search-admission-fees-by-term');
-
-Route::post('/search/admission/fees/yearly/report',[SchoolFeesReportController::class,'AdmissionFeesYearlyReport'])->name('search-admission-fees-by-year');
-
-
-
-//Schoolfees Collections Reporting
-
-Route::get('/schoolfees/collections/report', [SchoolFeesReportController::class, 'SchoolfeesCollectionsReport'])->name('schoolfees.collections.report');
-
-Route::post('/search/schoolfees/termly/report',[SchoolFeesReportController::class,'SchoolfeesTermlyReport'])->name('search-schoolfees-collection-by-term');
-
-Route::post('/search/schoolfees/yearly/report',[SchoolFeesReportController::class,'SchoolfeesYearlyReport'])->name('search-schoolfees-collection-by-year');
-
-
-
-
-//Expense Categories
-
-Route::get('/view/expense/categories', [ExpenseController::class, 'ViewExpenseCategory'])->name('view.expense.categories');
-
-Route::post('/expense/categories/store', [ExpenseController::class, 'ExpenseCategoryStore'])->name('expense.category.store');
-
-Route::get('/expense/category/edit/{id}', [ExpenseController::class, 'EditExpenseCategory']);
-
-Route::post('/expense-category-update', [ExpenseController::class, 'ExpenseCategoryUpdate']);
-
-
-
-
-
-// All Expense Informations
-
-Route::get('/view/expenses/information', [ExpenseController::class, 'ViewExpenses'])->name('view.expenses');
-
-Route::post('/expense/store', [ExpenseController::class, 'ExpenseFeesStore'])->name('expense.fees.store');
-
-Route::get('/expense/fees/edit/{id}', [ExpenseController::class, 'ExpenseFeesEdit'])->name('expense.fees.edit');
-
-Route::post('/expense-fees-update/{id}', [ExpenseController::class, 'ExpenseFeesUpdate'])->name('expense.fees.update');
-
-Route::get('/expense/fees/details/{invoice_no}', [ExpenseController::class, 'ViewExpenseFeesDetails'])->middleware(['auth','verified'])->name('expense.fees.details');
-
-Route::get('/view/expenses/information/filter', [ExpenseController::class, 'ViewExpenseFeesFilter'])->name('view.expenses.filter');
-
-Route::get('/expense/information/report/print/{id}', [ExpenseController::class, 'ViewExpenseReportPrint'])->name('expense.information.report.print');
-
-
-
-
-//Expense Fees Payments 
-
-
-Route::get('/expense/fee/track/invoice/{invoice_no}', [ExpenseController::class, 'ExpenseFeesTrackInvoice'])->name('expense.fees.track.invoice'); 
-
-
-Route::post('/expense/fees/topup/payment/{invoice_no}', [ExpenseController::class, 'SubmitExpenseFeesTopup'])->name('expense.fees.topup.payment');
-
-
-Route::get('/expense/fees/topup/payment/invoice/{id}', [ExpenseController::class, 'ExpenseTopupPaymentInvoice'])->name('expense.fees.topup.payment.invoice'); 
-
-Route::get('/expense/fees/topup/payment/delete/{id}', [ExpenseController::class, 'ExpenseFeesTopupPaymentDelete'])->name('delete.expense.fees.topup.payment'); 
-
-
-
-//Expenses Reporting
-
-Route::get('/school/expenses/report', [ExpenseReportController::class, 'SchoolExpensesReport'])->name('view.expenses.reports');
-
-
-Route::post('/search/school/expenses/termly/report',[ExpenseReportController::class,'SchoolTermlyExpenseReport'])->name('search-school-expenses-by-term');
-
-Route::post('/search/school/expenses/yearly/report',[ExpenseReportController::class,'SchoolYearlyExpenseReport'])->name('search-school-expenses-by-year');
-
-
-
-Route::post('/search/expense/category/termly/report',[ExpenseReportController::class,'ExpenseCategoryTermlyReport'])->name('search-school-expense-category-by-term');
-
-Route::post('/search/expense/category/yearly/report',[ExpenseReportController::class,'ExpenseCategoryYearlyReport'])->name('search-school-expense-category-by-year');
-
-
-
-
-
-//Purchases Section
-
-
-Route::controller(PurchasesController::class)->group(function() {
-
-
-
-/// PURCHASES Stock Information Routes  ///
-
-
-Route::get('/view/all/purchases','ViewAllPurchases')->name('view.all.purchases');
-
-Route::get('/view/purchases/filter','ViewPurchasesFilter')->name('view.purchases.filter');
-
-Route::post('/submit/purchase/information','SubmitPurchaseInfo')->name('store.purchase.information');
-
-Route::get('/edit/purchase/information/{id}','EditPurchaseInfo');
-
-Route::post('/update-purchase-information','UpdatePurchaseInfo');
-
-Route::get('/purchase/information/report/{id}',  'PurchaseInfoReport')->name('purchase.information.report');
-
-Route::get('/purchase/details/{id}','ViewPurchaseDetails')->middleware(['auth','verified'])->name('purchase.details');
-
-
-
-Route::get('view/purchase/items','ViewPurchaseItemList')->name('view.purchase.items');
-
-Route::post('purchase/items/store','StorePurchaseItem')->name('store.purchase.items');
-
-Route::get('/purchase/items/edit/{id}','EditPurchaseItem');
-
-Route::post('/purchase-items-update','UpdatePurchaseItem');
-
-
-
-Route::get('view/purchase/items/category','ViewPurchaseItemCategoryList')->name('view.purchase.item.categories');
-
-Route::post('/store/purchase/item/category','StorePurchaseItemCategory')->name('store.purchase.item.category');
-
-Route::get('/purchase/item/category/edit/{id}','EditPurchaseItemCategory');
-
-Route::post('/purchase-item-category-update','UpdatePurchaseItemCategory');
-
-
-
-
-
-});// Purchases
-
-
-
-
-Route::controller(PurchasesReportController::class)->group(function() {
-
-
-///Purchase Reports ///
-Route::get('/purchases/reports/view','ViewPurchaseReports')->name('view.purchases.reports');
-
-Route::post('/purchases/report/search/by/term','PurchasesReportByTerm')->name('search-purchases-report-by-term-year');
-
-Route::post('/purchases/report/search/by/year', 'PurchasesReportByYears')->name('search-purchases-report-by-year');
-
-
-
-Route::post('/search/purchase/item/termly/report','PurchaseItemTermlyReport')->name('search-purchase-item-by-term');
-
-Route::post('/search/purchase/item/yearly/report','PurchaseItemYearlyReport')->name('search-purchase-item-by-year');
-
-
-
-});// Purchases Reports
-
-
-
-
-
-Route::controller(IncomeStatementController::class)->group(function() {
-
-
-///Income statement Reports ///
-Route::get('/income/statement/reports/view','ViewIncomeStatementReports')->name('income.statement.reports');
-
-Route::post('/income/statement/report/search/by/term','IncomeStatementReportByTerm')->name('search-income-statement-report-by-term-year');
-
-Route::post('/income/statement/report/search/by/year', 'IncomeStatementReportByYears')->name('search-income-statement-report-by-year');
-
-});// Income statement Reports
-
-
-
-*/
 
 
 
@@ -1184,7 +867,7 @@ Route::controller(SchoolToursController::class)->group(function() {
 
 
 ///School Tours $ Travels Routes///
-Route::get('/tours/travels/dashboard','ViewToursTravelDash')->name('tours.travels.dashboard');
+Route::get('/tours/travels','ViewToursTravelDash')->name('tours.travels.dashboard');
 
 Route::get('/tour/packages','viewTourPackages')->name('school.tour.packages');
 
@@ -1202,6 +885,21 @@ Route::get('/tour/agency/packages/filtered','TourAgencyPackagesFilterd')->name('
 
 
 });
+
+
+// Product Search Route 
+Route::post('/search/tour', [SchoolToursController::class, 'TourSearch'])->name('tour.search');
+
+
+// Advance Search Routes 
+Route::post('search-tour', [SchoolToursController::class, 'SearchTour']);
+
+
+// Shop Page Route 
+Route::get('/filter/by/tour/regions', [SchoolToursController::class, 'ShopPage'])->name('tours.filter.page');
+
+Route::post('/tours/filter', [SchoolToursController::class, 'ShopFilter'])->name('tours.filtered');
+
 
 
 
@@ -1223,6 +921,9 @@ Route::get('/adults/quantity/increment/{id}','IncreAdultQtyCart')->name('tour.ca
 Route::get('/adults/quantity/decrement/{id}','DecreAdultQtyCart')->name('tour.cart.adults.qty.decrement');
 
 Route::delete('/tour/cart/remove','removeTourCart')->name('tour.cart.remove');
+
+Route::delete('/delete/tour/cart','deleteTourFromCart')->name('delete.tour.cart');
+
 
 Route::delete('/tour/cart/clear','clearTourCart')->name('tour.cart.clear');
 
@@ -1269,8 +970,22 @@ Route::post('/store/review', [ReviewController::class, 'StoreReview'])->name('st
 
 
 
+//School Tours Booking General Information
+Route::get('/tour/booking/general/information', [TourBookingsController::class, 'TourBookingsGeneralInfo'])->name('view.tour.bookings.info');
 
 
+
+
+//Orders Reports    
+
+Route::get('/annual/tours/reports', [TourBookingsController::class, 'AnnualTourReports'])->name('school.annual.tours.reports');
+
+Route::get('/annual/bus/rentals/reports', [TourBookingsController::class, 'AnnualBusRentalsReports'])->name('school.annual.bus.rentals.reports');
+
+
+Route::post('/search/annual/school/tours/report',[TourBookingsController::class,'ToursAnnualReport'])->name('search-annual-school-tour');
+
+Route::post('/search/annual/school/bus/rentals/report', [TourBookingsController::class,'BusRentalsAnnualReports'])->name('search-annual-school-bus-rental');
 
 
 
@@ -1281,9 +996,9 @@ Route::post('/store/review', [ReviewController::class, 'StoreReview'])->name('st
 Route::controller(CarRentalsController::class)->group(function() {
 
 
-Route::get('/bus/rentals/dashboard','ViewBusRentalsDash')->name('school.car.rentals.dashboard');
+Route::get('/bus/rentals','ViewBusRentalsDash')->name('school.car.rentals.dashboard');
 
-Route::get('/bus/rentals','viewBusRentals')->name('school.car.rentals');
+//Route::get('/bus/rentals','viewBusRentals')->name('school.car.rentals');
 
 
 Route::get('/filter/bus/rentals','FilterBusRentals')->name('filter.car.rentals');
@@ -1303,6 +1018,16 @@ Route::get('/bus/rental/operator/filtered','BusRentalOperatorFilterd')->name('bu
 
 
 
+// Rental Search Route 
+Route::post('/search/rental', [CarRentalsController::class, 'BusRentalSearch'])->name('bus.rental.search');
+
+
+// Advance Search Routes 
+Route::post('search-rental', [CarRentalsController::class, 'SearchBusRental']);
+
+
+
+
 
 
 Route::controller(CartController::class)->group(function() {
@@ -1316,7 +1041,21 @@ Route::post('/bus/rentals/cart/store','addToRentalCart')->name('add.to.car.renta
 
 Route::delete('/bus/rentals/cart/remove','removeRentalCart')->name('car.rental.cart.remove');
 
+
+Route::delete('/delete/bus/rental/cart','deleteBusRentalCart')->name('delete.car.rental.cart');
+
+
 Route::delete('/bus/rentals/cart/clear','clearRentalCart')->name('car.rental.cart.clear');
+
+
+Route::get('/rentals/vehicles/increment/{id}','IncreVehiclesCart')->name('vehicles.increment');
+
+Route::get('/rentals/vehicles/decrement/{id}','DecreVehiclesCart')->name('vehicles.decrement');
+
+Route::get('/rentals/days/increment/{id}','IncreRentalDaysCart')->name('days.increment');
+
+Route::get('/rental/days/decrement/{id}','DecreRentalDaysCart')->name('days.decrement');
+
 
 
 
@@ -1356,11 +1095,7 @@ Route::post('/bus/rental/checkout/store', [CarRentalCheckoutController::class, '
 
 
 //Bus Rental Booking Payments
-Route::get('/rental/booking/payments', [CarRentalCheckOutController::class, 'BusRentalBookingPayments'])->name('view.rental.booking.payments');
-
-
-//Bus Rental Booking Payments
-Route::get('/tour/booking/payments', [TourBookingsController::class, 'SchoolTourBookingsPayments'])->name('view.tour.booking.payments');
+Route::get('/rental/booking/payments', [CarRentalCheckOutController::class, 'BusRentalBookingPayments'])->name('view.bus.rental.bookings.info');
 
 
 
@@ -1371,6 +1106,10 @@ Route::get('/orders/payments', [OrderController::class, 'OrdersPayments'])->name
 
 
 });// end school auth middleware
+
+
+
+
 
 
 

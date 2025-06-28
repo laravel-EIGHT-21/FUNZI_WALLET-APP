@@ -143,6 +143,7 @@ public function storeCategory(Request $request)
 
         $category = new categories();
         $category->category_name =  $request->category_name;
+        $category->category_icon = $request->category_icon;
         $category->save();
 
 
@@ -177,6 +178,7 @@ public function updateCategory(Request $request)
     $id = $request->input('id');
     $updateData = categories::find($id);
     $updateData->category_name = $request->category_name;
+    $updateData->category_icon = $request->category_icon;
     $updateData->save();
 
 

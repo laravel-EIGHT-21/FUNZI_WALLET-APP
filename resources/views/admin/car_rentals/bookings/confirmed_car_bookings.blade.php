@@ -108,7 +108,7 @@ Confirmed Car Rentals Bookings | funziwallet
 
 <td class="pe-0">
       
-<span class="badge badge-pill badge-warning" style="background: orange;">{{$value->status}}</span>
+<span class="badge badge-pill badge-warning" style="background: rgb(40, 238, 19);">{{$value->status}}</span>
 
 </td>
 

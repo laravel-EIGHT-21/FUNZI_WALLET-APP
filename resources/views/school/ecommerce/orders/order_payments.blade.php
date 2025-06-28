@@ -1,7 +1,6 @@
-
-@extends('school.ecommerce.body.admin_master')
+@extends('school.body.admin_master')
 @section('content')
-
+        
 
 @section('title')
  
@@ -18,18 +17,17 @@ $years = date('Y');
 
 $school_id = Auth::user()->id;
 
-$today_payments = App\Models\order_payments::whereDate('created_at',Carbon\Carbon::today())->where('school_id',$school_id)->sum('amount');
+$month_payments = DB::table('schoolorders_payments_records')->where('month',$months)->where('school_id',$school_id)->sum('amount');
 
-$month_payments = DB::table('order_payments')->where('school_id',$school_id)->where('month',$months)->sum('amount');
+$year_payments = DB::table('schoolorders_payments_records')->where('year',$years)->where('school_id',$school_id)->sum('amount');
 
-$year_payments = DB::table('order_payments')->where('school_id',$school_id)->where('year',$years)->sum('amount');
 
 
 
 
 @endphp 
 
-        
+                
         <!-- Content -->
         
         <div class="container-xxl flex-grow-1 container-p-y">
@@ -37,7 +35,7 @@ $year_payments = DB::table('order_payments')->where('school_id',$school_id)->whe
             
 
             <h4 class="py-3 mb-4">
-              <span class="text-muted fw-light"><a href="{{route('school.ecommerce.dashboard')}}">Home</a> /View /</span>Ecommerce Mobile Payments
+              <span class="text-muted fw-light"><a href="{{route('dashboard')}}">Home</a> /View /</span>All School Orders Payments Records
             </h4>
             
 
@@ -49,29 +47,9 @@ $year_payments = DB::table('order_payments')->where('school_id',$school_id)->whe
       <div class="row gy-4 gy-sm-1">
             
             
-<!-- Cards SchoolFees Transactions -->
-<div class="col-lg-4 col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <div class="avatar me-3">
-            <div class="avatar-initial bg-label-primary rounded">
-              <i class="mdi mdi-currency-usd mdi-24px">
-              </i>
-            </div>
-          </div>
-          <div class="card-info">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">UGX {{ ($today_payments) }}</h4>
+<!-- Cards Payments Records Transactions -->
 
-            </div>
-            <small>Todays Total</small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-4 col-sm-6">
+  <div class="col-lg-6 col-sm-6">
     <div class="card">
       <div class="card-body">
         <div class="d-flex align-items-center flex-wrap gap-2">
@@ -92,7 +70,7 @@ $year_payments = DB::table('order_payments')->where('school_id',$school_id)->whe
       </div>
     </div>
   </div>
-  <div class="col-lg-4 col-sm-6">
+  <div class="col-lg-6 col-sm-6">
     <div class="card">
       <div class="card-body">
         <div class="d-flex align-items-center flex-wrap gap-2">
@@ -138,22 +116,68 @@ $year_payments = DB::table('order_payments')->where('school_id',$school_id)->whe
                         <!-- start row -->
                         <tr>
                         <th>Order No. </th>
-                        <th>School </th>
-                        <th> Date</th>
-                        <th> Time</th>
-                        <th>Payments (UGX)</th>
+                          <th>Pay Status </th>
+                        <th>Amount Paid</th>
+                        <th>Order Total</th>
+                        <th>Balance</th>
+                        <th>Month</th>
 
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($payments as $key => $value )
+                        @foreach($payment_records as $key => $value )
                         <tr>
 
                         <td> {{ $value['order']['order_number']}}</td>
-                        <td> {{ $value['school']['name']}}</td>
-                        <td> {{ $value->payment_date}}</td>
-                        <td> {{ $value->sent_time}}</td>
-                        <td> {{ $value->amount}}</td>
+
+                        <td> 
+                          
+                        
+                            <span class="badge rounded-pill text-warning bg-dark-warning p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i> {{ $value['order']['payment_status']}}</b></span>
+  
+                          
+                         
+                        
+                        
+                        
+                        </td>
+
+                        <td>
+  
+  
+                            <span class="badge rounded-pill text-success bg-dark-success p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $value->amount }}</b></span>
+                            
+                            
+                            </td>
+                            
+                            
+                            
+                            <td>
+                            
+                            
+                            <span class="badge rounded-pill text-primary bg-dark-info p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $value->total_amount }}</b></span>
+                            
+                            
+                            </td>
+                            
+                            
+                            @php 
+                            
+                            $bal = (float)$value->total_amount-(float)$value->amount;
+                            
+                            @endphp
+                            
+                            
+                            <td>
+                            
+                            
+                            <span class="badge rounded-pill text-danger bg-dark-danger p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $bal }}</b></span>
+                            
+                            
+                            </td>
+
+                            <td> {{ $value->month}}</td>
+                            
 
 
                         </tr>

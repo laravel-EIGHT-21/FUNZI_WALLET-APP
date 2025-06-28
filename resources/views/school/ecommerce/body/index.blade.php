@@ -1,203 +1,284 @@
+@extends('school.ecommerce.body.main_master')
 
-@extends('school.ecommerce.body.admin_master')
 @section('content')
         
 
 @section('title')
 
-Admin - Dashboard | funziwallet
+Funzi Wallet E-commerce Website
 
 @endsection
 
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-3 sidebar'> 
+      <!-- ================================== TOP NAVIGATION ================================== -->
 
-@php 
+      @php 
+
+      $categories = App\Models\categories::orderBy('category_name','ASC')->get();
+      
+      @endphp 
+
+      <div class="side-menu animate-dropdown outer-bottom-xs">
+        <div class="head"><i class="icon fa fa-align-justify fa-fw"></i> Categories</div>
+        <nav class="yamm megamenu-horizontal">
+
+          <ul class="nav">
 
 
-$school_id = Auth::user()->id;
+            @foreach($categories as $category)
+            <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon {{$category->category_icon}}" aria-hidden="true"></i>
+              {{$category->category_name}}  
+          </a>
+              <ul class="dropdown-menu mega-menu">
+                <li class="yamm-content">
+                  <div class="row"> 
+          
+                  @php
+              $cate_products = App\Models\products::where('category_id',$category->id)->orderBy('product_name','ASC')->get();
+              @endphp
+          
+              @foreach($cate_products as $prods)
+                    <div class="col-sm-12 col-md-3">
+          
+                      <ul class="links list-unstyled">
+                        <li> <a href="{{url('school/product/details/'.$prods->id .'/'.$prods->product_name)}}">
+                          {{$prods->product_name}}
+                        </a></li>
+                       
+                      </ul>
+          
+          
+                    </div>
+                    <!-- /.col -->
+                    @endforeach <!-- endforeach SubCategories -->
+          
+                  
+                  </div>
+                  <!-- /.row --> 
+                </li>
+                <!-- /.yamm-content -->
+              </ul>
+              <!-- /.dropdown-menu --> </li>
+          
+            <!-- /.menu-item -->
+            @endforeach <!-- endforeach Categories -->
+            
+            
+            
+            
+            
+          </ul>
+          <!-- /.nav --> 
+        </nav>
+        <!-- /.megamenu-horizontal --> 
+      </div>
+      <!-- /.side-menu --> 
+      <!-- ================================== TOP NAVIGATION : END ================================== -->
 
-$months = date('F Y');
-
-$years = date('Y');
 
 
 
-$orders_delivered = App\Models\orders::where('status','Order Delivered')->where('school_id',$school_id)->where('order_year',$years)->get();
+      <div class="sidebar-module-container">
+        <div class="sidebar-filter"> 
+          <!-- ============================================== SIDEBAR CATEGORY ============================================== -->
+          <div class="sidebar-widget wow fadeInUp">
+            <h3 class="section-title">shop by</h3> 
+            <div class="widget-header">
+              <h4 class="widget-title">Category Or Price Filters</h4>
+            </div>
 
-$orders_cancelled = App\Models\orders::where('status','Order Cancelled')->where('school_id',$school_id)->where('order_year',$years)->get();
+            <div class="sidebar-widget-body m-t-10">
+              
+              <!-- /.price-range-holder --> 
+              <a href="{{route('shopping.filter.page')}}" class="lnk btn btn-primary">Shop Now</a>
+            
+            </div>
+            
+          </div>
+          <!-- /.sidebar-widget --> 
+          <!-- ============================================== SIDEBAR CATEGORY : END ============================================== --> 
+          
 
-$products = App\Models\products::latest()->limit(6)->get();
 
-@endphp
+
+        </div>
+        <!-- /.sidebar-filter --> 
+      </div>
+      <!-- /.sidebar-module-container --> 
+    </div>
+    <!-- /.sidebar -->
+
+    
+    <div class='col-md-9'> 
+      
+      <!-- ========================================== SECTION – HERO ========================================= -->
+      
+<div id="hero">
+<div id="owl-main" class="owl-carousel owl-inner-nav owl-ui-sm">
+  <div class="item" style="background-image: url({{asset('eCOMM/assets/images/sliders/01.jpg')}});">
+    <div class="container-fluid">
+      <div class="caption bg-color vertical-center text-left">
+        <div class="slider-header fadeInDown-1">Top Brands</div>
+        <div class="big-text fadeInDown-1"> New Collections </div>
+        <div class="excerpt fadeInDown-2 hidden-xs"> <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span> </div>
+        <div class="button-holder fadeInDown-3"> <a href="index.php?page=single-product" class="btn-lg btn btn-uppercase btn-primary shop-now-button">Shop Now</a> </div>
+      </div>
+      <!-- /.caption --> 
+    </div>
+    <!-- /.container-fluid --> 
+  </div>
+  <!-- /.item -->
+  
+  <div class="item" style="background-image: url({{asset('eCOMM/assets/images/sliders/02.jpg')}});">
+    <div class="container-fluid">
+      <div class="caption bg-color vertical-center text-left">
+        <div class="slider-header fadeInDown-1">Spring 2016</div>
+        <div class="big-text fadeInDown-1"> Women <span class="highlight">Fashion</span> </div>
+        <div class="excerpt fadeInDown-2 hidden-xs"> <span>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit</span> </div>
+        <div class="button-holder fadeInDown-3"> <a href="index.php?page=single-product" class="btn-lg btn btn-uppercase btn-primary shop-now-button">Shop Now</a> </div>
+      </div>
+      <!-- /.caption --> 
+    </div>
+    <!-- /.container-fluid --> 
+  </div>
+  <!-- /.item --> 
+  
+</div>
+<!-- /.owl-carousel --> 
+</div>
+
+<!-- ========================================= SECTION – HERO : END ========================================= --> 
+
+<!-- ============================================== INFO BOXES ============================================== -->
+<div class="info-boxes wow fadeInUp">
+<div class="info-boxes-inner">
+  <div class="row">
+
+    
+
+    
+ 
+  </div>
+  <!-- /.row --> 
+</div>
+<!-- /.info-boxes-inner --> 
+
+</div>
+<!-- /.info-boxes --> 
+<!-- ============================================== INFO BOXES : END ============================================== --> 
+
+<br/> <br/> 
+   
+<div class="row">
+
+<h3 class="text">All Products Available </h3>
+
+</div>
+
+<br/> <br/> 
+
+      <div class="search-result-container ">
+        <div id="myTabContent" class="tab-content category-list">
+          
+
+            <div class="category-product">
+              <div class="row">
+
+                
+                @foreach($products as $product )
+
+                <div class="col-sm-6 col-md-4 wow fadeInUp">
+                  <div class="products">
+                    <div class="product">
+                      <div class="product-image">
+                        <div class="image"> 
+                          <a href="{{url('school/product/details/'.$product->id .'/'.$product->product_name)}}">
+                            <img  src="{{ (!empty($product->product_thambnail))? url('upload/product_images/'.$product->product_thambnail):url('upload/no_image.jpg') }}" alt="">
+                          
+                          </a> 
+                        
+                        </div>
+                        <!-- /.image -->
+                        
+
+                      </div>
+                      <!-- /.product-image -->
+                      
+                      <div class="product-info text-left">
+                        <h2 class="name"><a href="{{url('school/product/details/'.$product->id .'/'.$product->product_name)}}"><b>{{ $product->product_name}}</b></a></h2>
+      
+                        <div class="description">{{ $product->short_descp_en}}</div>
+                        <div class="product-price"> <span class="price"> UGX {{$product->selling_price}}</span>  </div>
+                       
+                        <!-- /.product-price --> 
+                        
+                      </div>
+                      <!-- /.product-info -->
+
+                      <div class="cart clearfix animate-effect">
+                        <div class="action">
+                          <ul class="list-unstyled">
+                            <li class="add-cart-button btn-group">
+                              <a href="{{url('school/product/details/'.$product->id .'/'.$product->product_name)}}">
+                              <button class="btn btn-primary icon" type="button" title="Add Cart"> <i class="fa fa-shopping-cart"></i> </button>
+                              <button class="btn btn-primary cart-btn" type="button">Add to cart</button>
+                              </a>
+                            </li>
+                            
+                          </ul>
+                        </div>
+                        <!-- /.action --> 
+                      </div>
+                      <!-- /.cart --> 
+
+                    </div>
+                    <!-- /.product --> 
+                    
+                  </div>
+                  <!-- /.products --> 
+                </div>
+                <!-- /.item -->
+
+                
+                @endforeach
+                 
+              </div>
+              <!-- /.row --> 
+            </div>
+            <!-- /.category-product --> 
+        </div>
+
+
+        {{$products->appends($_GET)->links('pagination.bootstrap-4') }}
+ 
+
+
+
+
+      </div>
+      <!-- /.search-result-container --> 
+
+
+
+
+
+<br/><br/><br/><br/><br/><br/>
+
 
       
-              <!-- Content -->
-        
-              <div class="container-xxl flex-grow-1 container-p-y">
-       
-                <div class="row gy-4">
-                
-                  <!-- Cards with users info -->
-                 
-                  <div class="col-lg-6 col-sm-6">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="d-flex align-items-center flex-wrap gap-2">
-                          <div class="avatar me-3">
-                            <div class="avatar-initial bg-label-success rounded">
-                              <i class="mdi mdi-bus mdi-24px">
-                              </i>
-                            </div>
-                          </div>
-                    
-                          <div class="card-info">
-                            <div class="d-flex align-items-center">
-                              <h4 class="mb-0">{{count($orders_delivered)}}</h4>
-
-                            </div>
-                            <h6>Annual Total Confirmed Orders</h6>
-                          </div>
-                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 col-sm-6">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="d-flex align-items-center flex-wrap gap-2">
-                          <div class="avatar me-3">
-                            <div class="avatar-initial bg-label-info rounded">
-                              <i class="mdi mdi-bus mdi-24px">
-                              </i>
-                            </div>
-                          </div>
-                
-                          <div class="card-info">
-                            <div class="d-flex align-items-center">
-                              <h4 class="mb-0">{{count($orders_cancelled)}}</h4>
-
-                            </div>
-                            <h6>Annual Total Cancelled Orders</h6>
-                          </div>
-                        
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                
-                
-                
-                </div>
-                
-
-
-
-
-                 <br />   <br />
-            
-
-                 <div class="row">
-                  <div class="col-xl-12">
-                    <div class="nav-align-top mb-4">
-                      <h5 class="mb-1"><a href="{{route('school.products')}}">View More Products</a></h5>
-                      <div class="tab-content">
-                        <div class="tab-pane fade show active" id="navs-pills-all" role="tabpanel">
-                
-                        <div class="card mb-4">
-
-                              <div class="card-body">
-                                <div class="row gy-4 mb-4">
-                
-                
-                                @foreach($products as $product )
-                
-                                  <div class="col-sm-6 col-lg-4">
-                                    <div class="card p-2 h-100 shadow-none border">
-                                      <div class="rounded-2 text-center mb-3">
-
-                                       <img src="{{ (!empty($product->product_thambnail))? url('upload/product_images/'.$product->product_thambnail):url('upload/no_image.jpg') }}" class="img-fluid" alt="Product Image" >
-
-                
-                                      </div>
-                                      <div class="card-body p-3 pt-2">
-                
-                                        <a href="javascript:void(0);" class="h5">{{ $product->product_name}}</a>
-                                        <p class="mt-2">{{ $product->short_descp_en}}</p>
-                                       
-                                        <hr>
-
-                                        <div class="row mb-6 g-4">
-                                          <div class="col-6">
-                                            <div class="d-flex">
-                                              <div class="avatar flex-shrink-0 me-4">
-                                                <span class="avatar-initial rounded-3 bg-label-success"><i class="ri-money-dollar-circle-fill ri-24px"></i></span>
-                                              </div>
-                                              <div>
-                                                <h6 class="mb-0 text-nowrap fw-semibold"> ugx {{$product->selling_price}}</h6>
-
-                                                <small>Price</small>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-
-                                        <br>
-
-                                        <div class="d-flex flex-column flex-md-row gap-3 text-nowrap flex-wrap flex-md-nowrap  flex-lg-wrap flex-xxl-nowrap">
-                                          <a href="{{url('school/product/details/'.$product->id .'/'.$product->product_name)}}">
-                                            <button type="button" title="Add to Cart" class="w-100 btn btn-primary d-flex align-items-center">
-                                            <i class="mdi mdi-cart-variant lh-1 scaleX-n1-rtl"></i>
-                                            </button>
-                                          </a>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                
-                
-                                  @endforeach
-                
-                
-                                </div>
-                
-                
-
-                
-                
-                              </div>
-                            </div>
-                        </div>
-                
-                
-                
-                
-                
-                
-                
-                        </div>
-                        
-                
-                
-                
-                
-                      </div>
-                    </div>
-                  </div>
+    </div>
+    <!-- /.col --> 
   
 
-<br/><br/>
 
-                          </div>
-                          <!-- / Content -->
-                
+<!-- /.container --> 
 
+</div>
                       
 
-                      <script src="{{asset('Admin/assets/vendor/libs/chart.js/Chart.js')}}"></script>
-<script src="{{asset('Admin/assets/vendor/libs/chart.js/Chart.min.js')}}"></script>
-<script src="{{asset('Admin/assets/vendor/libs/chart.js/Chart.bundle.min.js')}}"></script>
 
-                      
 
             
             @endsection

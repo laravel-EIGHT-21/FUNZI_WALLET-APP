@@ -56,6 +56,12 @@ $yearly_rentals = DB::table('car_rental_bookings')->where('year',$years)->where(
 @endphp
 
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" ></script>
+
+
        <!-- Content -->
         
        <div class="container-xxl flex-grow-1 container-p-y">
@@ -516,6 +522,26 @@ $yearly_rentals = DB::table('car_rental_bookings')->where('year',$years)->where(
 
                       
 
+
+<script type="text/javascript">
+      
+  @session("success")
+      toastr.success("{{ $value }}", "Success");
+  @endsession
+
+  @session("info")
+      toastr.info("{{ $value }}", "Info");
+  @endsession
+
+  @session("warning")
+      toastr.warning("{{ $value }}", "Warning");
+  @endsession
+
+  @session("error")
+      toastr.error("{{ $value }}", "Error");
+  @endsession
+
+</script>
 
 
 

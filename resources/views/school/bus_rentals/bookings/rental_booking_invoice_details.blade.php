@@ -165,7 +165,7 @@
 
         <tr>
           <td class="pe-3">Total Price:</td>
-          <td class="fw-medium">ugx {{$booking->total_price}}</td>
+          <td class="fw-medium">UGX {{$booking->total_price}}</td>
         </tr>
 
 
@@ -181,9 +181,9 @@
       <thead class="table-light border-top">
       <tr>
         <th>Rental</th>
-        <th>Operator</th>
         <th>Vehicle Total</th>
         <th>No. of Days</th>
+        <th>Fuel Status</th>
         <th>Dates</th>
         <th>Price / Day</th>
       </tr>
@@ -210,17 +210,6 @@
   
           <div class="d-flex">
   
-          <h6 class="mb-0">{{ $value->rental->operator->name}}</h6>
-  
-          </div>
-  
-  
-          </td>
-  
-          <td>
-  
-          <div class="d-flex">
-  
           <h6 class="mb-0">{{ $value->vehicle_total}}</h6>
   
           </div>
@@ -240,6 +229,18 @@
   
           </td>
   
+  
+
+            
+          <td>
+  
+          <div class="d-flex">
+  
+          <h6 class="mb-0">{{ $value->fuel_status}}</h6>
+  
+          </div>
+  
+          </td>
   
   
           <td>
@@ -261,7 +262,7 @@
   
           <div class="d-flex">
   
-          <h6 class="mb-0">{{ $value->price_per_day}}</h6>
+          <h6 class="mb-0">UGX {{ $value->price_per_day}}</h6>
   
           </div>
   

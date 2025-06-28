@@ -28,11 +28,11 @@ class CheckoutController extends Controller
         else{
 
     
-    return redirect()->route('school.products')->with('error','Shop Atleast One Product...');
+    return back()->with('warning','Shop Atleast One Product...');
 
 
         }
-
+ 
     
 } // end method 
 
@@ -42,8 +42,12 @@ class CheckoutController extends Controller
 
 public function CheckoutStore(Request $request){
 
+    $schoolid = Auth::user()->id;
+    $CartCout = order_carts::where('school_id',$schoolid)->count();
+    if ($CartCout > 0) {
+
     $data = array();
-    $data['shipping_name'] = $request->shipping_name;
+    $data['shipping_name'] = $request->shipping_name; 
     $data['shipping_email'] = $request->shipping_email;
     $data['shipping_tel1'] = $request->shipping_tel1; 
     $data['shipping_tel2'] = $request->shipping_tel2; 
@@ -53,8 +57,16 @@ public function CheckoutStore(Request $request){
     $carts = order_carts::where('school_id',$school_id)->get();
     
     
-    return view('school.ecommerce.cart.checkout_submit',compact('data','carts'));
-    
+    return view('school.ecommerce.cart.checkout_view',compact('data','carts'));
+
+}
+        
+else{
+
+
+return back()->with('warning','Shop Atleast One Product...');
+
+}
     
      
 
@@ -66,7 +78,7 @@ public function CheckoutStore(Request $request){
 
 
 
-    
+    /*
     public function CheckoutCreditStore(Request $request){
 
 		$data = array();
@@ -86,7 +98,7 @@ public function CheckoutStore(Request $request){
     	 
 
     }// end mehtod. 
-
+*/
 
 
 }

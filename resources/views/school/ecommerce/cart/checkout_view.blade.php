@@ -1,203 +1,265 @@
-@extends('school.ecommerce.body.admin_master')
+@extends('school.ecommerce.body.main_master')
 @section('content')
 
 
 @section('title')
 
-CheckOut | funziwallet
+Ecommerce CheckOut 
 
 @endsection
 
 
-<!-- Content -->
-
-<div class="container-xxl flex-grow-1 container-p-y">
+<div class="container">
 
 
-
-<h4 class="py-3 mb-0">
-<span class="text-muted fw-light">View/</span><span class="fw-medium"> CheckOut</span>
-</h4>
-
-<div class="app-ecommerce">
-
-<form id="CheckOutStore" method="post" action="{{ route('checkout.store') }}">
-@csrf
-
+  
 <div class="row">
-
-<!-- First column-->
-<div class="col-12 col-lg-4">
-<!-- Product Information -->
-<div class="card mb-4">
-<div class="card-header">
-<h5 class="card-tile mb-0">School Shipping Information</h5>
-</div>
-<div class="card-body">
-<div class="mb-3">
-<label class="form-label" for="ecommerce-school-name">School</label>
-<input type="text" class="form-control" id="ecommerce-school-name"  name="shipping_name" value="{{ Auth::user()->name }}" aria-label="School Name">
-</div>
-
-
-<div class="mb-3">
-<label class="form-label" for="ecommerce-school-email">Email</label>
-<input type="email" class="form-control" id="ecommerce-school-email" name="shipping_email" value="{{Auth::user()->email}}" aria-label="Email">
-</div>
-
-<div class="mb-3">
-<label class="form-label" for="ecommerce-school_tel1">Telephone One</label>
-<input type="text" class="form-control" id="ecommerce-school_tel1" name="shipping_tel1" value="{{Auth::user()->school_tel1}}" aria-label="Telephone One">
-</div>
-
-<div class="mb-3">
-<label class="form-label" for="ecommerce-school_tel2">Telephone Two</label>
-<input type="text" class="form-control" id="ecommerce-school_tel2" name="shipping_tel2" value="{{Auth::user()->school_tel2}}" aria-label="Telephone Two">
-</div>
-
-<div class="mb-3">
-<label class="form-label" for="ecommerce-school_address">Address</label>
-<input type="text" class="form-control" id="ecommerce-school_address" name="shipping_address" value="{{Auth::user()->address}}" aria-label="Address">
-</div>
-
-</div>
-</div>
-<!-- /Product Information -->
-
-
-</div>
-<!-- /First column -->
-
-@php 
-
-$school_id = Auth::user()->id;
-$CartCount = App\Models\order_carts::where('school_id',$school_id)->count();
-$Subtotal = App\Models\order_carts::where('school_id',$school_id)->sum('pricetotal');
-
-
-
-@endphp
-
-<!-- Second column -->
-<div class="col-12 col-lg-8">
-<!-- Pricing Card -->
-<div class="card mb-4">
-<div class="card-header">
-<h5 class="card-title mb-0">School Order(s)</h5>
-</div>
-<div class="card-body">
-<ul class="list-group mb-3">
-@foreach($carts as $cart)
-<li class="list-group-item p-4">
-<div class="d-flex gap-3">
-<div class="flex-shrink-0">
-<img src="{{ (!empty($cart['product']['product_thambnail']))? url('upload/product_images/'.$cart['product']['product_thambnail']):url('upload/no_image.jpg') }} " alt="Product Image" class="w-px-100">
-
-</div>
-<div class="flex-grow-1">
-<div class="row">
-<div class="col-md-8">
-<h6 class="me-3"><a href="javascript:void(0)" class="text-heading">{{$cart['product']['product_name']}}</a></h6>
-
-
-<div class="d-flex d-md-block align-items-center mb-2 gap-4 justify-content-center justify-content-sm-start">
-
-<p class="fw-medium">Quantity : {{$cart->qty}}</p>
-
-<p class="fw-medium">Total Price : {{$cart->pricetotal}}</p>
+  
+  <h4>CheckOut Section</h4>
 
 </div>
 
+<br/>
 
+
+
+  <div class="checkout-box ">
+    <div class="row">
+      <div class="col-md-5">
+        <div class="panel-group checkout-steps" id="accordion">
+          <!-- checkout-step-01  -->
+<div class="panel panel-default checkout-step-01">
+
+<!-- panel-heading -->
+ 
+  <!-- panel-heading -->
+
+<div id="collapseOne" class="panel-collapse collapse in">
+
+  <!-- panel-body  -->
+    <div class="panel-body">
+    <div class="row">		
+
+      <!-- guest-login -->			
+     <div class="col-md-6 col-sm-6 already-registered-login">
+   <h4 class="checkout-subtitle"><b>Shipping Information</b></h4>
+         
+
+
+  <div class="form-group"> 
+    <label class="info-title" for="exampleInputEmail1"><b>Shipping Name</b>  <span>*</span></label>
+    <input type="text" name="shipping_name" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Full Name" value="{{ Auth::user()->name }}" required="">
+  </div>  <!-- // end form group  -->
+ 
+
+<div class="form-group">
+    <label class="info-title" for="exampleInputEmail1"><b>Email </b> <span>*</span></label>
+    <input type="email" name="shipping_email" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Email" value="{{ Auth::user()->email }}" required="">
+  </div>  <!-- // end form group  -->
+
+
+<div class="form-group">
+    <label class="info-title" for="exampleInputEmail1"><b>Phone 1</b>  <span>*</span></label>
+    <input type="number" name="shipping_tel1" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Phone" value="{{ Auth::user()->school_tel1}}" required="">
+  </div>  <!-- // end form group  -->
+
+
+  <div class="form-group">
+    <label class="info-title" for="exampleInputEmail1"><b>Phone 2</b>  <span>*</span></label>
+    <input type="number" name="shipping_tel1" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Phone 2" value="{{ Auth::user()->school_tel2}}" required="">
+  </div>  <!-- // end form group  -->
+
+
+  
+  <div class="form-group">
+    <label class="info-title" for="exampleInputEmail1"><b>Address</b>  <span>*</span></label>
+    <input type="text" name="shipping_address" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Address" value="{{Auth::user()->address}}" required="">
+  </div>  <!-- // end form group  -->
+
+ 
+      </div>	
+      <!-- guest-login -->
+
+
+
+
+    </div>			
+  </div>
+  <!-- panel-body  -->
+
+</div><!-- row -->
 </div>
+<!-- End checkout-step-01  -->
 
 
-</div>
-</div>
-</div>
-</li>
+            
+            
+        </div><!-- /.checkout-steps -->
+      </div>
 
 
 
+      
+      
 
-@endforeach
-</ul>
+      <div class="col-md-7">
+        <!-- checkout-progress-sidebar -->
+<div class="checkout-progress-sidebar ">
+<div class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="unicase-checkout-title">Your Checkout Progress</h4>
+      </div>
+      <div class="">
+        <div class="shopping-cart">
+          <div class="shopping-cart-table ">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="cart-description item">Image</th>
+            <th class="cart-product-name item">Product</th>
+            <th class="cart-qty item">Qty</th>
+            <th class="cart-sub-total item">Subtotal</th>
+          
+          </tr>
+        </thead><!-- /thead -->
+
+    
+        @php 
+    
+        $school_id = Auth::user()->id;
+        $CartCount = App\Models\order_carts::where('school_id',$school_id)->count();
+        $Subtotal = App\Models\order_carts::where('school_id',$school_id)->sum('pricetotal');
+    
+        
+              @endphp
+    
+    
+    
+    @foreach($carts as $cart)
+    
+        <tbody>
+          <tr>
+
+    
+    
+            <td class="cart-image">
+              <a class="entry-thumbnail" href="">
+                <img src="{{ (!empty($cart['product']['product_thambnail']))? url('upload/product_images/'.$cart['product']['product_thambnail']):url('upload/no_image.jpg') }}" alt="">
+              </a>
+            </td>
+            <td class="cart-product-name-info">
+              <h4 class='cart-product-description'><a href="">{{$cart['product']['product_name']}}</a></h4>
+    
+    
+            </td>
+    
+            <td class="cart-product-quantity">
+              <div class="quant-input">
+    
+                <input readonly name="qty" value="{{$cart->qty}}" >
+                  
+                </div>
+            </td>
+            <td class="cart-product-sub-total"><span class="cart-sub-total-price">{{$cart->pricetotal}}</span></td>
+            
+          </tr>
+    
+    
+    
+    
+          
+    
+    
+        </tbody><!-- /tbody -->
+    
+        @endforeach
+
+      </table><!-- /table -->
+    </div>
+    </div><!-- /.shopping-cart-table -->				<div class="col-md-4 col-sm-12 estimate-ship-tax">
+    <table class="table">
+      
+      
+    </table>
+    </div><!-- /.estimate-ship-tax -->
+    
+    <div class="col-md-4 col-sm-12 estimate-ship-tax">
+    <table class="table">
+      
+      <tbody>
+          <tr>
+            <td>
+    
+            </td>
+          </tr>
+      </tbody><!-- /tbody -->
+    </table><!-- /table -->
+    </div><!-- /.estimate-ship-tax -->
+    
+    <div class="col-md-4 col-sm-12 cart-shopping-total">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+    
+            <div class="cart-grand-total">
+              Total<span class="inner-left-md">{{$Subtotal}}</span>
+            </div>
+          </th>
+        </tr>
+      </thead><!-- /thead -->
+
+    </table><!-- /table -->
+    </div><!-- /.cart-shopping-total -->			
+    
+    
+    
+    
+    
+    
+    </div><!-- /.shopping-cart -->	
+    </div>
+
+  </div> <!-- // end row  -->
+  <hr>
 
 
-<hr class="mx-n4">
-
-<!-- Price Details -->
-<h6>Price Details</h6>
-<dl class="row mb-0">
-
-<dt class="col-6 fw-normal text-heading">Total</dt>
-<dd class="col-6 text-end">ugx {{ $Subtotal }}</dd>
-
-</dl>
-<hr class="mx-n4">
-<div class="d-grid">
-<button type="button" onclick="event.preventDefault();document.getElementById('CheckOutStore').submit();" class="btn btn-primary btn-next">
-Proceed to CheckOut 
-</button>
-
-   
-
-
-</div>
-
-</form>
-
-
-<br />
-
-<hr class="mx-n4">
-
-<div class="d-grid">
-
-  <form id="CheckOutCreditOrder" method="post" action="{{ route('checkoutcredit.store') }}">
+  <form action="{{ route('submit.orders') }}" method="post" id="ConfirmOrder" >
     @csrf
-  
-  <div class="row">
-  <div class="form-floating">
-  <input type="hidden" name="shipping_name" value="{{ Auth::user()->name }}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
-  <input type="hidden" name="shipping_email" value="{{Auth::user()->email}}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
-  <input type="hidden" name="shipping_tel1" value="{{Auth::user()->school_tel1}}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
-  <input type="hidden" name="shipping_tel2" value="{{Auth::user()->school_tel2}}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
-  <input type="hidden" name="shipping_address" value="{{Auth::user()->address}}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" /> 
-  
-  
-  
-  </div>
-  </div>
-  
+
+    <input type="hidden" name="name" value="{{ $data['shipping_name'] }}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
+     <input type="hidden" name="email" value="{{ $data['shipping_email'] }}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
+    <input type="hidden" name="school_tel1" value="{{ $data['shipping_tel1'] }}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
+    <input type="hidden" name="school_tel2" value="{{ $data['shipping_tel2'] }}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" />
+    <input type="hidden" name="address" value="{{ $data['shipping_address'] }}" class="form-control" id="floatingInput" aria-describedby="floatingInputHelp" /> 
+
+
+
+  <a href="javascript:void(0)" onclick="event.preventDefault();document.getElementById('ConfirmOrder').submit();" class="btn btn-primary checkout-btn">
+    <span>CONFIRM ORDER</span>
+    </a>  
   </form>
-  
-  
-  
-  
-  <a href="javascript:void(0)" onclick="event.preventDefault();document.getElementById('CheckOutCreditOrder').submit();" class="btn btn-warning btn-next">
-  <span>Chechout Credit Order(s)</span>
-  </a>   
-
+    
+  </div>
 </div>
-
-
+</div> 
+<!-- checkout-progress-sidebar --> 
 </div>
 
 
 
-</div>
-<!-- /Pricing Card -->
+
+
+    </div><!-- /.row -->
+  </div><!-- /.checkout-box -->
+
+  <br/><br/><br/><br/><br/>
+
+
 
 </div>
-<!-- /Second column -->
-
-</div>
-
-</div>
-
-</div>
-<!--/ Content -->
 
 
 @endsection 

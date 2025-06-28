@@ -27,15 +27,15 @@ Tour Bookings Details | funziwallet
 
 @elseif($booking->status == 'Bookings Confirmed')
 
-<a href="{{ route('confirmed-tour-bookings')}}" class="btn rounded-pill btn-primary" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
+<a href="{{ route('confirmed-tour-bookings')}}" class="btn rounded-pill btn-success" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
 
 
 
 @elseif($booking->status == 'Bookings Cancelled')
 
-<a href="{{ route('cancelled-tour-bookings')}}" class="btn rounded-pill btn-primary" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
+<a href="{{ route('cancelled-tour-bookings')}}" class="btn rounded-pill btn-danger" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
 
-@endif
+@endif 
 
 
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
@@ -49,6 +49,9 @@ Tour Bookings Details | funziwallet
 
 @elseif($booking->status == 'Bookings Confirmed')
 Booking Status : <span class="badge badge-pill badge-warning" style="background: green;;">Confirmed</span>
+@elseif($booking->status =='Bookings Cancelled')
+Booking Status : <span class="badge badge-pill badge-warning" style="background: rgb(249, 20, 20);;">Cancelled</span>
+
 @endif
                 
                 </h4>
@@ -72,12 +75,11 @@ Booking Status : <span class="badge badge-pill badge-warning" style="background:
               <table class="table table-borderless">
                 <thead class="border-bottom">
                         <tr>
-                          <th >Tour</th>
-                          <th >Agency</th>
-                          <th >Stud Qty</th>
-                          <th>Stud Total</th>
-                          <th>Adult Qty</th>
-                          <th>AdultTotal</th>
+ <th >Tour</th>
+        <th >Stud Qty</th>
+        <th>Adult Qty</th>
+        <th>Stud Total</th>
+        <th>AdultTotal</th>
                         </tr>
                       </thead>
                       @foreach($tour_booking as $value )
@@ -88,19 +90,7 @@ Booking Status : <span class="badge badge-pill badge-warning" style="background:
                             <p class="mb-0">{{$value->tour->name}}</p>
                             </div>
                             </td>
-                     
-                    
-                            <td>
-                    
-                            <div class="d-flex">
-                    
-                            <h6 class="mb-0">{{ $value->tour->operator->name}}</h6>
-                    
-                            </div>
-                    
-                    
-                            </td>
-                    
+
                             <td>
                     
                             <div class="d-flex">
@@ -118,22 +108,21 @@ Booking Status : <span class="badge badge-pill badge-warning" style="background:
                     
                             <div class="d-flex">
                     
-                            <h6 class="mb-0">{{ $value->stud_pricetotal}}</h6>
-                    
-                            </div>
-                    
-                            </td>
-                    
-                    
-                    
-                            <td>
-                    
-                            <div class="d-flex">
-                    
                             <h6 class="mb-0">{{ $value->adult_qty}}</h6>
                     
                             </div>
                     
+                    
+                            </td>
+                    
+                            
+                            <td>
+                    
+                            <div class="d-flex">
+                    
+                            <h6 class="mb-0">{{ $value->stud_pricetotal}}</h6>
+                    
+                            </div>
                     
                             </td>
                     
@@ -161,7 +150,7 @@ Booking Status : <span class="badge badge-pill badge-warning" style="background:
 
                         <div class="d-flex justify-content-between">
                           <h6 class="w-px-100 mb-0">Total Amount:</h6>
-                          <h6 class="mb-0">ugx {{$booking->total_amount}}</h6>
+                          <h6 class="mb-0">UGX {{$booking->total_amount}}</h6>
                         </div>
                       </div>
                     </div>

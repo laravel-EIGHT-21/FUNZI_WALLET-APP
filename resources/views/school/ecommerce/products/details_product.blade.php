@@ -1,4 +1,4 @@
-@extends('school.ecommerce.body.admin_master')
+@extends('school.ecommerce.body.main_master')
 @section('content')
         
 
@@ -12,134 +12,208 @@
 
 
 
-
-        <!-- Content -->
-        
-        <div class="container-xxl flex-grow-1 container-p-y">
-            
-            
-            
-        <h4 class="py-3 mb-4">
-              <span class="text-muted fw-light">View /</span> <b>{{$product->product_name}}</b>  Detail
-            </h4>
+       
+	<div class='container'>
+		<div class='row single-product'>
 
 
-            <div class="row">
+			<div class='col-md-12'>
+            <div class="detail-block">
+				<div class="row  wow fadeInUp">
+                
+					     <div class="col-xs-12 col-sm-6 col-md-5 gallery-holder">
+    <div class="product-item-holder size-big single-product-gallery small-gallery">
 
-<div class="mb-4">
-
-<a href="{{ route('school.products')}}" class="btn rounded-pill btn-warning" style="float:right;"><i class='tf-icons mdi mdi-cart-arrow-right mdi-20px'></i>Contiune Shopping</a>
-
-</div>
-
-</div>
-            
-            <div class="card g-3 mt-5">
-              <div class="card-body row g-3">
-
-
-                <div class="col-lg-8">
-                  <div class="d-flex justify-content-between align-items-center flex-wrap mb-2 gap-1">
-                    <div class="me-1">
-                      <h5 class="mb-1">{{$product->product_name}}</h5>                      
-                    </div>
-
-                  </div>
-                  <div class="card academy-content shadow-none border">
-                    <div class="p-2">
-                      <div class="cursor-pointer">
-
-                       <img src="{{ (!empty($product->product_thambnail))? url('upload/product_images/'.$product->product_thambnail):url('upload/no_image.jpg') }}" class="img-fluid w-100" alt="Product Image" >
+        <div id="owl-single-product">
+            <div class="single-product-gallery-item" id="slide1">
+                <a data-lightbox="image-1" data-title="Gallery" href="{{ (!empty($product->product_thambnail))? url('upload/product_images/'.$product->product_thambnail):url('upload/no_image.jpg') }}">
+                    <img class="img-responsive" alt="" src="{{ (!empty($product->product_thambnail))? url('upload/product_images/'.$product->product_thambnail):url('upload/no_image.jpg') }}" data-echo="{{ (!empty($product->product_thambnail))? url('upload/product_images/'.$product->product_thambnail):url('upload/no_image.jpg') }}" />
+                </a>
+            </div><!-- /.single-product-gallery-item -->
 
 
-                      </div>
-                    </div>
-                    <div class="card-body">
-                      <h5 class="mb-2">Product Details</h5>
-
-                      <hr class="my-4">
-                    
-                      <div class="d-flex flex-wrap">
-                        <div class="me-5">
-                        <p class="text-nowrap fw-semibold"><i class='mdi mdi-wallet-giftcard mdi-24px me-2'></i>Product Name : {{$product->product_name}}</p>
-                          <p class="text-nowrap fw-bold"><i class='mdi mdi-currency-usd mdi-24px me-2'></i>Selling Price : ugx {{$product->selling_price}}</p>
-                          <p class="text-nowrap fw-semibold"><i class='mdi mdi-wallet-giftcard mdi-24px me-2'></i>Product Category : {{$product['category']['category_name']}}</p>
-
-                        </div>
-
-                      </div>
-                      <hr class="mb-4 mt-2">
-                      <h5>Description</h5>
-                      <p class="mb-4">
-                      {{$product->short_descp_en}}
-                      </p>
+        </div><!-- /.single-product-slider -->
 
 
 
-                    </div>
-                  </div>
+    </div><!-- /.single-product-gallery -->
+</div><!-- /.gallery-holder -->        			
+					<div class='col-sm-6 col-md-7 product-info-block'>
+						<div class="product-info">
+							<h1 class="name">{{$product->product_name}}</h1>
+							
+
+							<div class="description-container m-t-20">
+								{{$product->short_descp_en}}
+							</div><!-- /.description-container -->
+
+							<div class="price-container info-container m-t-20">
+								<div class="row">
+									
+
+									<div class="col-sm-6">
+										<div class="price-box">
+											<span class="price">UGX {{$product->selling_price}}</span>
+										
+										</div>
+									</div>
+
+
+								</div><!-- /.row -->
+							</div><!-- /.price-container -->
+
+              <div class="quantity-container info-container">
+
+                <form action="{{ route('add.to.cart') }}"  method="POST" >
+                  @csrf
+
+                  <input class="form-control" type="hidden" name="id" value="{{$product->id}}" id="html5-text-input" />
+
+
+								<div class="row">
+									
+									<div class="col-sm-2">
+										<span class="label">Qty :</span>
+										
+									</div>
+									
+
+					 				<div class="col-sm-2">
+										<div class="cart-quantity">
+											<div class="quant-input">
+
+												<input type="number" id="qty" name="quantity" value="1" min="1">
+
+							              </div>
+							            </div>
+									</div>
+
+
+							@php 
+
+							$school_id = Auth::user()->id;
+							$Cart = App\Models\order_carts::where('school_id',$school_id)->where('product_id',$product->id)->first();
+
+
+							@endphp 
+
+							@if($Cart == null)
+							<input type="hidden" id="product_id" value="{{ $product->id }}" min="1">
+
+							<div class="col-sm-7">
+							<button type="submit" class="btn btn-primary"><i class="fa fa-shopping-cart inner-right-vs"></i> ADD TO CART</button>
+							</div>
+
+							@else
+
+							<button type="button" class="btn btn-warning"><i class="fa fa-shopping-cart inner-right-vs"></i> Already in Cart</button>
+
+
+
+							@endif
+
+
+									
+								</div><!-- /.row -->
+
+                </form>
+
+							</div><!-- /.quantity-container -->
+
+
+							
+
+							
+						</div><!-- /.product-info -->
+					</div><!-- /.col-sm-7 -->
+				</div><!-- /.row -->
                 </div>
+				
+<br/><br/>
+
+				<!-- ============================================== RELATED PRODUCTS ============================================== -->
+<section class="section featured-product wow fadeInUp">
+	<h3 class="section-title">related products</h3>
+	<div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs">
+
+    @php 
+
+$relatedProduct = App\Models\products::where('category_id',$product->category_id)->get(); 
+
+    @endphp
+	    	
+
+    @foreach($relatedProduct as $prod)
+		<div class="item item-carousel">
+			<div class="products">
+				
+	<div class="product">		
+		<div class="product-image">
+			<div class="image">
+
+        <img  src="{{ (!empty($prod->product_thambnail))? url('upload/product_images/'.$prod->product_thambnail):url('upload/no_image.jpg') }}" alt="">
+			</div><!-- /.image -->			
+           		   
+		</div><!-- /.product-image -->
+			
+		
+		<div class="product-info text-left">
+			<h3 class="name"><a href="{{url('school/product/details/'.$prod->id .'/'.$prod->product_name)}}">{{$prod->product_name}}</a></h3>
+			
+			<div class="description">{{ $product->short_descp_en}}</div>
+
+			<div class="product-price">	
+				<span class="price">
+					ugx {{$prod->selling_price}}			</span>
+										    
+									
+			</div><!-- /.product-price -->
+			
+		</div><!-- /.product-info -->
+					<div class="cart clearfix animate-effect">
+				<div class="action">
+					<ul class="list-unstyled">
+            <li class="add-cart-button btn-group">
+              <a href="{{url('school/product/details/'.$prod->id .'/'.$prod->product_name)}}">
+              <button class="btn btn-primary icon" type="button" title="Add Cart"> <i class="fa fa-shopping-cart"></i> </button>
+              <button class="btn btn-primary cart-btn" type="button">Add to cart</button>
+              </a>
+            </li>
+	                   
+
+					</ul>
+				</div><!-- /.action -->
+			</div><!-- /.cart -->
+			</div><!-- /.product --> 
+      
+			</div><!-- /.products -->
+		</div><!-- /.item -->
+	@endforeach
+	
+	
+			</div><!-- /.home-owl-carousel -->
+</section><!-- /.section -->
+
+
+<!-- ============================================== UPSELL PRODUCTS : END ============================================== -->
+			
+			</div><!-- /.col -->
+			<div class="clearfix"></div>
+		</div><!-- /.row -->
 
 
 
-                <div class="col-lg-4">
-                  <div class="accordion stick-top" id="courseContent">
-                    <div class="accordion-item shadow-none border border-bottom-0 active my-0 overflow-hidden">
-                      <div class="accordion-header border-0" id="headingOne">
-                        <button type="button" class="accordion-button bg-lighter rounded-0" data-bs-toggle="collapse" data-bs-target="#chapterOne" aria-expanded="true" aria-controls="chapterOne">
-                          <span class="d-flex flex-column">
-                            <span class="h4 mb-1">Add Product to Cart</span>
 
-                          </span>
-                        </button>
-                      </div>
-                      <div id="chapterOne" class="accordion-collapse collapse show" data-bs-parent="#courseContent">
-                        <div class="accordion-body py-3 border-top">
-
-                        <form action="{{ route('add.to.cart') }}"  method="POST" >
-                    @csrf
-
-                    <input class="form-control" type="hidden" name="id" value="{{$product->id}}" id="html5-text-input" />
-
-                    
-            <div class="row">
-            <div class="col-md">
-
-            <div class="form-floating form-floating-outline mb-4">
-          <input class="form-control" type="number" id="qty" name="quantity" value="1" min="1" />
-          <label for="qty">Product Quantity</label>
-        </div>
-
-            </div>
-            </div>
-
-            <div class="row">
-            <div class="col-md">
-            <button type="submit" class="btn rounded-pill btn-success me-2"><i class='tf-icons mdi mdi-cart-variant mdi-20px'></i>Add To Cart</button>
-            </div>
-            </div>
-
-            </form>
-
-                        </div>
-                      </div>
-                    </div>
-
-
-                  </div>
-                </div>
+<br/><br/><br/>
 
 
 
-              </div>
-            </div>
-            
-            
-            
-                      </div>
-                      <!-- / Content -->
+
+	</div><!-- /.container -->
 
 
+
+  
 
 
 

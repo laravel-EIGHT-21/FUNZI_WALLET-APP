@@ -1,342 +1,150 @@
-
-@extends('school.bus_rentals.body.admin_master')
+@extends('school.bus_rentals.body.main_master')
 @section('content')
         
 
 @section('title')
 
-Bus Rental Bookings List | funziwallet
+Bus Rentals Bookings List 
 
 @endsection
 
-@php
 
 
 
+<div class="body-content">
+	<div class="container">
 
-$id = Auth::user()->id;
+<div class="row">
+  
+  <h4>All School Bus Rentals Bookings For Tours</h4>
+
+</div>
+
+<br/>
+		<div class="row">
+		
+       
+       <div class="col-md-1">
+
+       </div>
+
+       <div class="col-md-12"> 
+
+        <div class="shopping-cart">
+			<div class="shopping-cart-table">
+        <div class="table-responsive"> 
+          <table class="table">
+            <tbody>
+  
+              <tr style="background: #e2e2e2;">
+              
+
+                <td class="col-md-1">
+                  <label for="">Booking No.</label>
+                </td>
+
+                <td class="col-md-3">
+                  <label for=""> Date</label>
+                </td>
+
+                <td class="col-md-3">
+                  <label for="">Time</label>
+                </td>
 
 
-$months = date('F Y');
+                <td class="col-md-2">
+                  <label for=""> Total Px</label>
+                </td>
 
-$years = date('Y');
+                 <td class="col-md-2">
+                  <label for=""> Booking Status</label>
+                </td>
 
-
-$month_rentals = DB::table('car_bookings')->where('school_id',$id)->where('month',$months)->where('status','Bookings Confirmed')->get();
-
-$year_rentals = DB::table('car_bookings')->where('school_id',$id)->where('year',$years)->where('status','Bookings Confirmed')->get();
-
-
-$monthly_total = DB::table('car_bookings')->where('school_id',$id)->where('month',$months)->where('status','Bookings Confirmed')->sum('total_price');
-
-$yearly_total =DB::table('car_bookings')->where('school_id',$id)->where('year',$years)->where('status','Bookings Confirmed')->sum('total_price');
-
-@endphp 
-        
+                 <td class="col-md-1">
+                  <label for=""> Action </label>
+                </td>
+                
+              </tr>
 
 
-        <!-- Content -->
-        
-        <div class="container-xxl flex-grow-1 container-p-y">
+              @foreach($bookings as $value )
+       <tr>
+                <td class="col-md-1">
+                  <label for=""> {{ $value->booking_no}}
+                </td>
+
+                <td class="col-md-3">
+                  <label for=""> {{ $value->date }}</label>
+                </td>
 
 
-        <h4 class="py-3 mb-4">
-              <span class="text-muted fw-light"><a href="{{route('school.car.rentals.dashboard')}}">Home</a> /View /</span> All Bus Rental Bookings List
-            </h4>
+                 <td class="col-md-3">
+                  <label for=""> {{ $value->time }}</label>
+                </td>
 
-            <br/>
+                <td class="col-md-2">
+                  <label for="">UGX {{ $value->total_price }}</label>
+                </td>
 
 
 
+                 <td class="col-md-2">
+                  <label for=""> 
+                  @if($value->status == 'Bookings Pending')    
+                    <span class="badge badge-pill badge-warning" style="background: #330df1;">Tour Bookings Pending </span>
 
-             
-            <h5 class="py-3 mb-2">Total Bookings Amounts  </h5>
-<div class="row gy-4">
+                    @elseif($value->status == 'Bookings Confirmed')
+                    <span class="badge badge-pill badge-warning" style="background: #4bec58;">Tour Bookings Confirmed </span>
 
-  <!-- Cards with users info -->
+                   
+                @elseif($value->status == 'Bookings Cancelled')
+                <span class="badge badge-pill badge-" style="background: red;">Tour Booking Cancelled </span>
+
+
+                  @endif
  
-  <div class="col-lg-6 col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <div class="avatar me-3">
-            <div class="avatar-initial bg-label-success rounded">
-              <i class="mdi mdi-bus mdi-24px">
-              </i>
-            </div>
-          </div>
-    
-          <div class="card-info">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">{{ ($monthly_total) }}</h4>
+                    </label>
+                </td>
 
-            </div>
-            <small>Monthly Total</small>
-          </div>
+         <td class="col-md-1">
+         <a href="{{route('bus.rentals.bookings.details',$value->id)}}"   title="Tour Booking Details" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i> View</a>
+         
+         <a href="{{route('bus.rentals.bookings.invoice.report.details',$value->id)}}"  target="_blank" title="Booking Invoice Report" class="btn btn-sm btn-warning" style="margin-top: 5px;"><i class="fa fa-download" style="color: white;"></i> Invoice </a>
+          
+        </td>
+                
+              </tr>
+              @endforeach
+
+
+
+
+
+            </tbody>
+            
+          </table>
           
         </div>
       </div>
-    </div>
-  </div>
-  <div class="col-lg-6 col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <div class="avatar me-3">
-            <div class="avatar-initial bg-label-info rounded">
-              <i class="mdi mdi-bus mdi-24px">
-              </i>
-            </div>
-          </div>
-
-          <div class="card-info">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">{{ ($yearly_total) }}</h4>
-
-            </div>
-            <small>Yearly Total</small>
-          </div>
-        
-        </div>
-      </div>
-    </div>
-  </div>
+       </div>
 
 
 
+
+         
+       </div> <!-- / end col md 8 -->
+
+		 
+
+		 
+			
+		</div> <!-- // end row -->
+
+    <br/><br/><br/>
+		
+	</div>
+	
 </div>
-
-
-
-<br />
-
-                    
-<h5 class="py-3 mb-2">Total Bus Rental Bookings Made </h5>
-<div class="row gy-4">
-
-  <!-- Cards with users info -->
- 
-  <div class="col-lg-6 col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <div class="avatar me-3">
-            <div class="avatar-initial bg-label-danger rounded">
-              <i class="mdi mdi-bus mdi-24px">
-              </i>
-            </div>
-          </div>
-    
-          <div class="card-info">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">{{ count($month_rentals) }}</h4>
-
-            </div>
-            <small>Monthly Bus Rental Bookings</small>
-          </div>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-6 col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <div class="avatar me-3">
-            <div class="avatar-initial bg-label-warning rounded">
-              <i class="mdi mdi-bus mdi-24px">
-              </i>
-            </div>
-          </div>
-
-          <div class="card-info">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">{{ count($year_rentals) }}</h4>
-
-            </div>
-            <small>Yearly Bus Rental Bookings</small>
-          </div>
-        
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-</div>
-
-
-<br />
-
-
-            <div class="row">
-                        <div class="col-12">
-                            <!-- ---------------------
-                                    start Zero Configuration
-                          
-                                ---------------- -->
-                            <div class="card">
-                                <div class="card-body">
-     
-                                    <div class="table-responsive">
-                                        <table id="zero_config"
-                                            class="table border table-striped table-bordered text-nowrap">
-                                            <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                  <th scope="col">School</th>
-                                                  <th scope="col">Booking No.</th>
-                                                  <th scope="col">Date</th>
-                                                  <th scope="col">Total Price</th>
-                                                  <th scope="col">Status</th>
-                                                  <th scope="col">Actions</th>
-
-
-                                                </tr>
-                                                <!-- end row --> 
-                                            </thead>
-
-<tbody> 
-@foreach($bookings as $value )
-<tr>
-
-<td>
-
-<div class="d-flex align-items-center">
-<div class="ms-3">
-<h6 class="fw-semibold mb-0">{{ $value->name}}</h6>
-
-</div>
-</div>
-
-</td>
-
-
-
-<td>
-
-  <div class="d-flex align-items-center">
-  <div class="ms-3">
-  <h6 class="fw-semibold mb-0">{{ $value->booking_no}}</h6>
-  
-  </div>
-  </div>
-  
-  </td>
-
-
-
-
-<td>
-
-<div class="d-flex align-items-center">
-<div class="ms-3">
-<h6 class="fw-semibold mb-0">{{ $value->date}}</h6>
-
-</div>
-</div>
-
-</td>
-
-
-<td>
-    
-<div class="d-flex align-items-center">
-<div class="ms-3">
-<h6 class="fw-semibold mb-0">{{ $value->total_price}}</h6>
-
-</div>
-</div>
-
-
-</td>
-
-
-<td class="pe-0">
-@if($value->status == 'Bookings Pending')        
-<span class="badge badge-pill badge-warning" style="background: red;">Pending </span>
-
-@elseif($value->status == 'Bookings Confirmed')
-<span class="badge badge-pill badge-warning" style="background: green;">Confirmed </span>
-
-
-@endif
-
-</td>
-
-
-
-
-<td>
-
-<div class="action-btn d-flex align-items-center">
-<a href="{{route('bus.rentals.bookings.details',$value->id)}}" target="_blank"  title="Tour Booking Details" class="btn btn-sm btn-primary">
-  <i class="ri-bus-line"></i>
-</a>
-
-&nbsp;&nbsp;
-
-<a href="{{route('bus.rentals.bookings.invoice.report.details',$value->id)}}"  target="_blank" title="Booking Invoice Report" class="btn btn-sm btn-warning">
-  <i class="ri-printer-line"></i>
-</a>
-
-
-
-
-
-&nbsp;&nbsp;
-
-@if($value->status == 'Bookings Pending')       
-
-<a href="{{route('cancel.bus.rentals.bookings',$value->id)}}" title="Cancel Booking" class="btn btn-sm btn-danger" id="cancelled">
-  <i class="ri-delete-bin-2-line lh-1 scaleX-n1-rtl"></i>
-</a>
-
-@else
-
-
-@endif
-
-
-
-
-</div>
-
-
-
-
-
-
-
-</td>
-
-</tr>
-@endforeach
-</tbody>
-
-                                        </table>
-                                    </div>
-
-
-
-
-                                </div>
-                            </div>
-                            <!-- ---------------------
-                                    end Zero Configuration
-                                ---------------- -->
-                        </div>
-                    </div>
-
-
-            
-            
-                      </div>
-                      <!--/ Content -->
-
-
 
 
                                   

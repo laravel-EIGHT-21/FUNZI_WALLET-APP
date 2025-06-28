@@ -168,85 +168,13 @@ public function AllOrdersPaymentsRecords(){
 
 
 
-
-
-public function MakeOrderPayment($order_id){
-
-
-    $orders = orders::with('school')->where('id',$order_id)->get(); 
-    
-    $order_payment_total = schoolorders_payments_records::with(['order'])->where('order_id',$order_id)->sum('amount');
-  
-
-      return view('admin.orders.make_offline_order_payment',compact('orders','order_payment_total'));
-  
-
-  
-  
-  }
-
-
-
-public function SubmitSchoolOrderPayment(Request $request, $order_id)
-{ 
-
-
-    $schoolorder_records = schoolorders_payments_records::where('order_id',$order_id)->first();	
-
-    $due_bal = (float)$schoolorder_records->total_amount-(float)$schoolorder_records->amount;
-
-
-    if($request->payment_amount <= $due_bal)
-    {
-    
-    $previous_amount = $schoolorder_records->amount;
-    $total_amount = $schoolorder_records->total_amount;
-    $present_amount = (float)$previous_amount+(float)$request->payment_amount; 
-    $schoolorder_records->amount = $present_amount;
-    $schoolorder_records->save();
-    
-       
-    $order_Pay = new order_payments_tracking();
-    $order_Pay->order_id = $order_id;
-    $order_Pay->school_id = $schoolorder_records->school_id;
-    $order_Pay->payment_amount  = $request->payment_amount;
-    $order_Pay->order_amount_balance  = (float)$total_amount-(float)$schoolorder_records->amount;
-    $order_Pay->payment_type = $request->payment_type;
-    $order_Pay->date = Carbon::today()->format('Y-m-d');
-    $order_Pay->month = Carbon::today()->format('F Y');
-    $order_Pay->year = Carbon::today()->format('Y');
-    $order_Pay->save();
-
-
-        return back()->with('success',' Offline Order Payment Successful');
-
-
-
-    }
-
-    else{
-    
-    
-          return back()->with('error',' Balance Amount Entered Greater than Account Balance!');
-    
-    
-    
-    }
-    
-
-} 
-
-
-
-
-
   
 public function SchoolOrdersPayment(Request $request, $order_id)
 { 
 
 
 
-    ///$order = orders::where('id',$order_id)->first();
+    $order_amount = orders::where('id',$order_id)->first();
 
 $schoolorder_records = schoolorders_payments_records::where('order_id',$order_id)->first();	
 
@@ -277,6 +205,32 @@ $order_Pay->save();
 
 
 
+if($order_Pay->payment_amount == $order_amount->amount)
+{
+
+
+orders::where('id',$order_id)->update([
+	
+  'payment_status' => 'Full Payment Made',
+
+]);
+
+}
+
+elseif($order_Pay->payment_amount < $order_amount->amount)
+{
+
+  
+orders::where('id',$order_id)->update([
+	
+  'payment_status' => 'Partial Payment Made',
+
+]);
+
+
+}
+
+
         return back()->with('success',' Balance Topup Payment Successful');
 
 }
@@ -291,72 +245,9 @@ else{
 }
 
 } 
-
-
-
-
-
-public function EditSchoolOrderOfflinePayment($order_id){
-
-
-  $payment_record = schoolorders_payments_records::with(['school','order'])->where('order_id',$order_id)->get();
-  
-  $orders_payments = order_payments_tracking::where('order_id',$order_id)->get();
-    
-    return view('admin.orders.edit_offline_order_payment',compact('payment_record','orders_payments'));
-  
-  }
   
   
   
-  
-  public function UpdateSchoolOrderOfflinePayment(Request $request,$order_id){
-  
-  
-  DB::transaction(function() use($request,$order_id){
-  
-        $payment_record_update = schoolorders_payments_records::where('order_id',$order_id)->first(); 
-        $payment_record_update->amount = $request->amount;  
-         
-        $payment_record_update->save();
-  
-  
-  
-        order_payments_tracking::where('order_id',$order_id)->delete(); 
-        $order_Pay = new order_payments_tracking();
-        $order_Pay->order_id = $order_id;
-        $order_Pay->school_id = $payment_record_update->school_id;
-        $order_Pay->payment_amount  = $request->amount;
-        $order_Pay->order_amount_balance  = (float)$payment_record_update->total_amount-(float)$payment_record_update->amount;
-        $order_Pay->payment_type = $request->payment_type;
-        $order_Pay->date = Carbon::today()->format('Y-m-d');
-        $order_Pay->month = Carbon::today()->format('F Y');
-        $order_Pay->year = Carbon::today()->format('Y');
-        $order_Pay->save();
-  
-  
-  
-  
-  
-      });
-  
-  
-      
-      return back()->with('info',' Schoolfees Payment Update was Successful');
-  
-  
-  
-  
-  
-  
-  }
-  
-  
-
-
-
-
-
 
 
   public function OfflineOrdersTrackInvoice($order_id){

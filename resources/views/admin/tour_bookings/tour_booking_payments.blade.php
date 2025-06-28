@@ -138,6 +138,7 @@ $year_payments = DB::table('tour_payments')->where('year',$years)->sum('amount')
                         <th>Booking No. </th>
                         <th>School </th>
                         <th> Date</th>
+                        <th>Month</th>
                         <th> Time</th>
                         <th>Payments (UGX)</th>
 
@@ -150,6 +151,7 @@ $year_payments = DB::table('tour_payments')->where('year',$years)->sum('amount')
                         <td> {{ $value['booking']['booking_number']}}</td>
                         <td> {{ $value['school']['name']}}</td>
                         <td> {{ $value->payment_date}}</td>
+                        <td> {{ $value->month}}</td>
                         <td> {{ $value->sent_time}}</td>
                         <td> {{ $value->amount}}</td>
 

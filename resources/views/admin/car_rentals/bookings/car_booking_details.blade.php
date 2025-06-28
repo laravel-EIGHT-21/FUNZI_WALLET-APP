@@ -22,18 +22,18 @@ Car Rental Bookings Details | funziwallet
 
             
             @if($booking->status == 'Bookings Pending')        
-            <a href="{{ route('pending-car-rental-bookings')}}" class="btn rounded-pill btn-primary" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
+            <a href="{{ route('pending-car-rental-bookings')}}" class="btn rounded-pill btn-warning" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
 
 
 @elseif($booking->status == 'Bookings Confirmed')
 
-<a href="{{ route('confirmed-car-rental-bookings')}}" class="btn rounded-pill btn-primary" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
+<a href="{{ route('confirmed-car-rental-bookings')}}" class="btn rounded-pill btn-success" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
 
 
 
-@elseif($booking->status == 'Bookings Cancelled')
-
-<a href="{{ route('cancelled-car-rental-bookings')}}" class="btn rounded-pill btn-primary" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
+@elseif($booking->status =='Bookings Cancelled')
+ 
+<a href="{{ route('cancelled-car-rental-bookings')}}" class="btn rounded-pill btn-danger" style="float:right;"><i class='tf-icons mdi mdi-arrow-left mdi-20px'></i>Back</a>
 
 @endif
 
@@ -49,6 +49,13 @@ Car Rental Bookings Details | funziwallet
 
 @elseif($booking->status == 'Bookings Confirmed')
 Booking Status : <span class="badge badge-pill badge-warning" style="background: green;;">Confirmed</span>
+
+
+
+@elseif($booking->status =='Bookings Cancelled')
+Booking Status : <span class="badge badge-pill badge-warning" style="background: rgb(249, 20, 20);;">Cancelled</span>
+
+
 @endif
                 
                 </h4>
@@ -73,9 +80,9 @@ Booking Status : <span class="badge badge-pill badge-warning" style="background:
                 <thead class="border-bottom">
                         <tr>
                           <th>Rental</th>
-                          <th>Operator</th>
                           <th>Vehicle Total</th>
                           <th>No. of Days</th>
+                          <th>Fuel Status</th>
                           <th>Dates</th>
                           <th>Price / Day</th>
                         </tr>
@@ -89,17 +96,6 @@ Booking Status : <span class="badge badge-pill badge-warning" style="background:
                             </div>
                             </td>
                     
-                    
-                            <td>
-                    
-                            <div class="d-flex">
-                    
-                            <h6 class="mb-0">{{ $value->rental->operator->name}}</h6>
-                    
-                            </div>
-                    
-                    
-                            </td>
                     
                             <td>
                     
@@ -121,6 +117,19 @@ Booking Status : <span class="badge badge-pill badge-warning" style="background:
                             <h6 class="mb-0">{{ $value->total_days}}</h6>
                     
                             </div>
+                    
+                            </td>
+                    
+
+                            
+                            <td>
+                    
+                            <div class="d-flex">
+                    
+                            <h6 class="mb-0">{{ $value->fuel_status}}</h6>
+                    
+                            </div>
+                    
                     
                             </td>
                     

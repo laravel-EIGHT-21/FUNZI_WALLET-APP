@@ -163,10 +163,15 @@
           <td>{{$booking->time}}</td>
         </tr>
 
-        <tr>
-          <td class="pe-3">Total Price:</td>
-          <td class="fw-medium">ugx {{$booking->total_amount}}</td>
-        </tr>
+      <tr>
+      <td class="pe-3">Total Tours:</td>
+      <td class="fw-medium">{{$booking->total_tours}}</td>
+      </tr>
+
+      <tr>
+      <td class="pe-3">Total Price:</td>
+      <td class="fw-medium">ugx {{$booking->total_amount}}</td>
+      </tr>
 
 
       </tbody>
@@ -181,10 +186,9 @@
       <thead class="table-light border-top">
       <tr>
         <th>Tour</th>
-        <th>Agency</th>
         <th>Stud Qty</th>
-        <th>Stud Total</th>
         <th>Adult Qty</th>
+        <th>Stud Total</th>
         <th>AdultTotal</th>
       </tr>
     </thead>
@@ -193,22 +197,17 @@
 
       <tr>
         <td>
-          <div class="d-flex">
-          <p class="mb-0">{{$value->tour->name}}</p>
-          </div>
+
+                          <div class="d-flex align-items-center">
+
+                            <img src="{{ (!empty($value['tour']['image_thambnail']))? url('upload/tour_package_thumbnail/'.$value['tour']['image_thambnail']):url('upload/no_image.jpg') }}" class="rounded-circle" alt="Product Image" width="50" height="50">
+
+                            <div class="ms-3">
+                              <h6 class="fw-bold mb-0 fs-6">{{$value->tour->name}}</h6>
+                            </div>
+                          </div>
           </td>
   
-  
-          <td>
-  
-          <div class="d-flex">
-  
-          <h6 class="mb-0">{{ $value->tour->operator->name}}</h6>
-  
-          </div>
-  
-  
-          </td>
   
           <td>
   
@@ -220,18 +219,7 @@
   
   
           </td>
-  
-  
-  
-          <td>
-  
-          <div class="d-flex">
-  
-          <h6 class="mb-0">{{ $value->stud_pricetotal}}</h6>
-  
-          </div>
-  
-          </td>
+
   
   
   
@@ -246,7 +234,17 @@
   
           </td>
   
+    
   
+          <td>
+  
+          <div class="d-flex">
+  
+          <h6 class="mb-0">{{ $value->stud_pricetotal}}</h6>
+  
+          </div>
+  
+          </td>
   
           <td>
   

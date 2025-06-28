@@ -1,210 +1,346 @@
-
-@extends('school.tours.body.admin_master')
+@extends('school.tours.body.main_master')
 @section('content')
         
 
 @section('title')
 
-Tour Bookings Details | funziwallet
+Tour Bookings Details 
 
 @endsection
 
 
+
+
+<div class="body-content">
+	<div class="container">
+
+
+    <div class="row">
+
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header"><h4>School Details</h4></div>
+         <hr>
+         <div class="card-body" style="background: #E9EBEC;">
+           <table class="table">
+            <tr>
+              <th> Shipping Name : </th>
+               <th> {{ $booking->name }} </th>
+            </tr>
+
+             <tr>
+              <th> Shipping Phone 1 : </th>
+               <th> {{ $booking->school_tel1 }} </th>
+            </tr>
+
+            <tr>
+              <th> Shipping Phone 2 : </th>
+               <th> {{ $booking->school_tel2 }} </th>
+            </tr>
+
+             <tr>
+              <th> Shipping Email : </th>
+               <th> {{ $booking->email }} </th>
+            </tr>
+
+             <tr>
+              <th> Address : </th>
+               <th> {{ $booking->school_address }} </th>
+            </tr>
+             
+           </table>
+
+
+         </div> 
+          
+        </div>
         
-        <!-- Content -->
+      </div> <!-- // end col md -5 -->
+
+
+
+<div class="col-md-6">
+        <div class="card">
+          <div class="card-header"><h4>Tour Booking Details
+<span class="text-danger"> Booking No. {{ $booking->booking_number }}</span></h4>
+          </div>
+         <hr>
+         <div class="card-body" style="background: #E9EBEC;">
+           <table class="table">
+            <tr>
+              <th>  Time : </th>
+               <th> {{ $booking->time}} </th>
+            </tr>
+
+             <tr>
+              <th>  Date : </th>
+               <th> {{ $booking->booking_date }} </th>
+            </tr>
+
+             <tr> 
+              <th> Total Tours : </th>
+               <th> {{ $booking->total_tours}} </th>
+            </tr>
+
+
+
+             <tr>
+              <th> Total Amount : </th>
+               <th> ugx {{ $booking->total_amount }} </th>
+            </tr>
+ 
+            <tr>
+              <th> Booking Status : </th>
+               <th>   
+                @if($booking->status == 'Bookings Pending')        
+                <span class="badge badge-pill badge-warning" style="background: #6a04df;">Tour Booking Pending </span>
+
+                @elseif($booking->status == 'Bookings Confirmed')
+                <span class="badge badge-pill badge-warning" style="background: #31f40a;">Tour Booking Confirmed </span>
+
+              
+                @elseif($booking->status == 'Bookings Cancelled')
+                <span class="badge badge-pill badge-" style="background: red;">Tour Booking Cancelled </span>
+
+               
+
+              @endif
+               </th>
+            </tr>
+
         
-        <div class="container-xxl flex-grow-1 container-p-y">
-            
-            
-        <h4 class="py-3 mb-2">
-              <span class="text-muted fw-light">View /</span> Tour Bookings Details
-            </h4>
-
-            
-                    
-<a href="{{ route('view.tour.bookings')}}" class="btn rounded-pill btn-info" style="float:right;"><i class='tf-icons ri-arrow-left-line ri-20px'></i>Back</a>
+    <tr>
 
 
-
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-            
-              <div class="d-flex flex-column justify-content-center gap-2 gap-sm-0">
-                <h4 class="mb-1 mt-3 d-flex flex-wrap gap-2 align-items-end">
-                  Booking No. #{{$booking->booking_number}} &nbsp;&nbsp; <b>|</b> &nbsp;&nbsp;
-                 @if($booking->status == 'Bookings Pending')        
-                 Booking Status : <span class="badge badge-pill badge-warning" style="background: #FFA500;">Booking Pending </span>
-
-
-@elseif($booking->status == 'Bookings Confirmed')
-Booking Status : <span class="badge badge-pill badge-warning" style="background: green;;">Confirmed</span>
-@endif
-                
-                </h4>
-
-                <p class="text-body"><b> Date : {{$booking->booking_date}}</b> &nbsp;&nbsp; <b>|</b> &nbsp;&nbsp; <b>Booking Time : {{$booking->time}}</b> </p>
-              </div>
-
-
-            </div>
-            
-            <!-- Order Details Table -->
-            
-            <div class="row">
-              <div class="col-12 col-lg-9">
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title m-0">Tour Bookings details</h5>
-
-                  </div>
-                  <div class="table-responsive text-nowrap">
-              <table class="table table-borderless">
-                <thead class="border-bottom">
-                        <tr>
       
-                          <th>Tour</th>
-                          <th>Agency</th>
-                          <th>Stud Qty</th>
-                          <th>Stud Total</th>
-                          <th>Adult Qty</th>
-                          <th>AdultTotal</th>
-                        </tr>
-                      </thead>
-                      @foreach($tour_booking as $value )
-                      <tbody>
-                        <tr>
-                          <td>
-                            <div class="d-flex">
-                            <p class="mb-0">{{$value->tour->name}}</p>
-                            </div>
-                            </td>
-                    
-                    
-                            <td>
-                    
-                            <div class="d-flex">
-                    
-                            <h6 class="mb-0">{{ $value->tour->operator->name}}</h6>
-                    
-                            </div>
-                    
-                    
-                            </td>
-                    
-                            <td>
-                    
-                            <div class="d-flex">
-                    
-                            <h6 class="mb-0">{{ $value->stud_qty}}</h6>
-                    
-                            </div>
-                    
-                    
-                            </td>
-                    
-                    
-                    
-                            <td>
-                    
-                            <div class="d-flex">
-                    
-                            <h6 class="mb-0">{{ $value->stud_pricetotal}}</h6>
-                    
-                            </div>
-                    
-                            </td>
-                    
-                    
-                    
-                            <td>
-                    
-                            <div class="d-flex">
-                    
-                            <h6 class="mb-0">{{ $value->adult_qty}}</h6>
-                    
-                            </div>
-                    
-                    
-                            </td>
-                    
-                    
-                    
-                            <td>
-                    
-                            <div class="d-flex">
-                    
-                            <h6 class="mb-0">{{ $value->adult_pricetotal}}</h6>
-                    
-                            </div>
-                    
-                            </td>
+      @if($booking->status == 'Bookings Pending')     
+      
+      <th> Cancel Tour Booking : </th>
+      <th> 
+  
+        <a href="{{route('cancel.tour.bookings',$booking->id)}}" class="btn btn-danger" id="cancelled">
+          <i class="fa fa-trash"></i>
+        </a>
+        
+      </th>
+
+      
+      @else
+      
+      
+      @endif
+
+    </tr>
+
+ 
+           
+             
+           </table>
+
+
+         </div> 
+          
+        </div>
+        
+      </div> <!-- // 2ND end col md -5 -->
+
+      
+<br><br>
+
+
+<div class="row">
+
+<h3> <b>Tour Booking Payments(Mobile Money)</b></h3>
+
+  <div class="col-md-12">
+  
+          <div class="table-responsive">
+            <table class="table border table-striped table-bordered">
+              <tbody>
+    
+                <tr style="background: rgba(241, 239, 241, 0.133)">
+                  <td class="col-md-3">
+                    <label for=""> Booking No</label>
+                  </td>
+  
+                  <td class="col-md-3">
+                    <label for=""> Date </label>
+                  </td>
+  
+                  <td class="col-md-3">
+                    <label for="">Time</label>
+                  </td>
+  
+  
+                   <td class="col-md-3">
+                    <label for=""> Amount (UGX) </label>
+                  </td>
+                  
+                </tr>
+  
+  
+                @foreach($payments as $key => $value)
+         <tr>
+                  <td class="col-md-3">
+                    <label for="">{{$value['booking']['booking_number']}} </label>
+                  </td>
+  
+                  <td class="col-md-3">
+                    <label for=""> {{ $value->payment_date }}</label>
+                  </td>
+  
+  
+                   <td class="col-md-3">
+                    <label for=""> {{ $value->sent_time }}</label>
+                  </td>
+  
+  
+
+  
+                   <td class="col-md-3">
+                    <label for=""> UGX  {{$value->amount }}</label>
+                  </td>
+                  
+                </tr>
+                @endforeach
+  
+  
+  
+  
+  
+              </tbody>
+              
+            </table>
+  
+            
+            
+          </div>
+   
+           
+         </div> <!-- / end col md 8 --> 
+  
+         
+          
+        </div> <!-- // END ORDER ITEM ROW -->
+  
+  
+
+<br><br>
+
+      <div class="row">
+
+
+        <h3> <b>Tours Booked </b></h3>
+
+
+
+<div class="col-md-12">
+
+        <div class="table-responsive">
+          <table class="table">
+            <tbody>
+  
+              <tr style="background: #e2e2e2;">
+                <td class="col-md-1">
+                  <label for=""> Image</label>
+                </td>
+
+                <td class="col-md-3">
+                  <label for=""> Tour </label>
+                </td>
+
+                <td class="col-md-3">
+                  <label for=""> Stud Qty</label>
+                </td>
+
+
+                 <td class="col-md-1">
+                  <label for="">Adult Qty </label>
+                </td>
+
+                <td class="col-md-1">
+                  <label for="">Stud Total </label>
+                </td>
+
+                <td class="col-md-1">
+                  <label for="">Adult Total </label>
+                </td>
+                
+              </tr>
+
+
+              @foreach($tour_booking as $value)
+       <tr>
+                <td class="col-md-1">
+                  <label for=""><img src="{{ (!empty($value['tour']['image_thambnail']))? url('upload/tour_package_thumbnail/'.$value['tour']['image_thambnail']):url('upload/no_image.jpg') }}" height="50px;" width="50px;"> </label>
+                </td>
+
+                <td class="col-md-3">
+                  <label for=""> {{ $value->tour->name }}</label>
+                </td>
+
+
+                 <td class="col-md-2">
+                  <label for=""> {{ $value->stud_qty }}</label>
+                </td>
+
+                
+                 <td class="col-md-2">
+                  <label for=""> {{ $value->adult_qty }}</label>
+                </td>
+
+
+          <td class="col-md-2">
+                  <label for=""> UGX {{ $value->stud_pricetotal}}    </label>
+                </td>
+
+                
+          <td class="col-md-2">
+                  <label for=""> UGX {{ $value->adult_pricetotal}}    </label>
+                </td>
+
+                
+              </tr>
+              @endforeach
+
+
+
+
+
+            </tbody>
+            
+          </table>
+
+          
+          
+        </div>
+ 
+         
+       </div> <!-- / end col md 8 --> 
+
+       
+        
+      </div> <!-- // END ORDER ITEM ROW -->
+
+
+
+
+
+<br><br>
+
+
+
     
 
-    
 
-                        </tr>
-                      </tbody>
-                      @endforeach
-                    </table>
-                    <div class="d-flex justify-content-end align-items-center m-3 mb-2 p-1">
-                      <div class="order-calculations">
-
-                        <div class="d-flex justify-content-between">
-                          <h6 class="w-px-100 mb-0">Total Amount:</h6>
-                          <h6 class="mb-0">ugx {{$booking->total_amount}}</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+		 
+			
+		</div> <!-- // end row -->
 
 
 
-              </div>
-
-
-
-              <div class="col-12 col-lg-3">
-
-                   <div class="card mb-4">
-      <div class="card-header">
-        <h6 class="card-title m-0">School details</h6>
-      </div>
-      <div class="card-body">
-        <div class="d-flex justify-content-start align-items-center mb-4">
-
-          <div class="d-flex flex-column">
-            <a href="app-user-view-account.html" class="text-body text-nowrap">
-              <h6 class="mb-0">{{$booking->name}}</h6>
-            </a>
+  </div>
 </div>
-        </div>
-        <div class="d-flex justify-content-start align-items-center mb-4">
-          <span class="avatar rounded-circle bg-label-success me-2 d-flex align-items-center justify-content-center"><i class='ri-bus-fill ri-24px'></i></span>
-          <h6 class="text-body text-nowrap mb-0">{{$booking->total_tours}} Tours</h6>
-        </div>
-        <div class="d-flex justify-content-between"> 
-          <h6>Contact info</h6>
-
-        </div>
-        <p class=" mb-1">Email: {{$booking->email}}</p>
-        <p class=" mb-0">Tel One : {{$booking->school_tel1}}</p>
-        <p class=" mb-0">Tel Two : {{$booking->school_tel2}}</p>
-        <p class="mb-0">Address :{{$booking->school_address}}</p>
-      </div>
-    </div>
-
-
-              </div>
-            </div>
-
-
-            
-            
-            
-            
-                      </div>
-                      <!--/ Content -->
-            
             
                     
 @endsection

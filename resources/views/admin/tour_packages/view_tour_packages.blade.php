@@ -69,10 +69,11 @@ Tour Packages | funzitours
                           <!-- start row -->
                           <tr>
                       <th>Tour</th>
+                      <th>Availability</th>
                       <th>Region</th>
                       <th>Std Px</th>
                       <th>Adult Px</th>
-                      <th>Dates(Start-End)</th>
+                      <th>Dates</th>
                       <th>Status</th>
                       <th>Actions</th>
                           </tr>
@@ -98,20 +99,30 @@ Tour Packages | funzitours
 
 </td>
 
+<td>
+  @if($tour->availability_end_date >= Carbon\Carbon::now()->format('Y-m-d'))
+  <span class="badge rounded-pill bg-label-success"><b> Available </b> </span>
+  @else
+<span class="badge rounded-pill bg-label-danger"><b> Expired </b></span>
+  @endif
+
+</td>
+
+
 
 <td> {{$tour['destination']['destination_name']}}</td>
 
-<td>ugx {{$tour->students_price}}</td>
-<td>ugx {{$tour->adults_price}}</td>
+<td> {{$tour->students_price}}</td>
+<td> {{$tour->adults_price}}</td>
 <td>
- <span class="badge bg-primary">{{ $tour->availability_start_date }}</span>  /<br/> <span class="badge bg-warning text-dark">{{ $tour->availability_end_date }}</span> 
+ <span class="badge bg-info">{{ $tour->availability_start_date }}</span>  /<br/> <span class="badge bg-warning text-dark">{{ $tour->availability_end_date }}</span> 
   
 <td class="pe-0">
 
 @if($tour->status == 1)
-<span class="badge rounded-pill bg-label-success">Active</span>
+<span class="badge rounded-pill bg-label-success"><b>Active</b></span>
 @elseif($tour->status == 0 )
-<span class="badge rounded-pill bg-label-danger">Deactived</span>
+<span class="badge rounded-pill bg-label-danger"><b>Deactived</b></span>
 @endif
 
 </td>

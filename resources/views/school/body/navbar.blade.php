@@ -53,31 +53,23 @@ $Subtotal = App\Models\order_carts::where('school_id',$school_id)->sum('pricetot
 
                                   <i class="mdi mdi-bus mdi-24px"></i>
                                 </span> 
-                                <a href="{{ route('tours.travels.dashboard')}}"  target="_blank" class="stretched-link"><b>Dashboard</b></a>
-                                <small class="text-primary"><b>Funzi Tours & Travel</b></small>
+                                <a href="{{ route('tours.travels.dashboard')}}"  target="_blank" class="stretched-link"><b><small class="text-primary"><b>Funzi Tours & Travel</b></small></b></a>
+                                
                               </div>
 
 
-                              
-                              <div class="dropdown-shortcuts-item col">
-                                <span class="dropdown-shortcuts-icon bg-label-success rounded-circle mb-2">
-                                  <i class="mdi mdi-bus-school mdi-24px fs-4"></i>
-                                </span>
-                                <a href="{{ route('school.car.rentals.dashboard')}}" class="stretched-link"><b>Dashboard</b></a>
-                                <small class="text-primary"><b>Funzi Bus Rentals</b></small>
-                              </div>
-
-
-
-                            </div>
-                            <div class="row row-bordered overflow-visible g-0">
                               <div class="dropdown-shortcuts-item col">
                                 <span class="dropdown-shortcuts-icon bg-label-danger rounded-circle mb-2">
                                   <i class="mdi mdi-cart-outline mdi-24px fs-4"></i>
                                 </span>
-                                <a href="{{ route('school.ecommerce.dashboard')}}" target="_blank" class="stretched-link">Dashboard</a>
-                                <small class="text-primary"><b>Funzi eCommerce</b></small>
+                                <a href="{{ route('school.ecommerce.dashboard')}}" target="_blank" class="stretched-link"><small class="text-primary"><b>Funzi eCommerce</b></small></a>
+                                
                               </div>
+
+
+                            </div>
+                            <div class="row row-bordered overflow-visible g-0">
+
 
                               <div class="dropdown-shortcuts-item col">
                                 <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">

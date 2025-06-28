@@ -44,11 +44,11 @@ public function ViewWeeklyOrdersReports(){
         return view('school.reports.orders.view_monthly_reports',compact('orders'));
       }
       
-  
+   
   public function OrdersReportsByMonth(Request $request){
   
       $month = Carbon::parse($request->month)->format('F Y');	 
-      $orders = order_items::with(['school'])->select('month','school_id')->groupBy('month','school_id')->where('school_id',Auth::id())->where('month',$month)->get();
+      $orders = order_items::with(['school'])->select('month','school_id')->groupBy('month','school_id')->where('status','Order Delivered')->where('school_id',Auth::id())->where('month',$month)->get();
         
       return view('school.reports.orders.view_monthly_reports',compact('orders'));
   
@@ -69,7 +69,7 @@ public function ViewWeeklyOrdersReports(){
   
   
       $year= Carbon::parse($request->year)->format('Y');
-      $orders = order_items::with(['school'])->select('month','school_id')->groupBy('month','school_id')->where('year',$year)->where('school_id',Auth::id())->orderBy('created_at', 'asc')->groupBy('month')->get();
+      $orders = order_items::with(['school'])->select('month','school_id')->groupBy('month','school_id')->where('status','Order Delivered')->where('year',$year)->where('school_id',Auth::id())->orderBy('created_at', 'asc')->groupBy('month')->get();
   
   
       return view('school.reports.orders.view_yearly_reports',compact('orders'));

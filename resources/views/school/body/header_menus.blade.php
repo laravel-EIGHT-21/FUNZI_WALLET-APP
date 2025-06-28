@@ -96,11 +96,51 @@ $route = Route::current()->getName();
           <ul class="menu-sub">
     
     
-                      <li class="menu-item {{($route == 'view.students')? 'active':''}}">
-                        <a href="{{ route('view.students') }}" class="menu-link">
+                      <li class="menu-item {{($route == 'school.orders.general.info')? 'active':''}}">
+                        <a href="{{ route('school.orders.general.info') }}" class="menu-link">
                           <div data-i18n="All Orders">All Orders</div>
                         </a>
                       </li>
+
+
+                      
+                      <li class="menu-item {{($route == 'order.payment.records')? 'active':''}}">
+                        <a href="{{ route('order.payment.records') }}" class="menu-link">
+                          <div data-i18n="Payments Records">Payments Records</div>
+                        </a>
+                      </li>
+
+
+                      
+<li class="menu-item ">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <div data-i18n="Orders Reports">Orders Reports</div>
+      </a>
+
+      <ul class="menu-sub">
+
+
+<li class="menu-item {{($route == 'school.monthly.orders.reports')? 'active':''}}">
+      <a href="{{ route('school.monthly.orders.reports') }}" class="menu-link">
+        <div data-i18n="Monthly Reports">Monthly Reports</div>
+      </a>
+</li>
+
+
+
+<li class="menu-item {{($route == 'school.yearly.orders.reports')? 'active':''}}">
+      <a href="{{ route('school.yearly.orders.reports') }}" class="menu-link">
+        <div data-i18n="Yearly Reports">Yearly Reports</div>
+      </a>
+</li>
+
+
+</ul>
+
+</li>
+
+
+                      
     
    
           </ul>
@@ -116,28 +156,50 @@ $route = Route::current()->getName();
       <ul class="menu-sub">
 
 
-                  <li class="menu-item {{($route == 'view.students')? 'active':''}}">
-                    <a href="{{ route('view.students') }}" class="menu-link">
-                      <div data-i18n="All Tours">All Tours</div>
+                  <li class="menu-item {{($route == 'view.tour.bookings.info')? 'active':''}}">
+                    <a href="{{ route('view.tour.bookings.info') }}" class="menu-link">
+                      <div data-i18n="Tour Bookings">Tour Bookings</div>
                     </a>
                   </li>
 
-                  <li class="menu-item {{($route == 'view.old.students')? 'active':''}}">
-                    <a href="{{ route('view.old.students') }}" class="menu-link">
-                      <div data-i18n="Vehicle Rentals">Vehicle Rentals</div>
+                  <li class="menu-item {{($route == 'view.bus.rental.bookings.info')? 'active':''}}">
+                    <a href="{{ route('view.bus.rental.bookings.info') }}" class="menu-link">
+                      <div data-i18n="Bus Rental Bookings">Bus Rental Bookings</div>
                     </a>
                   </li>
+
+
+
+<li class="menu-item ">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <div data-i18n="Reports">Reports</div>
+      </a>
+
+      <ul class="menu-sub">
+
+
+<li class="menu-item {{($route == 'school.annual.tours.reports')? 'active':''}}">
+      <a href="{{ route('school.annual.tours.reports') }}" class="menu-link">
+        <div data-i18n="Tours Reports">Tours Reports</div>
+      </a>
+</li>
+
+
+
+
+<li class="menu-item {{($route == 'school.annual.bus.rentals.reports')? 'active':''}}">
+      <a href="{{ route('school.annual.bus.rentals.reports') }}" class="menu-link">
+        <div data-i18n="Bus Rentals">Bus Rentals</div>
+      </a>
+</li>
+
+
 
       </ul>
     </li>
 
     
-
-
-        
-
-      </ul>
-    </li>
+    
 
 
 

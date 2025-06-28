@@ -114,10 +114,8 @@ Shopping By Categories & Prices
         <div class="sidebar-filter"> 
           <!-- ============================================== SIDEBAR CATEGORY ============================================== -->
           <div class="sidebar-widget wow fadeInUp">
-            <h3 class="section-title">shop by</h3>
-            <div class="widget-header">
-              <h4 class="widget-title">Category</h4>
-            </div>
+            <h3 class="section-title">shop by Categories</h3>
+
 
             <div class="sidebar-widget-body m-t-10">
               <div class="accordion">
@@ -160,35 +158,6 @@ Shopping By Categories & Prices
           <!-- ============================================== SIDEBAR CATEGORY : END ============================================== --> 
 
 
-          
-          <!-- ============================================== PRICE SILDER============================================== -->
-            <div class="sidebar-widget wow fadeInUp">
-              <div class="widget-header">
-                <h4 class="widget-title"><b><u>Prices</u></b></h4>
-              </div>
-
-                <div class="mall-property">
-
-
-                <div class="row filter-container-1">
-                <div class="col-md-4">
-                <input name="min_price" type="text" required  placeholder="Min Price">  
-                </div> 
-
-                <div class="col-md-4">
-                <input name="max_price" type="text" required  placeholder="Min Price">
-                </div>
-
-                <div class="col-md-4">
-                <button type="submit" class="btn btn-sm">Filter</button>
-                </div>
-
-                </div>
-                </div>
-                </div>
-<!-- /.sidebar-widget --> 
-            <!-- ============================================== PRICE SILDER : END ============================================== --> 
-            
 
         </form>
 

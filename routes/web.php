@@ -786,7 +786,7 @@ Route::post('search-product', [ShopController::class, 'SearchProduct']);
 
 
 // Shop Page Route 
-Route::get('/shop/by/category/prices', [ShopController::class, 'ShopPage'])->name('shopping.filter.page');
+Route::get('/shop/by/categories', [ShopController::class, 'ShopPage'])->name('shopping.filter.page');
 
 Route::post('/shop/filter', [ShopController::class, 'ShopFilter'])->name('shopping.filtered');
 

@@ -113,10 +113,7 @@ Shopping By Tour Regions
         <div class="sidebar-filter"> 
           <!-- ============================================== SIDEBAR CATEGORY ============================================== -->
           <div class="sidebar-widget wow fadeInUp">
-            <h3 class="section-title">shop by</h3>
-            <div class="widget-header">
-              <h4 class="widget-title">Region Or Price Filters</h4>
-            </div>
+            <h3 class="section-title">shop by Regions</h3>
 
             <div class="sidebar-widget-body m-t-10">
               <div class="accordion">
@@ -158,49 +155,6 @@ Shopping By Tour Regions
           <!-- /.sidebar-widget --> 
           <!-- ============================================== SIDEBAR CATEGORY : END ============================================== --> 
           
-          <!-- ============================================== PRICE SILDER============================================== -->
-            <div class="sidebar-widget wow fadeInUp">
-              <div class="widget-header">
-                <h4 class="widget-title"><b><u>Price Filter</u></b></h4>
-              </div>
-
-                <div class="mall-property">
-                <div class="mall-property__label">
-                <a class="mall-property__clear-filter mall-clear-filter" href="javascript:;" data-filter="students_price" >
-                </a> 
-                </div>
-
-                @php
-
-                $min_price = App\Models\tour_packages::min('students_price');
-                $max_price = App\Models\tour_packages::max('students_price');
-
-                $filter_min_price = $min_price; 
-                $filter_max_price = $max_price;
-
-                @endphp
-
-                <div class="mall-slider-handles" data-start="{{ $filter_min_price ?? $min_price }}" data-end="{{ $filter_max_price ?? $max_price }}" data-min="{{ $min_price}}" data-max="{{ $max_price }}" data-target="students_price" style="width: 100%">
-                </div>
-                <div class="row filter-container-1">
-                <div class="col-md-4">
-                <input data-min="students_price" id="skip-value-lower" name="min_price" value="{{ $filter_min_price ?? $min_price }}" >  
-                </div> 
-
-                <div class="col-md-4">
-                <input data-max="students_price" id="skip-value-upper" name="max_price" value="{{ $filter_max_price ?? $max_price }}" >
-                </div>
-
-                <div class="col-md-4">
-                <button type="submit" class="btn btn-sm">Filter</button>
-                </div>
-
-                </div>
-                </div>
-                </div>
-<!-- /.sidebar-widget --> 
-            <!-- ============================================== PRICE SILDER : END ============================================== --> 
-            
 
 
 

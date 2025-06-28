@@ -89,10 +89,7 @@ Funzi Wallet Tours & Travel
           <div class="sidebar-filter"> 
             <!-- ============================================== SIDEBAR CATEGORY ============================================== -->
             <div class="sidebar-widget wow fadeInUp">
-              <h3 class="section-title">shop by</h3>
-              <div class="widget-header">
-                <h4 class="widget-title">Regions Or Price Filters</h4>
-              </div>
+              <h3 class="section-title">shop by Regions</h3>
   
               <div class="sidebar-widget-body m-t-10">
                 

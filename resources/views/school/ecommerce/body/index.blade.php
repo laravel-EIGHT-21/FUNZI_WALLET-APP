@@ -86,7 +86,7 @@ Funzi Wallet E-commerce Website
           <div class="sidebar-widget wow fadeInUp">
             <h3 class="section-title">shop by</h3> 
             <div class="widget-header">
-              <h4 class="widget-title">Category Or Price Filters</h4>
+              <h4 class="widget-title">Categories</h4>
             </div>
 
             <div class="sidebar-widget-body m-t-10">

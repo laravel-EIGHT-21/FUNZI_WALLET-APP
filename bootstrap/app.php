@@ -18,7 +18,6 @@ return Application::configure(basePath: dirname(__DIR__))
         'admin' => \App\Http\Middleware\AdminRedirectIfAuthenticated::class,
         ///'user-school' => \App\Http\Middleware\School::class,
         'student' => \App\Http\Middleware\StudentRedirectIfAuthenticated::class,
-        'tour-operator' => \App\Http\Middleware\TourOperatorRedirectIfAuthenticated::class,
         'prevent-back-history' => \App\Http\Middleware\PreventBackButtonMiddleware::class,
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title> Offline Order Payment Track | Report Print</title>
+    <title> Order Payment Track | Report Print</title>
 
     
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
@@ -112,7 +112,7 @@
 <div class="row">
   <div class="col-12">
 
-    <span>OFFLINE ORDER PAYMENT TRACKING INVOICE </span>
+    <span>ORDER PAYMENT TRACKING INVOICE </span>
   </div>
 </div>
 
@@ -182,15 +182,17 @@
 </div>
 
 <br /><br />
-<h6><b>Offline Order Payments Tracking Details</b></h6>
+<h6><b>Order Payments Tracking Details</b></h6>
  <div class="table-responsive">
     <table class="table m-0">
       <thead class="table-light border-top">
       <tr>
-        <th>Payment Topup</th>
+        <th>Payment </th>
         <th>Balance</th>
         <th> Date</th>
-        <th>Payment Type</th>
+        <th>Pay Type</th>
+        <th>Notes</th>
+
 
       </tr>
     </thead>
@@ -204,6 +206,7 @@
     
         <td> {{ $value->date }}</td>	
         <td> {{ $value->payment_type }}</td>	
+        <td> {{ $value->payment_note }}</td>	
 
       </tr>
 @endforeach

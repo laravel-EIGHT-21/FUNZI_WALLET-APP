@@ -11,6 +11,9 @@ use App\Models\school_orders_payments;
 use App\Models\schoolorders_payments_records;
 use App\Models\order_payments_tracking;
 use Illuminate\Support\Facades\DB;
+use App\Models\tourpayment_records;
+use App\Models\tour_payments_tracking;
+
 
 class OrdersController extends Controller
 {
@@ -143,7 +146,7 @@ class OrdersController extends Controller
 
 //All School Orders MoMo Payments
 public function SchoolOrdersPayments(){
-
+ 
     
     $payments = school_orders_payments::with(['school','order'])->latest()->get();
 
@@ -197,6 +200,7 @@ $order_Pay->school_id = $schoolorder_records->school_id;
 $order_Pay->payment_amount  = $request->payment_amount;
 $order_Pay->order_amount_balance  = (float)$total_amount-(float)$schoolorder_records->amount;
 $order_Pay->payment_type = $request->payment_type;
+$order_Pay->payment_note = $request->payment_note;
 $order_Pay->date = Carbon::today()->format('Y-m-d');
 $order_Pay->month = Carbon::today()->format('F Y');
 $order_Pay->year = Carbon::today()->format('Y');
@@ -211,7 +215,7 @@ if($order_Pay->payment_amount == $order_amount->amount)
 
 orders::where('id',$order_id)->update([
 	
-  'payment_status' => 'Full Payment Made',
+  'payment_status' => 'Payment Made',
 
 ]);
 

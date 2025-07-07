@@ -17,11 +17,9 @@
 
     $school_id = Auth::user()->id;
 
-    $today_payments = App\Models\tour_payments::whereDate('created_at',Carbon\Carbon::today())->where('school_id',$school_id)->sum('amount');
+    $month_payments = DB::table('tourpayment_records')->where('school_id',$school_id)->where('month',$months)->sum('amount');
 
-    $month_payments = DB::table('tour_payments')->where('school_id',$school_id)->where('month',$months)->sum('amount');
-
-    $year_payments = DB::table('tour_payments')->where('school_id',$school_id)->where('year',$years)->sum('amount');
+    $year_payments = DB::table('tourpayment_records')->where('school_id',$school_id)->where('year',$years)->sum('amount');
 
 
 
@@ -48,29 +46,9 @@
     <div class="row gy-4 gy-sm-1">
 
 
-    <!-- Cards SchoolFees Transactions -->
-    <div class="col-lg-4 col-sm-6">
-    <div class="card">
-    <div class="card-body">
-    <div class="d-flex align-items-center flex-wrap gap-2">
-    <div class="avatar me-3">
-    <div class="avatar-initial bg-label-primary rounded">
-    <i class="mdi mdi-currency-usd mdi-24px">
-    </i>
-    </div>
-    </div>
-    <div class="card-info">
-    <div class="d-flex align-items-center">
-    <h4 class="mb-0">UGX {{ ($today_payments) }}</h4>
-
-    </div>
-    <small>Todays Total</small>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class="col-lg-4 col-sm-6">
+    <!-- Cards Paid Amounts Transactions -->
+    
+    <div class="col-lg-6 col-sm-6">
     <div class="card">
     <div class="card-body">
     <div class="d-flex align-items-center flex-wrap gap-2">
@@ -91,7 +69,7 @@
     </div>
     </div>
     </div>
-    <div class="col-lg-4 col-sm-6">
+    <div class="col-lg-6 col-sm-6">
     <div class="card">
     <div class="card-body">
     <div class="d-flex align-items-center flex-wrap gap-2">
@@ -136,11 +114,13 @@
     <thead>
     <!-- start row -->
     <tr>
-    <th>Total Booking No. </th>
-    <th>Total Tours </th>
-    <th> Date</th>
-    <th> Booking Status</th>
-    <th>Payments (UGX)</th>
+      <th>Booking No. </th>
+      <th>Total Tours </th>
+      <th> Date</th>
+      <th> Booking Status</th>
+      <th>Paid (UGX)</th>
+      <th>Total (UGX)</th>
+      <th>Bal. (UGX)</th>
 
     </tr>
     </thead>
@@ -150,7 +130,7 @@
 
     <td> {{ $value['booking']['booking_number']}}</td>
     <td> {{ $value['booking']['total_tours']}}</td>
-    <td> {{ $value->payment_date}} </td>
+    <td> {{ $value['booking']['booking_date']}} </td>
 
 
     @php
@@ -158,7 +138,7 @@
     @endphp
     <td>
         @if($status == 'Bookings Pending')        
-        <span class="badge badge-pill badge-warning" style="background: maroon;">Bookings Pending </span>
+        <span class="badge badge-pill badge-warning" style="background: blue;">Bookings Pending </span>
 
         @elseif($status == 'Bookings Confirmed')
         <span class="badge badge-pill badge-warning" style="background: #21f32f;">Bookings Confirmed </span>
@@ -173,11 +153,39 @@
 
     </td>
 
-    <td>
 
-    <span class="badge rounded-pill text-primary bg-dark-primary p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $value->amount }}</b></span>
+  <td>
 
-    </td>
+
+  <span class="badge rounded-pill text-success bg-dark-success p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $value->amount }}</b></span>
+
+
+  </td>
+
+
+
+  <td>
+
+
+  <span class="badge rounded-pill text-primary bg-dark-info p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $value->total_amount }}</b></span>
+
+
+  </td>
+     
+@php 
+
+$bal = (float)$value->total_amount-(float)$value->amount;
+
+@endphp
+
+
+<td>
+
+
+<span class="badge rounded-pill text-danger bg-dark-danger p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $bal }}</b></span>
+
+
+</td>
 
 
     </tr>

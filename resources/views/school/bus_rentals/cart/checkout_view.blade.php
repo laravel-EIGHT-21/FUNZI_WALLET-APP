@@ -202,7 +202,7 @@ Bus Rental Checkout
       
               </td>
 
-              <td class="cart-product-sub-total"><span class="cart-sub-total-price">{{$cart->pricetotal}}</span></td>
+              <td class="cart-product-sub-total"><span class="cart-sub-total-price">UGX {{$cart->pricetotal}}</span></td>
               
 
             </tr>

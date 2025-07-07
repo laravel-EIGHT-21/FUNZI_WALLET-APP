@@ -20,7 +20,7 @@ use App\Models\order_payments_tracking;
  
 class OrderController extends Controller
 {
-    
+     
 
 
     public function SubmitOrders(Request $request){
@@ -127,6 +127,9 @@ schoolorders_payments_records::insert([
 'created_at' => Carbon::now(),
 
 ]);
+
+
+
 
 $carts = order_carts::where('school_id',$school_id)->orderBy('id','ASC')->get();
      foreach ($carts as $cartitem) {
@@ -274,10 +277,8 @@ if($auth_check == true){
 		
         $order_payments = schoolorders_payments_records::with(['order'])->where('order_id',$order_id)->where('school_id',Auth::id())->get();
 
-        $offline_payments_track = order_payments_tracking::with(['order'])->where('order_id',$order_id)->where('school_id',Auth::id())->get();
 
-
-    	return view('school.ecommerce.orders.order_details',compact('order','orderItems','order_payments','offline_payments_track'));
+    	return view('school.ecommerce.orders.order_details',compact('order','orderItems','order_payments'));
 
 
 }
@@ -347,8 +348,8 @@ public function OrderPaymentsRecords(){
     
     public function OrderGeneralInfo(){
 
-    	$orders = orders::where('school_id',Auth::id())->latest()->get();
-    	return view('school.ecommerce.orders.orders_general_info',compact('orders'));
+    	$payment_records = schoolorders_payments_records::with(['school','order'])->where('school_id',Auth::id())->latest()->get();
+    	return view('school.ecommerce.orders.orders_general_info',compact('payment_records'));
 
     } 
 

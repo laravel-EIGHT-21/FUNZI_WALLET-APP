@@ -18,6 +18,14 @@ use Intervention\Image\Drivers\Imagick\Driver;
 use App\MtnMomo\MtnConfig;
 use App\MtnMomo\MtnCollection;
 use App\Models\tour_packages;
+use App\Models\rentalpayment_records;
+use App\Models\rental_payments_tracking;
+
+
+
+
+
+
 
 class CarRentalsController extends Controller
 {
@@ -272,7 +280,7 @@ public function UpdateVehicle(Request $request){
 
 public function DeleteVehicle($id){
 
-    car::find($id)->delete();
+    car::find($id)->delete(); 
 
 
     return back()->with('error','Vehicle Deleted Successfully'); 
@@ -409,7 +417,7 @@ public function DeleteRoute($id){
 
 
 	    
-    public function SchoolTourBookingDetails($booking_id){
+    public function SchoolTourBookingDetails($booking_id){ 
 
 		$booking = car_bookings::where('id',$booking_id)->first();
     	$rental_booking = car_rental_bookings::with(['rental','school'])->where('booking_id',$booking_id)->orderBy('id','ASC')->get();
@@ -594,6 +602,9 @@ public function SubmitBusRentalsBookings(Request $request){
    
     $subtotal = car_rental_cart::where('school_id',$school_id)->sum('pricetotal');
 
+
+    /*
+
     $externalId = rand(100,10000000);
     $partyId = $request->school_tel1;
 
@@ -624,26 +635,6 @@ public function SubmitBusRentalsBookings(Request $request){
     
     $transaction = $collection->getTransaction($transactionId);
 
-    
- $booking_id = car_bookings::insertGetId([ 
-    'school_id' => $school_id,
-     'name' => $request->name,
-     'email' => $request->email,
-     'school_tel1' => $request->school_tel1,
-     'school_tel2' => $request->school_tel2, 
-    'school_address' => $request->address,     	 
-     'total_price' => $subtotal,
-    'total_rentals' => $rentalCartCout,
-    'booking_no' => mt_rand(10000000,99999999),
-     'time' => Carbon::now()->toTimeString(),
-     'date' => Carbon::today()->format('Y-m-d'),
-     'month' => Carbon::today()->format('F Y'),
-     'year' => Carbon::today()->format('Y'),
-     'status' => 'Bookings Pending',
-    'created_at' => Carbon::now(),
-
- ]);
-
 
  
 $token_obj = $transaction->status;
@@ -665,6 +656,46 @@ $rental_payment->payment_date = Carbon::today()->format('Y-m-d');;
 $rental_payment->month = Carbon::now()->format('F Y');
 $rental_payment->year = Carbon::now()->format('Y');
 $rental_payment->save();
+
+*/
+
+
+    
+ $booking_id = car_bookings::insertGetId([ 
+    'school_id' => $school_id,
+     'name' => $request->name,
+     'email' => $request->email,
+     'school_tel1' => $request->school_tel1,
+     'school_tel2' => $request->school_tel2, 
+    'school_address' => $request->address,     	 
+     'total_price' => $subtotal,
+    'total_rentals' => $rentalCartCout,
+    'booking_no' => mt_rand(10000000,99999999),
+     'time' => Carbon::now()->toTimeString(),
+     'date' => Carbon::today()->format('Y-m-d'),
+     'month' => Carbon::today()->format('F Y'),
+     'year' => Carbon::today()->format('Y'),
+     'status' => 'Bookings Pending',
+     'payment_status' => 'No Payment',
+    'created_at' => Carbon::now(),
+
+ ]);
+
+
+
+
+
+rentalpayment_records::insert([
+
+'booking_id' => $booking_id, 
+'school_id' => Auth::id(), 
+'amount' => 0,
+'total_amount' => $subtotal,
+'month' => Carbon::today()->format('F Y'),
+'year' => Carbon::today()->format('Y'),
+'created_at' => Carbon::now(),
+
+]);
 
 
  $carts = car_rental_cart::where('school_id',$school_id)->orderBy('id','ASC')->get();
@@ -726,7 +757,7 @@ public function BusRentalBookingDetails($booking_id){
     $school_id = Auth::user()->id;
     $booking = car_bookings::with('school')->where('id',$booking_id)->where('school_id',$school_id)->first();
     $rental_booking = car_rental_bookings::with('rental')->where('booking_id',$booking_id)->orderBy('id','ASC')->get();
-    $payments = rental_bookings_payments::with('booking')->where('booking_id',$booking_id)->where('school_id',$school_id)->get();
+    $payments = rentalpayment_records::with('booking')->where('booking_id',$booking_id)->where('school_id',$school_id)->get();
 
 
     return view('school.bus_rentals.bookings.rental_booking_details',compact('booking','rental_booking','payments'));

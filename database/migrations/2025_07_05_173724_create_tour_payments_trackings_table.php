@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_payments_trackings', function (Blueprint $table) {
+        Schema::create('tour_payments_trackings', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_id')->nullable();
+            $table->integer('booking_id')->nullable();
             $table->integer('school_id')->nullable();
             $table->double('payment_amount')->nullable();
-            $table->double('order_amount_balance')->nullable();
+            $table->double('tour_amount_balance')->nullable();
             $table->string('payment_type')->nullable();
-            $table->string('payment_note')->nullable();
+             $table->string('payment_note')->nullable();
             $table->string('date')->nullable();
             $table->string('month')->nullable();          
             $table->string('year')->nullable();
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_payments_trackings');
+        Schema::dropIfExists('tour_payments_trackings');
     }
 };

@@ -309,7 +309,7 @@ $yearly_rentals = DB::table('car_rental_bookings')->where('year',$years)->where(
                     <th class="pe-0 fw-medium text-heading">Order Date</th>
                     <th class="pe-0 fw-medium text-heading">Time of Order</th>
                     <th class="pe-0 fw-medium text-heading"> Status</th>
-                    <th class="pe-0 text-end text-heading"> Total Price </th>
+                    <th class="pe-0 text-end text-heading"> Total Amount </th>
                   </tr>
                 </thead>
                 @foreach($orders as $key => $value )
@@ -390,7 +390,7 @@ $yearly_rentals = DB::table('car_rental_bookings')->where('year',$years)->where(
                     <th class="pe-0 fw-medium text-heading"> Date</th>
                     <th class="pe-0 fw-medium text-heading">Time</th>
                     <th class="pe-0 fw-medium text-heading"> Status</th>
-                    <th class="pe-0 text-end text-heading"> Total Price </th>
+                    <th class="pe-0 text-end text-heading"> Total Amount</th>
                   </tr>
                 </thead>
                 @foreach($tours as $key => $value )
@@ -464,7 +464,7 @@ $yearly_rentals = DB::table('car_rental_bookings')->where('year',$years)->where(
                     <th class="pe-0 fw-medium text-heading">Date</th>
                     <th class="pe-0 fw-medium text-heading">Time </th>
                     <th class="pe-0 fw-medium text-heading"> Status</th>
-                    <th class="pe-0 text-end text-heading"> Total Price </th>
+                    <th class="pe-0 text-end text-heading"> Total Amount </th>
                   </tr>
                 </thead>
                 @foreach($rentals as $key => $value )

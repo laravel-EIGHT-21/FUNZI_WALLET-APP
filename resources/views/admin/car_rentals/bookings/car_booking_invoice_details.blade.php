@@ -97,7 +97,7 @@
     <p class="mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
   </div>
   <div>
-    <h4 class="fw-medium">BOOKING No. #{{$booking->booking_number}}</h4>
+    <h4 class="fw-medium">BOOKING No. #{{$booking->booking_no}}</h4>
 
     <div>
       <span class="text-muted">Print Date:</span>

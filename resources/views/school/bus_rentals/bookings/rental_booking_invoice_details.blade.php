@@ -163,6 +163,19 @@
           <td>{{$booking->time}}</td>
         </tr>
 
+
+                <tr>
+          <td class="pe-3">Pay Status:</td>
+          <td class="fw-medium"> {{$booking->payment_status}}</td>
+        </tr>
+
+
+                <tr>
+          <td class="pe-3">Order Status:</td>
+          <td class="fw-medium">{{$booking->status}}</td>
+        </tr>
+
+
         <tr>
           <td class="pe-3">Total Price:</td>
           <td class="fw-medium">UGX {{$booking->total_price}}</td>

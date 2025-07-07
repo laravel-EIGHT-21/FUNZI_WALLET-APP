@@ -13,6 +13,9 @@ use App\Models\tour_payments;
 use App\MtnMomo\MtnConfig;
 use App\MtnMomo\MtnCollection;
 use App\Models\car_rental_bookings;
+use App\Models\tourpayment_records;
+use App\Models\tour_payments_tracking;
+
 
 class TourBookingsController extends Controller
 {
@@ -30,6 +33,7 @@ class TourBookingsController extends Controller
         $tourCartSubtotal_Adult = tours_cart::where('school_id',$school_id)->sum('adult_pricetotal');
         $subtotal =(float)$tourCartSubtotal_Stud + (float)$tourCartSubtotal_Adult;
 
+		/*
 		$externalId = rand(100,10000000);
 		$partyId = $request->school_tel1;
 
@@ -60,7 +64,7 @@ class TourBookingsController extends Controller
 		
 		$transaction = $collection->getTransaction($transactionId);
 
-
+*/
  
  //dd($transaction);
 
@@ -97,12 +101,13 @@ class TourBookingsController extends Controller
      	'booking_month' => Carbon::today()->format('F Y'),
      	'booking_year' => Carbon::today()->format('Y'),
      	'status' => 'Bookings Pending',
+		'payment_status' => 'No Payment',
 		'created_at' => Carbon::now(),
 
      ]);
 
 
-	 
+	/* 
 $token_obj = $transaction->status;
 $amount = $transaction->amount;
 $currency = $transaction->currency;
@@ -123,6 +128,25 @@ $tour_payment->payment_date = Carbon::today()->format('Y-m-d');;
 $tour_payment->month = Carbon::now()->format('F Y');
 $tour_payment->year = Carbon::now()->format('Y');
 $tour_payment->save();
+
+*/
+
+
+
+
+tourpayment_records::insert([
+
+'booking_id' => $booking_id, 
+'school_id' => Auth::id(), 
+'amount' => 0,
+'total_amount' => $subtotal,
+'month' => Carbon::today()->format('F Y'),
+'year' => Carbon::today()->format('Y'),
+'created_at' => Carbon::now(),
+
+]);
+
+
 
 
 	 $carts = tours_cart::where('school_id',$school_id)->orderBy('id','ASC')->get();
@@ -177,7 +201,7 @@ $tour_payment->save();
         $school_id = Auth::user()->id;
 		$booking = school_bookings::with('school')->where('id',$booking_id)->where('school_id',$school_id)->first();
     	$tour_booking = tours_packs::with('tour')->where('booking_id',$booking_id)->orderBy('id','ASC')->get();
-		$payments = tour_payments::with('booking')->where('booking_id',$booking_id)->where('school_id',$school_id)->get();
+		$payments = tourpayment_records::with('booking')->where('booking_id',$booking_id)->where('school_id',$school_id)->get();
 
     	return view('school.tours.bookings.tour_booking_details',compact('booking','tour_booking','payments'));
 
@@ -225,7 +249,7 @@ public function TourBookingReportInvoice($booking_id){
     
     public function TourBookingsGeneralInfo(){
 
-    	$payments = tour_payments::with(['school','booking'])->where('school_id',Auth::id())->latest()->get();
+    	$payments = tourpayment_records::with(['school','booking'])->where('school_id',Auth::id())->latest()->get();
 
     	return view('school.tours.bookings.tour_booking_payments', compact('payments'));
 

@@ -435,13 +435,11 @@ Route::get('/school/orders/payments', [OrdersController::class, 'SchoolOrdersPay
 Route::get('/all/orders/payments/records', [OrdersController::class, 'AllOrdersPaymentsRecords'])->name('school-orders-payments-records');
 
 
-///Offline Order Payments///
+///Order Payments///
 
 Route::post('/school/orders/payment/{order_id}', [OrdersController::class, 'SchoolOrdersPayment'])->name('order.balance.topup.payment');
 
 Route::get('/offline/orders/track/invoice/{order_id}', [OrdersController::class, 'OfflineOrdersTrackInvoice'])->name('offline.orders.track.invoice'); 
-
-Route::get('/make/order/offline/payment/{order_id}', [OrdersController::class, 'MakeOrderPayment'])->name('make.order.offline.payment'); 
 
 Route::get('/offline/order/payment/invoice/{id}', [OrdersController::class, 'OfflineOrderPaymentInvoice'])->name('offline.order.payment.invoice'); 
 
@@ -517,6 +515,20 @@ Route::get('/tour/bookings/invoice/{booking_id}', [SchoolTourBookingsController:
 Route::get('/tour/bookings/payments', [SchoolTourBookingsController::class, 'SchoolTourBookingsPayments'])->name('tour-bookings-payments');
 
 
+
+///Tour Booking Payments///
+
+Route::post('/school/tour/booking/payment/{booking_id}', [SchoolTourBookingsController::class, 'SchoolTourBookingPayment'])->name('tour.booking.topup.payment');
+
+Route::get('/tour/booking/track/invoice/{booking_id}', [SchoolTourBookingsController::class, 'TourBookingTrackInvoice'])->name('tour.booking.payments.track.invoice'); 
+
+Route::get('/tour/booking/payment/invoice/{id}', [SchoolTourBookingsController::class, 'TourBookingPaymentInvoice'])->name('tour.booking.payment.invoice'); 
+
+Route::get('/tour/booking/payment/delete/{id}', [SchoolTourBookingsController::class, 'TourBookingPaymentDelete'])->name('delete.tour.booking.payment'); 
+
+
+
+
 // Update Tour Booking  Status 
 Route::get('/tour/pending/to/confirmed/{booking_id}', [SchoolTourBookingsController::class, 'PendingToConfirmBooking'])->name('pending.confirm.bookings');
 
@@ -570,6 +582,21 @@ Route::get('/car-rental/bookings/payments', [CarRentalCheckOutController::class,
 
 // Update Car Rental Booking  Status 
 Route::get('/car/rental/pending/to/confirmed/{booking_id}', [CarRentalCheckOutController::class, 'PendingToConfirmBooking'])->name('pending.confirm.car.rental.bookings');
+
+
+
+
+
+
+///Rentals Booking Payments///
+
+Route::post('/rentals/booking/payment/{booking_id}', [CarRentalCheckOutController::class, 'SchoolRentalBookingPayment'])->name('rental.booking.topup.payment');
+
+Route::get('/rentals/booking/track/invoice/{booking_id}', [CarRentalCheckOutController::class, 'RentalBookingTrackInvoice'])->name('rental.booking.payments.track.invoice'); 
+
+Route::get('/rentals/booking/payment/invoice/{id}', [CarRentalCheckOutController::class, 'RentalBookingPaymentInvoice'])->name('rental.booking.payment.invoice'); 
+
+Route::get('/rentals/booking/payment/delete/{id}', [CarRentalCheckOutController::class, 'RentalBookingPaymentDelete'])->name('delete.rental.booking.payment'); 
 
 
 

@@ -150,7 +150,7 @@ Bus Rental Bookings Details
 
 <div class="row">
 
-<h3> <b>Bus Rental Booking Payments(Mobile Money)</b></h3>
+<h3> <b>Rental Booking Payment Info</b></h3>
 
   <div class="col-md-12">
   
@@ -164,17 +164,20 @@ Bus Rental Bookings Details
                   </td>
   
                   <td class="col-md-3">
-                    <label for=""> Date </label>
+                    <label for=""> Paid (UGX) </label>
                   </td>
   
                   <td class="col-md-3">
-                    <label for="">Time</label>
+                    <label for="">Total (UGX)</label>
                   </td>
   
   
                    <td class="col-md-3">
-                    <label for=""> Amount (UGX) </label>
+                    <label for=""> Balance (UGX) </label>
                   </td>
+                  
+                </tr>
+  
                   
                 </tr>
   
@@ -186,19 +189,24 @@ Bus Rental Bookings Details
                   </td>
   
                   <td class="col-md-3">
-                    <label for=""> {{ $value->payment_date }}</label>
+                    <label for=""> UGX {{ $value->amount }}</label>
                   </td>
   
   
                    <td class="col-md-3">
-                    <label for=""> {{ $value->sent_time }}</label>
+                    <label for="">UGX {{ $value->total_amount }}</label>
                   </td>
   
   
+                  @php 
+
+                  $bal = (float)$value->total_amount-(float)$value->amount;
+
+                  @endphp
 
   
                    <td class="col-md-3">
-                    <label for=""> UGX  {{$value->amount }}</label>
+                    <label for=""> UGX  {{ $bal }}</label>
                   </td>
                   
                 </tr>

@@ -149,16 +149,7 @@ $route = Route::current()->getName();
                     </a>
                   </li>
 
-                  
-
-                  <li class="menu-item {{($route == 'school-orders-payments')? 'active':''}}">
-                    <a href="{{ route('school-orders-payments') }}" class="menu-link">
-                      <div data-i18n="Momo Payments">Momo Payments</div>
-                    </a>
-                  </li>
-
-
-                  
+                                  
 
                   <li class="menu-item {{($route == 'school-orders-payments-records')? 'active':''}}">
                     <a href="{{ route('school-orders-payments-records') }}" class="menu-link">

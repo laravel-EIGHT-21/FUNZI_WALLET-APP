@@ -78,7 +78,7 @@ Order Status : <span class="badge badge-pill badge-warning" style="background: g
 &nbsp;&nbsp; <b>|</b> &nbsp;&nbsp; <b>Payment Status : 
 
 
-@if($order->payment_status == 'Full Payment Made')        
+@if($order->payment_status == 'Payment Made')        
 <span class="badge badge-pill badge-warning" style="background: #34f105;">Full Payment Made </span>
 
 
@@ -92,8 +92,6 @@ Order Status : <span class="badge badge-pill badge-warning" style="background: g
 @endif
 
 </b>
-
-</p>
 
 
 
@@ -120,19 +118,13 @@ Order Status : <span class="badge badge-pill badge-warning" style="background: g
 
 
 <li class="nav-item">
-<button type="button" class="nav-link py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-order-payments" aria-controls="navs-pills-justified-order-payments" aria-selected="false">Order Payment</button>
-</li>
-
-
-<li class="nav-item">
-<button type="button" class="nav-link py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-momo-payments-details" aria-controls="navs-pills-justified-momo-payments-details" aria-selected="false"> Momo Payment</button>
+<button type="button" class="nav-link py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-order-payments" aria-controls="navs-pills-justified-order-payments" aria-selected="false">Payment Record</button>
 </li>
 
 
 
-
 <li class="nav-item">
-<button type="button" class="nav-link py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-all-balance-payments" aria-controls="navs-pills-justified-all-balance-payments" aria-selected="false">Offline Order Payments</button>
+<button type="button" class="nav-link py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-all-balance-payments" aria-controls="navs-pills-justified-all-balance-payments" aria-selected="false">Enter Order Payments</button>
 </li>
 
 
@@ -414,62 +406,6 @@ $bal = (float)$value->total_amount-(float)$value->amount;
 
 
 
-<div class="tab-pane fade" id="navs-pills-justified-momo-payments-details" role="tabpanel">
-<div class="row">
-
-
-
-<div class="card">
-<div class="card-body">
-
-
-<div class="table-responsive">
-<table class="table border table-striped table-bordered text-nowrap">
-<thead>
-<!-- start row -->
-<tr>
-
-<th>Order No</th> 
-<th>Total Px</th>
-<th>Amount Paid</th>
-<th>Pay Date</th>
-<th>Time</th>
-<th>Payer</th>
-
-
-</tr>
-<!-- end row -->
-</thead>
-@foreach($momo_pays as $key => $value )
-<tbody>
-<tr>
-
-<td> {{ $value['order']['order_number'] }}</td>	
-<td> {{ $value['order']['amount'] }}</td>	
-<td> {{ $value->amount }}</td>	
-<td> {{ $value->payment_date }}</td>	
-<td> {{ $value->sent_time }}</td>	
-<td> {{ $value->payer_number }}</td>	
-
-</tr>
-
-
-
-
-
-
-</tbody>
-@endforeach
-</table>
-</div>
-</div>
-</div>
-
-</div>
-</div>
-
-
-
 
 <div class="tab-pane fade" id="navs-pills-justified-all-balance-payments" role="tabpanel">
 
@@ -479,11 +415,11 @@ $bal = (float)$value->total_amount-(float)$value->amount;
 
 
 <li class="nav-item">
-<button type="button" class="nav-link active py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-offline-orders-payments" aria-controls="navs-pills-justified-offline-orders-payments" aria-selected="true">Track Offline Payments </button>
+<button type="button" class="nav-link active py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-offline-orders-payments" aria-controls="navs-pills-justified-offline-orders-payments" aria-selected="true">Track Order Payments </button>
 </li>
 
 <li class="nav-item">
-<button type="button" class="nav-link py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-offline-topup-payment" aria-controls="navs-pills-justified-offline-topup-payment" aria-selected="false">Offline Balance Topup Pay </button>
+<button type="button" class="nav-link py-2" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-justified-offline-topup-payment" aria-controls="navs-pills-justified-offline-topup-payment" aria-selected="false">Submit Payments </button>
 </li>
 
 
@@ -530,9 +466,10 @@ $bal = (float)$value->total_amount-(float)$value->amount;
 <tr>
 
 <th>Order No.</th> 
-<th> Topup Pay</th>
+<th> Paid</th>
 <th>Balance</th>
-<th> Payment type</th>
+<th> Pay type</th>
+<th> Notes</th>
 <th> Date</th>
 <th>Action</th>
 
@@ -547,6 +484,7 @@ $bal = (float)$value->total_amount-(float)$value->amount;
 <td> {{ $value->payment_amount }}</td>	
 <td> {{ $value->order_amount_balance }}</td>	
 <td> {{ $value->payment_type}}</td>	
+<td> {{ $value->payment_note}}</td>	
 <td> {{ $value->date }}</td>	
 
 <td>
@@ -584,7 +522,7 @@ $bal = (float)$value->total_amount-(float)$value->amount;
 
 <div class="row text-nowrap">
 <div class="card mb-4">
-<h5 class="card-header">Submit Offline Balance Topup Payment </h5>
+<h5 class="card-header">Submit Order Payment </h5>
 
 <form action="{{ route('order.balance.topup.payment',$orders['0']['id']) }}" method="POST" >
 @csrf
@@ -666,6 +604,16 @@ $balance = (float)$orders['0']['amount'] - (float)$order_payment_total;
 
 
 
+<div class="row">
+
+<div class="col mb-4 mt-2">
+<div class="form-floating form-floating-outline">
+<input class="form-control" type="text" name="payment_note" id="note" required />
+<label for="note">Enter Payment Note</label>
+</div>
+
+</div>
+</div>
 
 <div class="row">
 <div>

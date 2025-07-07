@@ -25,7 +25,7 @@ Ecommerce CheckOut
 
   <div class="checkout-box ">
     <div class="row">
-      <div class="col-md-5">
+      <div class="col-md-12">
         <div class="panel-group checkout-steps" id="accordion">
           <!-- checkout-step-01  -->
 <div class="panel panel-default checkout-step-01">
@@ -41,44 +41,62 @@ Ecommerce CheckOut
     <div class="row">		
 
       <!-- guest-login -->			
-     <div class="col-md-6 col-sm-6 already-registered-login">
-   <h4 class="checkout-subtitle"><b>Shipping Information</b></h4>
-         
+       <div class="col-md-12 col-sm-12 already-registered-login">
+     <h4 class="checkout-subtitle"><b>Shipping Information</b></h4>
+           
+     <div class="row ">
 
-
-  <div class="form-group"> 
-    <label class="info-title" for="exampleInputEmail1"><b>Shipping Name</b>  <span>*</span></label>
-    <input type="text" name="shipping_name" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Full Name" value="{{ Auth::user()->name }}" required="">
-  </div>  <!-- // end form group  -->
- 
-
-<div class="form-group">
-    <label class="info-title" for="exampleInputEmail1"><b>Email </b> <span>*</span></label>
-    <input type="email" name="shipping_email" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Email" value="{{ Auth::user()->email }}" required="">
-  </div>  <!-- // end form group  -->
-
-
-<div class="form-group">
-    <label class="info-title" for="exampleInputEmail1"><b>Phone 1</b>  <span>*</span></label>
-    <input type="number" name="shipping_tel1" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Phone" value="{{ Auth::user()->school_tel1}}" required="">
-  </div>  <!-- // end form group  -->
-
-
-  <div class="form-group">
-    <label class="info-title" for="exampleInputEmail1"><b>Phone 2</b>  <span>*</span></label>
-    <input type="number" name="shipping_tel1" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Phone 2" value="{{ Auth::user()->school_tel2}}" required="">
-  </div>  <!-- // end form group  -->
-
-
+      <div class="col-md-6 col-sm-6 ">
+    <div class="form-group"> 
+      <label class="info-title" for="exampleInputEmail1"><b>Shipping Name</b>  <span>*</span></label>
+      <input type="text" name="shipping_name" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Full Name" value="{{ Auth::user()->name }}" required="">
+    </div>  <!-- // end form group  -->
+      </div>
   
+    <div class="col-md-6 col-sm-6">
   <div class="form-group">
-    <label class="info-title" for="exampleInputEmail1"><b>Address</b>  <span>*</span></label>
-    <input type="text" name="shipping_address" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Address" value="{{Auth::user()->address}}" required="">
-  </div>  <!-- // end form group  -->
+      <label class="info-title" for="exampleInputEmail1"><b>Email </b> <span>*</span></label>
+      <input type="email" name="shipping_email" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Email" value="{{ Auth::user()->email }}" required="">
+    </div>  <!-- // end form group  -->
+    </div>
 
- 
-      </div>	
-      <!-- guest-login -->
+  </div>
+  
+  <div class="row ">
+
+    <div class="col-md-6 col-sm-6 ">
+  <div class="form-group">
+      <label class="info-title" for="exampleInputEmail1"><b>Phone 1</b>  <span>*</span></label>
+      <input type="number" name="shipping_tel1" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Phone" value="{{ Auth::user()->school_tel1}}" required="">
+    </div>  <!-- // end form group  -->
+    </div>
+  
+    
+
+      <div class="col-md-6 col-sm-6 ">
+    <div class="form-group">
+      <label class="info-title" for="exampleInputEmail1"><b>Phone 2</b>  <span>*</span></label>
+      <input type="number" name="shipping_tel1" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Phone 2" value="{{ Auth::user()->school_tel2}}" required="">
+    </div>  <!-- // end form group  -->
+      </div>
+  </div>
+  
+    
+  <div class="row ">
+
+    <div class="col-md-6 col-sm-6 ">
+    <div class="form-group">
+      <label class="info-title" for="exampleInputEmail1"><b>Address</b>  <span>*</span></label>
+      <input type="text" name="shipping_address" class="form-control unicase-form-control text-input" id="exampleInputEmail1" placeholder="Address" value="{{Auth::user()->address}}" required="">
+    </div>  <!-- // end form group  -->
+    </div>
+  </div>
+  
+   
+        </div>	
+        <!-- guest-login -->
+  
+  
 
 
 
@@ -102,7 +120,7 @@ Ecommerce CheckOut
       
       
 
-      <div class="col-md-7">
+      <div class="col-md-12">
         <!-- checkout-progress-sidebar -->
 <div class="checkout-progress-sidebar ">
 <div class="panel-group">
@@ -162,7 +180,7 @@ Ecommerce CheckOut
                   
                 </div>
             </td>
-            <td class="cart-product-sub-total"><span class="cart-sub-total-price">{{$cart->pricetotal}}</span></td>
+            <td class="cart-product-sub-total"><span class="cart-sub-total-price">UGX {{$cart->pricetotal}}</span></td>
             
           </tr>
     
@@ -181,7 +199,7 @@ Ecommerce CheckOut
     </div><!-- /.shopping-cart-table -->				<div class="col-md-4 col-sm-12 estimate-ship-tax">
     <table class="table">
       
-      
+       
     </table>
     </div><!-- /.estimate-ship-tax -->
     
@@ -205,7 +223,7 @@ Ecommerce CheckOut
           <th>
     
             <div class="cart-grand-total">
-              Total<span class="inner-left-md">{{$Subtotal}}</span>
+              Total<span class="inner-left-md">UGX {{$Subtotal}}</span>
             </div>
           </th>
         </tr>

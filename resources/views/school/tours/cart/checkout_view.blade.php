@@ -192,10 +192,10 @@ Tours Checkout
 
 
 
-              <td class="cart-product-sub-total"><span class="cart-sub-total-price">{{$cart->stud_pricetotal}}</span></td>
+              <td class="cart-product-sub-total"><span class="cart-sub-total-price">UGX {{$cart->stud_pricetotal}}</span></td>
               
 
-              <td class="cart-product-sub-total"><span class="cart-sub-total-price">{{$cart->adult_pricetotal}}</span></td>
+              <td class="cart-product-sub-total"><span class="cart-sub-total-price">UGX {{$cart->adult_pricetotal}}</span></td>
 
 
             </tr>
@@ -247,7 +247,7 @@ Tours Checkout
       
 
               <div class="cart-grand-total">
-                Total<span class="inner-left-md">{{$subtotal}}</span>
+                Total<span class="inner-left-md">UGX {{$subtotal}}</span>
               </div>
             </th>
           </tr>

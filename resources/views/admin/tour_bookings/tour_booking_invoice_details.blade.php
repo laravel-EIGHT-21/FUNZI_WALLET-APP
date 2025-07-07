@@ -169,9 +169,16 @@
       <td class="fw-medium">{{$booking->total_tours}}</td>
       </tr>
 
+
+        <tr>
+          <td class="pe-3">Payment :</td>
+          <td class="fw-medium">{{$booking->payment_status}}</td>
+        </tr>
+
+
         <tr>
           <td class="pe-3">Total Price:</td>
-          <td class="fw-medium">ugx {{$booking->total_amount}}</td>
+          <td class="fw-medium">UGX {{$booking->total_amount}}</td>
         </tr>
 
 

@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\car_bookings;
 use App\Models\car_rental_bookings;
 use App\Models\rental_bookings_payments;
+use App\Models\rentalpayment_records;
+use App\Models\rental_payments_tracking;
+use Carbon\Carbon;
+
 
 
 class CarRentalCheckOutController extends Controller
@@ -47,9 +51,16 @@ class CarRentalCheckOutController extends Controller
     public function SchoolVehicleRentalBookingDetails($booking_id){
 
 		$booking = car_bookings::where('id',$booking_id)->first();
-    	$car_booking = car_rental_bookings::with(['rental','booking'])->where('booking_id',$booking_id)->orderBy('id','ASC')->get();
 
-    	return view('admin.car_rentals.bookings.car_booking_details',compact('booking','car_booking'));
+    	$car_booking = car_bookings::with('school')->where('id',$booking_id)->get();
+        $rentals = car_rental_bookings::with(['booking','rental'])->where('booking_id',$booking_id)->orderBy('id','ASC')->get();
+        $rental_payment_total = rentalpayment_records::with(['booking'])->where('booking_id',$booking_id)->sum('amount');
+		$rental_payments = rentalpayment_records::with('booking')->where('booking_id',$booking_id)->get();
+        
+        $payments_track = rental_payments_tracking::with(['booking'])->where('booking_id',$booking_id)->get();
+
+
+    	return view('admin.car_rentals.bookings.car_booking_details',compact('booking','car_booking','rental_payments','rental_payment_total','payments_track','rentals'));
 
     } 
 
@@ -179,11 +190,204 @@ return back()->with('warning','Book Atleast One Bus Rental First...');
 
 public function SchoolBusRentalBookingsPayments(){
 
-$payments = rental_bookings_payments::with(['school','booking'])->latest()->get();
+$payment_records = rentalpayment_records::with(['school','booking'])->latest()->get();
 
-return view('admin.car_rentals.bookings.rentals_booking_payments', compact('payments'));
+return view('admin.car_rentals.bookings.rentals_booking_payments', compact('payment_records'));
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public function SchoolRentalBookingPayment(Request $request, $booking_id)
+{ 
+
+
+
+$rental_booking_records = rentalpayment_records::where('booking_id',$booking_id)->first();	
+
+$due_bal = (float)$rental_booking_records->total_amount-(float)$rental_booking_records->amount;
+
+
+if($request->payment_amount <= $due_bal)
+{
+
+$previous_amount = $rental_booking_records->amount;
+$total_amount = $rental_booking_records->total_amount;
+$present_amount = (float)$previous_amount+(float)$request->payment_amount; 
+$rental_booking_records->amount = $present_amount;
+$rental_booking_records->save();
+
+   
+$booking_Pay = new rental_payments_tracking();
+$booking_Pay->booking_id = $booking_id;
+$booking_Pay->school_id = $rental_booking_records->school_id;
+$booking_Pay->payment_amount  = $request->payment_amount;
+$booking_Pay->amount_balance  = (float)$total_amount-(float)$rental_booking_records->amount;
+$booking_Pay->payment_type = $request->payment_type;
+$booking_Pay->payment_note = $request->payment_note;
+$booking_Pay->date = Carbon::today()->format('Y-m-d');
+$booking_Pay->month = Carbon::today()->format('F Y');
+$booking_Pay->year = Carbon::today()->format('Y');
+$booking_Pay->save();
+
+
+
+
+if($rental_booking_records->amount == $rental_booking_records->total_amount)
+{
+
+
+car_bookings::where('id',$booking_id)->update([
+	
+  'payment_status' => 'Payment Made',
+
+]);
+
+}
+
+elseif($rental_booking_records->amount < $rental_booking_records->total_amount)
+{
+
+  
+car_bookings::where('id',$booking_id)->update([
+	
+  'payment_status' => 'Partial Payment Made',
+
+]);
+
+
+}
+
+
+        return back()->with('success',' Payment Successful');
+
+}
+
+else{
+
+
+      return back()->with('error','Payment Amount Entered Greater than Account Balance!');
+
+
+
+}
+
+} 
+  
+  
+  
+
+
+  public function RentalBookingTrackInvoice($booking_id){
+    
+    
+    $payment_track = rentalpayment_records::where('booking_id',$booking_id)->first();
+    
+    if($payment_track == true){
+    
+      $data['payments_record'] = rentalpayment_records::with(['school','booking'])->where('booking_id',$booking_id)->first();
+      $data['payment_records_track'] = rental_payments_tracking::where('booking_id',$booking_id)->get();
+    
+    return view('admin.car_rentals.bookings.rental_booking_track_invoice', $data);
+    
+    
+      }
+       
+      else{
+    
+         abort(code:403);
+        
+        }	
+    
+    
+      }
+    
+
+
+
+    
+  public function RentalBookingPaymentInvoice($id){
+
+    $payment_track = rental_payments_tracking::where('id',$id)->first();
+    
+    if($payment_track == true){
+
+$payment_details = rental_payments_tracking::with(['school'])->where('id',$id)->get();
+
+    
+    return view('admin.car_rentals.bookings.rental_booking_payment_invoice', compact('payment_details'));
+    
+    
+      }
+       
+      else{
+    
+         abort(code:403);
+        
+        }	
+    
+    
+      }
+    
+
+
+
+  		
+public function RentalBookingPaymentDelete($id)
+{
+
+  $rental_booking_payment = rental_payments_tracking::find($id);
+  $payment = $rental_booking_payment->payment_amount;
+  $booking_id = $rental_booking_payment->booking_id;
+
+  
+  
+  $paid_amount = rentalpayment_records::where('booking_id',$booking_id)->first();
+  $old_amount = $paid_amount->amount;
+  $new_amount = (float)$old_amount-(float)$payment;
+
+  rentalpayment_records::where('booking_id',$booking_id)->update([
+
+    'amount' => $new_amount,
+
+  ]);
+
+
+  rental_payments_tracking::find($id)->delete();
+ 
+  return back()->with('error',' Payment Deleted Successfully');
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -195,7 +399,7 @@ return view('admin.car_rentals.bookings.rentals_booking_payments', compact('paym
 
 public function BusRentalBookingPayments(){
 
-    $payments = rental_bookings_payments::with(['school','booking'])->where('school_id',Auth::id())->latest()->get();
+    $payments = rentalpayment_records::with(['school','booking'])->where('school_id',Auth::id())->latest()->get();
     
     return view('school.bus_rentals.bookings.rentals_booking_payments', compact('payments'));
     

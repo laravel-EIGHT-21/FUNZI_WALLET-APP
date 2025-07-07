@@ -6,7 +6,7 @@
 
 @section('title')
 
-Bus Rental Bookings Mobile Payments Transactions
+Rentals Booking Payments Records
 
 @endsection
 
@@ -16,11 +16,9 @@ $months = date('F Y');
 
 $years = date('Y');
 
-$today_payments = App\Models\rental_bookings_payments::whereDate('created_at',Carbon\Carbon::today())->sum('amount');
+$month_payments = DB::table('rentalpayment_records')->where('month',$months)->sum('amount');
 
-$month_payments = DB::table('rental_bookings_payments')->where('month',$months)->sum('amount');
-
-$year_payments = DB::table('rental_bookings_payments')->where('year',$years)->sum('amount');
+$year_payments = DB::table('rentalpayment_records')->where('year',$years)->sum('amount');
 
 
 
@@ -35,7 +33,7 @@ $year_payments = DB::table('rental_bookings_payments')->where('year',$years)->su
             
 
             <h4 class="py-3 mb-4">
-              <span class="text-muted fw-light"><a href="{{route('admin.dashboard')}}">Home</a> /View /</span>All Bus Rental Bookings Mobile Payments
+              <span class="text-muted fw-light"><a href="{{route('admin.dashboard')}}">Home</a> /View /</span>All Rentals Booking Payments Records
             </h4>
             
 
@@ -47,29 +45,9 @@ $year_payments = DB::table('rental_bookings_payments')->where('year',$years)->su
       <div class="row gy-4 gy-sm-1">
             
             
-<!-- Cards SchoolFees Transactions -->
-<div class="col-lg-4 col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <div class="avatar me-3">
-            <div class="avatar-initial bg-label-primary rounded">
-              <i class="mdi mdi-currency-usd mdi-24px">
-              </i>
-            </div>
-          </div>
-          <div class="card-info">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">UGX {{ ($today_payments) }}</h4>
+<!-- Cards Payments Records Transactions -->
 
-            </div>
-            <small>Todays Total</small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-4 col-sm-6">
+  <div class="col-lg-6 col-sm-6">
     <div class="card">
       <div class="card-body">
         <div class="d-flex align-items-center flex-wrap gap-2">
@@ -90,7 +68,7 @@ $year_payments = DB::table('rental_bookings_payments')->where('year',$years)->su
       </div>
     </div>
   </div>
-  <div class="col-lg-4 col-sm-6">
+  <div class="col-lg-6 col-sm-6">
     <div class="card">
       <div class="card-body">
         <div class="d-flex align-items-center flex-wrap gap-2">
@@ -105,7 +83,7 @@ $year_payments = DB::table('rental_bookings_payments')->where('year',$years)->su
               <h4 class="mb-0">UGX {{ ($year_payments) }}</h4>
 
             </div>
-            <small>Yearly Total</small>
+            <small>Yearly Total</small> 
           </div>
         </div>
       </div>
@@ -137,21 +115,55 @@ $year_payments = DB::table('rental_bookings_payments')->where('year',$years)->su
                         <tr>
                         <th>Booking No. </th>
                         <th>School </th>
-                        <th> Date</th>
-                        <th> Time</th>
-                        <th>Payments (UGX)</th>
+                        <th>Amount Paid</th>
+                        <th>Total</th>
+                        <th>Balance</th>
+                        <th>Month</th>
 
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($payments as $key => $value )
+                        @foreach($payment_records as $key => $value )
                         <tr>
 
                         <td> {{ $value['booking']['booking_no']}}</td>
                         <td> {{ $value['school']['name']}}</td>
-                        <td> {{ $value->payment_date}}</td>
-                        <td> {{ $value->sent_time}}</td>
-                        <td> {{ $value->amount}}</td>
+                        <td>
+  
+  
+                            <span class="badge rounded-pill text-success bg-dark-success p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>ugx {{ $value->amount }}</b></span>
+                            
+                            
+                            </td>
+                            
+                            
+                            
+                            <td>
+                            
+                            
+                            <span class="badge rounded-pill text-primary bg-dark-info p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>ugx {{ $value->total_amount }}</b></span>
+                            
+                            
+                            </td>
+                            
+                            
+                            @php 
+                            
+                            $bal = (float)$value->total_amount-(float)$value->amount;
+                            
+                            @endphp
+                            
+                            
+                            <td>
+                            
+                            
+                            <span class="badge rounded-pill text-danger bg-dark-danger p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>ugx {{ $bal }}</b></span>
+                            
+                            
+                            </td>
+
+                            <td> {{ $value->month}}</td>
+                            
 
 
                         </tr>

@@ -1,10 +1,12 @@
-@extends('school.body.admin_master')
+
+@extends('admin.body.admin_master')
 @section('content')
-        
+
+
 
 @section('title')
- 
-Ecommerce Mobile Payments Transactions
+
+Tour Booking Payments Records
 
 @endsection
 
@@ -14,20 +16,16 @@ $months = date('F Y');
 
 $years = date('Y');
 
+$month_payments = DB::table('tourpayment_records')->where('month',$months)->sum('amount');
 
-$school_id = Auth::user()->id;
-
-$month_payments = DB::table('schoolorders_payments_records')->where('month',$months)->where('school_id',$school_id)->sum('amount');
-
-$year_payments = DB::table('schoolorders_payments_records')->where('year',$years)->where('school_id',$school_id)->sum('amount');
-
+$year_payments = DB::table('tourpayment_records')->where('year',$years)->sum('amount');
 
 
 
 
 @endphp 
 
-                
+        
         <!-- Content -->
         
         <div class="container-xxl flex-grow-1 container-p-y">
@@ -35,7 +33,7 @@ $year_payments = DB::table('schoolorders_payments_records')->where('year',$years
             
 
             <h4 class="py-3 mb-4">
-              <span class="text-muted fw-light"><a href="{{route('dashboard')}}">Home</a> /View /</span>All School Orders Payments Records
+              <span class="text-muted fw-light"><a href="{{route('admin.dashboard')}}">Home</a> /View /</span>All School Tour Booking Payments Records
             </h4>
             
 
@@ -115,10 +113,10 @@ $year_payments = DB::table('schoolorders_payments_records')->where('year',$years
                         <thead>
                         <!-- start row -->
                         <tr>
-                        <th>Order No. </th>
-                          <th>Pay Status </th>
+                        <th>Booking No. </th>
+                        <th>School </th>
                         <th>Amount Paid</th>
-                        <th>Order Total</th>
+                        <th>Total</th>
                         <th>Balance</th>
                         <th>Month</th>
 
@@ -128,24 +126,12 @@ $year_payments = DB::table('schoolorders_payments_records')->where('year',$years
                         @foreach($payment_records as $key => $value )
                         <tr>
 
-                        <td> {{ $value['order']['order_number']}}</td>
-
-                        <td> 
-                          
-                        
-                            <span class="badge rounded-pill text-warning bg-dark-warning p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i> {{ $value['order']['payment_status']}}</b></span>
-  
-                          
-                         
-                        
-                        
-                        
-                        </td>
-
+                        <td> {{ $value['booking']['booking_number']}}</td>
+                        <td> {{ $value['school']['name']}}</td>
                         <td>
   
   
-                            <span class="badge rounded-pill text-success bg-dark-success p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $value->amount }}</b></span>
+                            <span class="badge rounded-pill text-success bg-dark-success p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>ugx {{ $value->amount }}</b></span>
                             
                             
                             </td>
@@ -155,7 +141,7 @@ $year_payments = DB::table('schoolorders_payments_records')->where('year',$years
                             <td>
                             
                             
-                            <span class="badge rounded-pill text-primary bg-dark-info p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $value->total_amount }}</b></span>
+                            <span class="badge rounded-pill text-primary bg-dark-info p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>ugx {{ $value->total_amount }}</b></span>
                             
                             
                             </td>
@@ -171,7 +157,7 @@ $year_payments = DB::table('schoolorders_payments_records')->where('year',$years
                             <td>
                             
                             
-                            <span class="badge rounded-pill text-danger bg-dark-danger p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>UGX {{ $bal }}</b></span>
+                            <span class="badge rounded-pill text-danger bg-dark-danger p-2 text-uppercase px-3"><b><i class='align-middle me-1'></i>ugx {{ $bal }}</b></span>
                             
                             
                             </td>

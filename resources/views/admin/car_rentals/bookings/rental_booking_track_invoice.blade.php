@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>All Offline School Order Payments Records | Report Print</title>
+    <title>Rentals Booking Payments Records | Report Print</title>
 
     
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
@@ -97,7 +97,7 @@
     <p class="mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
   </div>
   <div>
-    <h4 class="fw-medium">Order No #{{$payments_record['order']['order_number']}}</h4>
+    <h4 class="fw-medium">Booking No #{{$payments_record['booking']['booking_number']}}</h4>
 
     <div>
       <span class="text-muted">Print Date:</span>
@@ -112,7 +112,7 @@
 <div class="row">
   <div class="col-12">
 
-    <span>SCHOOL ORDER PAYMENT INVOICE </span>
+    <span>SCHOOL RENTALS BOOKING PAYMENT INVOICE </span>
   </div>
 </div>
 
@@ -145,32 +145,32 @@
     </table>
   </div>
   <div class="col-sm-6 w-50">
-    <h6>Order Details:</h6>
+    <h6>Tour Booking Details:</h6>
     <table>
       <tbody>
       <tr>
-          <td class="pe-3">Order No :</td>
-          <td>{{$payments_record['order']['order_number']}}</td>
+          <td class="pe-3">Booking No :</td>
+          <td>{{$payments_record['booking']['booking_number']}}</td>
         </tr>
 
         <tr>
-          <td class="pe-3">Total Items:</td>
-          <td>{{$payments_record['order']['total_order_items']}}</td>
+          <td class="pe-3">Total Vehicles:</td>
+          <td>{{$payments_record['booking']['total_rentals']}}</td>
         </tr>
 
         <tr>
           <td class="pe-3">Date :</td>
-          <td>{{$payments_record['order']['order_date']}}</td>
+          <td>{{$payments_record['booking']['date']}}</td>
         </tr>
 
         <tr>
-          <td class="pe-3">Order Time :</td>
-          <td>{{$payments_record['order']['order_time']}}</td>
+          <td class="pe-3">Time :</td>
+          <td>{{$payments_record['booking']['time']}}</td>
         </tr>
 
         <tr>
-          <td class="pe-3">Order Status :</td>
-          <td>{{$payments_record['order']['status']}}</td>
+          <td class="pe-3">Booking Status :</td>
+          <td>{{$payments_record['booking']['status']}}</td>
         </tr>
         
 
@@ -181,7 +181,7 @@
 
 <br /><br />
 
-<h6>School Order Payment Details</h6>
+<h6>Rentals Booking Payment Details</h6>
 <div class="table-responsive">
     <table class="table m-0">
       <thead class="table-light border-top">
@@ -218,17 +218,17 @@
 <br/><br/>
 
 
-<h6>Orders Payments Records Track</h6>
+<h6>Rentals Booking Payments Records Track</h6>
  <div class="table-responsive">
     <table class="table m-0">
       <thead class="table-light border-top">
       <tr>
 
-    <th>Payment </th>
+    <th>Payment</th>
     <th>Balance</th>
     <th> Date</th>
-    <th>Pay Type</th> 
-    <th>Notes</th>
+    <th>Pay Type</th>
+        <th>Payment Notes</th>
 
       </tr>
     </thead>
@@ -238,11 +238,11 @@
       <tr>
     <td> {{ $value->payment_amount }}</td>	
 
-    <td> {{ $value->order_amount_balance}}</td>	
+    <td> {{ $value->amount_balance}}</td>	
 
     <td> {{ $value->date }}</td>	
-    <td> {{ $value->payment_type }}</td>
-    <td> {{ $value->payment_note }}</td>	
+    <td> {{ $value->payment_type }}</td>	
+        <td> {{ $value->payment_note }}</td>	
 
       </tr>
 @endforeach

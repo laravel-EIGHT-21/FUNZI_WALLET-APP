@@ -123,8 +123,7 @@
         <!-- /Logo -->
 
         <div class="card-body mt-2">
-          <h4 class="mb-2">Welcome to Funzi Wallet! 👋</h4>
-          <h5 class="mb-2">Schools Login </h5>
+          <h3 class="mb-2">Welcome to Funzi Wallet! 👋</h3>
           <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
             <form id="formAuthentication" class="mb-3" method="POST" action="{{ isset($guard) ? url($guard.'/login'): route('login') }}">

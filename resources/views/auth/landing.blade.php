@@ -188,6 +188,7 @@
 <li><a href="#project-sec">gallery</a></li>
 <li><a href="#blog-sec">Blog</a></li>
 <li><a href="#contact-sec">Contact Us</a></li>
+<li><a href="{{route('login')}}">School Login</a></li>
 
 
 </ul>
